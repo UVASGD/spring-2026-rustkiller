@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://d0cf85ijwpwce"]
+
+[ext_resource type="Texture2D" uid="uid://bvtbe7xv6am45" path="res://Source/Resources/Images/Screenshot 2025-12-20 181127.png" id="1_nic1j"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nic1j"]
+size = Vector2(55, 68)
+
+[node name="DummyBoss" type="CharacterBody2D" groups=["boss"]]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_nic1j")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_nic1j")

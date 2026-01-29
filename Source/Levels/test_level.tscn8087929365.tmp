@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://urf0t2pdrlbv"]
+
+[ext_resource type="PackedScene" uid="uid://b21mjx6am7tvm" path="res://Source/Entities/Player/player.tscn" id="1_nsx4u"]
+[ext_resource type="Script" uid="uid://np8yjxnxxm8m" path="res://Source/Entities/Components/LockOnComponent/lockon_system.gd" id="3_pqqw8"]
+[ext_resource type="PackedScene" uid="uid://dfwb6fkkl614" path="res://Source/Entities/Bosses/TankBoss/Art/tank_boss.tscn" id="4_2t31d"]
+
+[node name="TestLevel" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_nsx4u")]
+position = Vector2(59, 82)
+max_speed = 250.0
+
+[node name="LockOnSystem" type="Node2D" parent="." node_paths=PackedStringArray("camera", "player")]
+script = ExtResource("3_pqqw8")
+camera = NodePath("../Camera2D")
+player = NodePath("../Player")
+lerp_speed = 10.0
+padding = 300.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="TankBoss" parent="." instance=ExtResource("4_2t31d")]

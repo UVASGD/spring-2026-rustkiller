@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://6xkesodr0lt8"]
+
+[ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="1_avmj2"]
+
+[node name="MeleeHitbox" type="Node2D"]
+
+[node name="HitboxComponent" parent="." instance=ExtResource("1_avmj2")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]

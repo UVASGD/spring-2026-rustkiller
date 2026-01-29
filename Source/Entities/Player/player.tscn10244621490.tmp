@@ -1,0 +1,105 @@
+[gd_scene load_steps=10 format=3 uid="uid://b21mjx6am7tvm"]
+
+[ext_resource type="Script" uid="uid://endp6v8st32l" path="res://Source/Entities/Player/player.gd" id="1_3xi8j"]
+[ext_resource type="Texture2D" uid="uid://df1i7heao3fuu" path="res://Source/Entities/Player/Art/Arm.png" id="2_g4gsc"]
+[ext_resource type="Texture2D" uid="uid://bwcdjnarjekww" path="res://Source/Entities/Player/Art/Head.png" id="3_tipuk"]
+[ext_resource type="Texture2D" uid="uid://bxcv10dgk15nd" path="res://Source/Entities/Player/Art/Torso.png" id="4_lv6p1"]
+[ext_resource type="Texture2D" uid="uid://dtadvwmo1vmu1" path="res://Source/Entities/Player/Art/FrontLeg.png" id="5_hjit1"]
+[ext_resource type="Texture2D" uid="uid://osntgxley0d0" path="res://Source/Entities/Player/Art/RearLeg.png" id="6_mjklq"]
+[ext_resource type="Texture2D" uid="uid://c1aywdmcc5vcf" path="res://Source/Entities/Player/Art/Tie.png" id="7_3ojbm"]
+[ext_resource type="Script" uid="uid://b8jd6e4bc1d4g" path="res://Source/Entities/Components/HealthComponent/health_component.gd" id="8_0g53v"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4gsc"]
+size = Vector2(3.5, 14)
+
+[node name="Player" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_3xi8j")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, -5)
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_g4gsc")
+
+[node name="SpriteParent" type="Node2D" parent="."]
+
+[node name="LeftArm" type="Sprite2D" parent="SpriteParent"]
+position = Vector2(-6, -10)
+rotation = 3.1415925
+texture = ExtResource("2_g4gsc")
+
+[node name="RightArm" type="Sprite2D" parent="SpriteParent"]
+position = Vector2(7, -10)
+texture = ExtResource("2_g4gsc")
+
+[node name="Head" type="Sprite2D" parent="SpriteParent"]
+position = Vector2(0, -15)
+texture = ExtResource("3_tipuk")
+
+[node name="Torso" type="Sprite2D" parent="SpriteParent"]
+position = Vector2(0, -8)
+texture = ExtResource("4_lv6p1")
+
+[node name="FrontLeg" type="Sprite2D" parent="SpriteParent"]
+position = Vector2(1, 2)
+texture = ExtResource("5_hjit1")
+
+[node name="RearLeg" type="Sprite2D" parent="SpriteParent"]
+position = Vector2(-2, 2)
+texture = ExtResource("6_mjklq")
+
+[node name="Tie" type="Sprite2D" parent="SpriteParent"]
+position = Vector2(-1, -9)
+texture = ExtResource("7_3ojbm")
+
+[node name="SpriteParent2" type="Node2D" parent="."]
+visible = false
+position = Vector2(32, 8)
+rotation = 0.42654887
+
+[node name="LeftArm" type="Sprite2D" parent="SpriteParent2"]
+position = Vector2(-6, -10)
+rotation = 3.1415925
+texture = ExtResource("2_g4gsc")
+
+[node name="RightArm" type="Sprite2D" parent="SpriteParent2"]
+position = Vector2(7, -10)
+texture = ExtResource("2_g4gsc")
+
+[node name="Head" type="Sprite2D" parent="SpriteParent2"]
+position = Vector2(0, -15)
+texture = ExtResource("3_tipuk")
+
+[node name="Torso" type="Sprite2D" parent="SpriteParent2"]
+position = Vector2(0, -8)
+texture = ExtResource("4_lv6p1")
+
+[node name="FrontLeg" type="Sprite2D" parent="SpriteParent2"]
+position = Vector2(1, 2)
+texture = ExtResource("5_hjit1")
+
+[node name="RearLeg" type="Sprite2D" parent="SpriteParent2"]
+position = Vector2(-2, 2)
+texture = ExtResource("6_mjklq")
+
+[node name="Tie" type="Sprite2D" parent="SpriteParent2"]
+position = Vector2(-1, -9)
+texture = ExtResource("7_3ojbm")
+
+[node name="HealthComponent" type="Node2D" parent="."]
+script = ExtResource("8_0g53v")
+metadata/_custom_type_script = "uid://b8jd6e4bc1d4g"

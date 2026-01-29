@@ -1,0 +1,53 @@
+[gd_scene load_steps=6 format=3 uid="uid://cmy1ds7wda1qa"]
+
+[ext_resource type="Script" uid="uid://d1pkpoovi8h05" path="res://Source/Entities/Components/LockOnComponent/lockon_component.gd" id="1_5d7ku"]
+[ext_resource type="Texture2D" uid="uid://bvtbe7xv6am45" path="res://Source/Resources/Images/Screenshot 2025-12-20 181127.png" id="2_n1ow5"]
+
+[sub_resource type="Animation" id="Animation_i0wai"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LockonSymbol:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.01, 0.01)]
+}
+
+[sub_resource type="Animation" id="Animation_n1ow5"]
+resource_name = "lockonsymbol"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LockonSymbol:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.01, 0.01), Vector2(0.02, 0.02), Vector2(0.01, 0.01)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_i0wai"]
+_data = {
+&"RESET": SubResource("Animation_i0wai"),
+&"lockonsymbol": SubResource("Animation_n1ow5")
+}
+
+[node name="LockonComponent" type="Node2D"]
+script = ExtResource("1_5d7ku")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_i0wai")
+}
+
+[node name="LockonSymbol" type="Sprite2D" parent="."]
+scale = Vector2(0.01, 0.01)
+texture = ExtResource("2_n1ow5")

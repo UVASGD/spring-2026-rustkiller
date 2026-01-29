@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://cmb1xobcj665e"]
+
+[ext_resource type="PackedScene" uid="uid://crvepxby1imcj" path="res://Source/Entities/Player/better_player/better_player.tscn" id="1_tcwoy"]
+[ext_resource type="PackedScene" uid="uid://d0cf85ijwpwce" path="res://Source/Entities/Bosses/DummyBoss/dummyBoss.tscn" id="3_e4nmc"]
+[ext_resource type="PackedScene" uid="uid://dfwb6fkkl614" path="res://Source/Entities/Bosses/TankBoss/tank_boss.tscn" id="4_ccsjw"]
+[ext_resource type="Script" uid="uid://np8yjxnxxm8m" path="res://Source/Entities/Components/LockOnComponent/lockon_system.gd" id="5_glfrp"]
+
+[node name="NewPlayerLevelTest" type="Node2D" unique_id=510909864]
+
+[node name="DummyBoss" parent="." unique_id=992422242 instance=ExtResource("3_e4nmc")]
+position = Vector2(298, 148)
+
+[node name="BetterPlayer" parent="." unique_id=1830731253 instance=ExtResource("1_tcwoy")]
+z_index = 1
+
+[node name="TankBoss" parent="." unique_id=970967454 instance=ExtResource("4_ccsjw")]
+position = Vector2(107, 274)
+
+[node name="LockOnSystem" type="Node2D" parent="." unique_id=1717660374 node_paths=PackedStringArray("camera", "player")]
+script = ExtResource("5_glfrp")
+camera = NodePath("../Camera2D")
+player = NodePath("../BetterPlayer")
+lerp_speed = 10.0
+padding = 300.0
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1093016881]

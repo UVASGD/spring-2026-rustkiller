@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://urf0t2pdrlbv"]
+
+[ext_resource type="PackedScene" uid="uid://b21mjx6am7tvm" path="res://Source/Entities/Player/player.tscn" id="1_nsx4u"]
+[ext_resource type="PackedScene" uid="uid://boa7y0gdbfri7" path="res://Source/Entities/Bosses/TestBoss/test_boss.tscn" id="2_vpwct"]
+
+[node name="TestLevel" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_nsx4u")]
+position = Vector2(59, 82)
+max_speed = 250.0
+acceleration_coefficient = 0.2
+
+[node name="TestBoss" parent="." instance=ExtResource("2_vpwct")]
+position = Vector2(58, 43)
