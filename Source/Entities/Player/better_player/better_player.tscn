@@ -4,10 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://blhr1feom5pqf" path="res://Source/Entities/Bosses/TankBoss/TankEnemyShadow.png" id="2_02bga"]
 [ext_resource type="Texture2D" uid="uid://3nm7o2d1toch" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushIdleAnimation.png" id="3_g17sf"]
 [ext_resource type="Texture2D" uid="uid://b3p1sxjpd2yug" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushWalkAnimationLessFrames.png" id="3_vlks3"]
-[ext_resource type="Texture2D" uid="uid://by5yw15ustsuu" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushAttackCombo.png" id="4_g17sf"]
+[ext_resource type="Texture2D" uid="uid://6ntw37guntat" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushAttackComboNoEnergy.png" id="5_02bga"]
 [ext_resource type="Texture2D" uid="uid://bam7exbn0kxgb" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushShoot.png" id="5_uxmjj"]
-[ext_resource type="Texture2D" uid="uid://byio4442aalpw" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushParry.png" id="6_2r8k3"]
 [ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="7_2jere"]
+[ext_resource type="Texture2D" uid="uid://0i8ka85rtui0" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushParryNoEnergy.png" id="7_36sdt"]
+[ext_resource type="Texture2D" uid="uid://dyrk1d2hnc82x" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushAttackComboEnergy.png" id="9_36sdt"]
+[ext_resource type="Texture2D" uid="uid://he47ke6bx1pr" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushParryEnergy.png" id="10_n5m2y"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g17sf"]
 radius = 13.0
@@ -148,6 +150,54 @@ tracks/10/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SpriteManager/EnergyArt/AttackEnergy:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SpriteManager/EnergyArt/AttackEnergy:frame")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SpriteManager/EnergyArt/ParryEnergy:visible")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("SpriteManager/EnergyArt/ParryEnergy:frame")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
 }
 
 [sub_resource type="Animation" id="Animation_ohtk3"]
@@ -333,6 +383,30 @@ tracks/7/keys = {
 "update": 1,
 "values": [true, false, true]
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteManager/EnergyArt/AttackEnergy:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteManager/EnergyArt/AttackEnergy:frame")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
 
 [sub_resource type="Animation" id="Animation_uxmjj"]
 resource_name = "idle"
@@ -501,6 +575,30 @@ tracks/6/keys = {
 "method": &"hitstop"
 }]
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteManager/EnergyArt/ParryEnergy:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteManager/EnergyArt/ParryEnergy:frame")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
 
 [sub_resource type="Animation" id="Animation_2jere"]
 resource_name = "shoot"
@@ -628,7 +726,7 @@ hframes = 10
 [node name="Attack" type="Sprite2D" parent="SpriteManager" unique_id=2017435352]
 visible = false
 position = Vector2(-4, 0)
-texture = ExtResource("4_g17sf")
+texture = ExtResource("5_02bga")
 hframes = 5
 
 [node name="Shoot" type="Sprite2D" parent="SpriteManager" unique_id=446709883]
@@ -638,7 +736,7 @@ hframes = 8
 
 [node name="Parry" type="Sprite2D" parent="SpriteManager" unique_id=1147541010]
 visible = false
-texture = ExtResource("6_2r8k3")
+texture = ExtResource("7_36sdt")
 hframes = 6
 
 [node name="Muzzle" type="Marker2D" parent="SpriteManager" unique_id=1982465885]
@@ -656,5 +754,22 @@ visible = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SpriteManager/ParryWindow" unique_id=569162858]
 shape = SubResource("CircleShape2D_02bga")
 debug_color = Color(0.2560167, 0.54428214, 0.86958313, 0.41960785)
+
+[node name="EnergyArt" type="Node2D" parent="SpriteManager" unique_id=1006281476]
+rotation = 3.1415927
+scale = Vector2(-1, -1)
+
+[node name="AttackEnergy" type="Sprite2D" parent="SpriteManager/EnergyArt" unique_id=301072800]
+visible = false
+self_modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-4, 3.496911e-07)
+texture = ExtResource("9_36sdt")
+hframes = 5
+
+[node name="ParryEnergy" type="Sprite2D" parent="SpriteManager/EnergyArt" unique_id=549585824]
+visible = false
+self_modulate = Color(1.353256, 1.353256, 1.353256, 1)
+texture = ExtResource("10_n5m2y")
+hframes = 6
 
 [connection signal="animation_finished" from="PlayerAnimation" to="." method="_on_player_animation_animation_finished"]

@@ -12,12 +12,14 @@ scale = Vector2(5, 5)
 script = ExtResource("1_7ff0x")
 
 [node name="HitboxComponent" parent="." unique_id=1836219598 instance=ExtResource("2_p72mb")]
+visible = false
 damage = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=1955254933]
 shape = SubResource("RectangleShape2D_p72mb")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=685778531]
+self_modulate = Color(1.353256, 1.353256, 1.353256, 1)
 z_index = 1
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("3_p72mb")
