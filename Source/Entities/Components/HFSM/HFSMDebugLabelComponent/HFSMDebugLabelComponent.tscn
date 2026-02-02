@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://co3gr1quly52h"]
+
+[ext_resource type="Script" uid="uid://b85v16wpslsuy" path="res://Source/Entities/Components/HFSM/HFSMDebugLabelComponent/hfsm_debug_label_component.gd" id="1_ybry1"]
+
+[node name="HfsmDebugLabelComponent" type="Label" unique_id=1800658358]
+offset_right = 103.0
+offset_bottom = 25.0
+text = "none"
+script = ExtResource("1_ybry1")

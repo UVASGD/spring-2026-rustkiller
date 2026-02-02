@@ -1,0 +1,699 @@
+[gd_scene format=3 uid="uid://cv31ib6mqu0ga"]
+
+[ext_resource type="Script" uid="uid://u25kk3jsajld" path="res://Source/Entities/Bosses/TankBoss/HSFM Code/hsfm_tank_boss.gd" id="1_un047"]
+[ext_resource type="PackedScene" uid="uid://cdvbfv2n8bbaf" path="res://Source/Entities/Weapons/Bullets/bullet.tscn" id="2_tmahb"]
+[ext_resource type="Texture2D" uid="uid://blhr1feom5pqf" path="res://Source/Entities/Bosses/TankBoss/TankEnemyShadow.png" id="3_tmahb"]
+[ext_resource type="Texture2D" uid="uid://u6rx381ob4tf" path="res://Source/Entities/Bosses/TankBoss/Art/TankEnemyGun.png" id="4_silce"]
+[ext_resource type="Texture2D" uid="uid://by7dyh0itnf2g" path="res://Source/Entities/Bosses/TankBoss/Art/TankEnemyBody.png" id="5_m744n"]
+[ext_resource type="PackedScene" uid="uid://cccn2edq2kj7x" path="res://Source/Entities/Components/HealthComponent/health_component.tscn" id="6_1fc83"]
+[ext_resource type="PackedScene" uid="uid://ccu0np30bscvr" path="res://Source/Entities/Components/HurtboxComponent/hurtbox_component.tscn" id="7_dmg6w"]
+[ext_resource type="PackedScene" uid="uid://cmy1ds7wda1qa" path="res://Source/Entities/Components/LockOnComponent/lockon_component.tscn" id="8_8dug8"]
+[ext_resource type="PackedScene" uid="uid://csvmkjqtav4p3" path="res://Source/Entities/Components/HurtFlashComponent/hurt_flash_component.tscn" id="9_gujmv"]
+[ext_resource type="Script" uid="uid://d2u3jq12opheb" path="res://Source/Entities/Bosses/TankBoss/HSFM Code/idle.gd" id="10_7s2fp"]
+[ext_resource type="Script" uid="uid://brcjina4jvjdh" path="res://Source/Entities/Bosses/TankBoss/HSFM Code/tank_hfsm.gd" id="10_tmahb"]
+[ext_resource type="Script" uid="uid://ccmv1rqlgg6f5" path="res://Source/Entities/Bosses/TankBoss/HSFM Code/alive.gd" id="11_e2c3t"]
+[ext_resource type="Script" uid="uid://dy6s7chhla8go" path="res://Source/Entities/Bosses/TankBoss/HSFM Code/rush_windup.gd" id="12_e2c3t"]
+[ext_resource type="Script" uid="uid://05esr62u1425" path="res://Source/Entities/Bosses/TankBoss/HSFM Code/rush_series.gd" id="12_vg5dq"]
+[ext_resource type="Script" uid="uid://ccin01sdbnkcu" path="res://Source/Entities/Bosses/TankBoss/HSFM Code/rush_fire.gd" id="13_43gej"]
+[ext_resource type="Script" uid="uid://ddn15shskxhnp" path="res://Source/Entities/Bosses/TankBoss/HSFM Code/rush_winddown.gd" id="14_q4bqe"]
+[ext_resource type="PackedScene" uid="uid://co3gr1quly52h" path="res://Source/Entities/Components/HFSM/HFSMDebugLabelComponent/HFSMDebugLabelComponent.tscn" id="17_silce"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_27ykr"]
+size = Vector2(161, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1l3g5"]
+size = Vector2(161, 72)
+
+[sub_resource type="Animation" id="Animation_4f2x7"]
+resource_name = "Idle"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/TankGun:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.43333334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="Animation" id="Animation_mxois"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/TankBody:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/TankBody:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/TankBody:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals/TankGun:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [5]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visuals/TankEnemyShadow:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visuals/TankEnemyShadow:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Visuals/TankEnemyShadow:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, -1)]
+}
+
+[sub_resource type="Animation" id="Animation_ct6bh"]
+resource_name = "RushWinddown"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/TankBody:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.033333335, 0.13333334, 0.3, 0.46666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [5, 4, 3, 1, 0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/TankBody:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.5, 0.5),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.865, 1.29)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/TankBody:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.13333334, 0.5),
+"transitions": PackedFloat32Array(0.5, -2, 0.5),
+"update": 0,
+"values": [0.0, 0.502654824574367, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals/TankEnemyShadow:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1333, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, -1), Vector2(-7.000001, 31), Vector2(1, 16)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visuals/TankEnemyShadow:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1333, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visuals/TankEnemyShadow:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.1333, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.94635165, 0.79201704), Vector2(0.86218226, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_76wi4"]
+resource_name = "RushWindup"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/TankBody:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.16666667, 0.26666668, 0.36666667, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 3, 4, 5]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/TankBody:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, -2),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.865, 1.29)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/TankBody:rotation")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, -2),
+"update": 0,
+"values": [0.0, -0.3019419605950192]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals/TankEnemyShadow:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.7200012, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visuals/TankEnemyShadow:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visuals/TankEnemyShadow:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, -1), Vector2(1, 21)]
+}
+
+[sub_resource type="Animation" id="Animation_4vkqh"]
+resource_name = "Rushing"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/TankBody:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03333334, 0.06666667, 0.099999994, 0.13333334, 0.16666667, 0.20000002, 0.23333335, 0.26666665, 0.3, 0.33333334, 0.36666667, 0.4, 0.43333334, 0.4666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 3, 4, 5, 0, 1, 3, 4, 5, 0, 1, 3, 4, 5]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/TankBody:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.43333334),
+"transitions": PackedFloat32Array(1, -2, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 0.9), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/TankEnemyShadow:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, -1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals/TankEnemyShadow:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visuals/TankEnemyShadow:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_l4ax6"]
+resource_name = "TankSpin"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/TankBody:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 3, 4, 5]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/TankBody:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.43333334),
+"transitions": PackedFloat32Array(0.5, -2, 0.5),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 0.9), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = false
+tracks/2/path = NodePath("Visuals/TankBody:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.43333334),
+"transitions": PackedFloat32Array(0.5, -2, 0.5),
+"update": 0,
+"values": [0.0, -0.3019419605950192, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals/TankEnemyShadow:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, -1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visuals/TankEnemyShadow:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visuals/TankEnemyShadow:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mxois"]
+_data = {
+&"Idle": SubResource("Animation_4f2x7"),
+&"RESET": SubResource("Animation_mxois"),
+&"RushWinddown": SubResource("Animation_ct6bh"),
+&"RushWindup": SubResource("Animation_76wi4"),
+&"Rushing": SubResource("Animation_4vkqh"),
+&"TankSpin": SubResource("Animation_l4ax6")
+}
+
+[sub_resource type="Animation" id="Animation_pqe5h"]
+resource_name = "GunFireBurst"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/TankGun:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03333333, 0.06666666, 0.099999994, 0.13333333, 0.16666669, 0.20000002, 0.23333335, 0.26666668, 0.3, 0.33333334, 0.36666667, 0.4, 0.43333334, 0.46666664, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 0, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1, 0.19706462, 0.30114806),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [],
+"method": &"_fire_burst"
+}, {
+"args": [],
+"method": &"_fire_burst"
+}, {
+"args": [],
+"method": &"_fire_burst"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/TankGun:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.06666667, 0.08743008, 0.10130787, 0.16797453, 0.18873796, 0.2053913, 0.27205798, 0.29282138, 0.46666667),
+"transitions": PackedFloat32Array(1, -2, 1, 1, -2, 1, 1, -2, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.7, 1.3), Vector2(1, 1), Vector2(1, 1), Vector2(0.7, 1.3), Vector2(1, 1), Vector2(1, 1), Vector2(0.7, 1.3), Vector2(1, 1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_8gonk"]
+resource_name = "GunFireRadial"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/TankGun:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03333333, 0.06666666, 0.099999994, 0.13333333, 0.16666669, 0.20000002, 0.23333335, 0.26666668, 0.3, 0.33333334, 0.36666667, 0.4, 0.43333334, 0.46666664, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 0, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.10293538, 0.2, 0.33333334),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [],
+"method": &"_fire_radial"
+}, {
+"args": [],
+"method": &"_fire_radial"
+}, {
+"args": [],
+"method": &"_fire_radial"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/TankGun:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.06666667, 0.08743008, 0.10130787, 0.16797453, 0.18873796, 0.2053913, 0.27205798, 0.29282138, 0.46666667),
+"transitions": PackedFloat32Array(1, -2, 1, 1, -2, 1, 1, -2, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.7, 1.3), Vector2(1, 1), Vector2(1, 1), Vector2(0.7, 1.3), Vector2(1, 1), Vector2(1, 1), Vector2(0.7, 1.3), Vector2(1, 1), Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals/TankGun:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.033333335, 0.06666667, 0.1, 0.13333334, 0.16666667, 0.2, 0.23333335, 0.26666668, 0.3, 0.46666667),
+"transitions": PackedFloat32Array(1, -2, 1, 1, -2, 1, 1, -2, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.954695100840898, 0.0, 0.0, -0.8552113334772214, 0.0, 0.0, 0.954695100840898, 0.0, 0.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_1yra4"]
+resource_name = "GunIdle"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/TankGun:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.19999999, 0.3, 0.43333334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="Animation" id="Animation_8v0vu"]
+resource_name = "Idle"
+
+[sub_resource type="Animation" id="Animation_u5ta6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/TankGun:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/TankGun:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pqe5h"]
+_data = {
+&"GunFireBurst": SubResource("Animation_pqe5h"),
+&"GunFireRadial": SubResource("Animation_8gonk"),
+&"GunIdle": SubResource("Animation_1yra4"),
+&"Idle": SubResource("Animation_8v0vu"),
+&"RESET": SubResource("Animation_u5ta6")
+}
+
+[node name="TankBoss" type="CharacterBody2D" unique_id=1115428638 groups=["boss"]]
+motion_mode = 1
+script = ExtResource("1_un047")
+acceleration = 5000000.0
+pellet_scene = ExtResource("2_tmahb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1237583900]
+position = Vector2(4.5, 33)
+shape = SubResource("RectangleShape2D_27ykr")
+debug_color = Color(0, 0.5764706, 0.80784315, 0.13725491)
+
+[node name="Visuals" type="Node2D" parent="." unique_id=189685411]
+
+[node name="TankEnemyShadow" type="Sprite2D" parent="Visuals" unique_id=929904456]
+position = Vector2(1, -1)
+texture = ExtResource("3_tmahb")
+
+[node name="TankGun" type="Sprite2D" parent="Visuals" unique_id=151681770]
+z_index = 30
+position = Vector2(-53, -24)
+texture = ExtResource("4_silce")
+hframes = 6
+frame = 5
+
+[node name="TankBody" type="Sprite2D" parent="Visuals" unique_id=1608576649]
+texture = ExtResource("5_m744n")
+hframes = 6
+
+[node name="HealthComponent" parent="." unique_id=1970387855 instance=ExtResource("6_1fc83")]
+max_health = 10000.0
+
+[node name="HurtboxComponent" parent="." unique_id=542877514 node_paths=PackedStringArray("health_component") instance=ExtResource("7_dmg6w")]
+health_component = NodePath("../HealthComponent")
+entity_name = "boss"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=1630858623]
+position = Vector2(4.5, 18)
+shape = SubResource("RectangleShape2D_1l3g5")
+debug_color = Color(0.972549, 0, 0.44313726, 0.105882354)
+
+[node name="LockonComponent" parent="." unique_id=1678096961 instance=ExtResource("8_8dug8")]
+visible = false
+position = Vector2(8, -21)
+
+[node name="HurtFlashComponent" parent="." unique_id=457934623 node_paths=PackedStringArray("hurtbox_component", "sprite") instance=ExtResource("9_gujmv")]
+hurtbox_component = NodePath("../HurtboxComponent")
+sprite = NodePath("../Visuals/TankBody")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=517088794]
+libraries/ = SubResource("AnimationLibrary_mxois")
+autoplay = &"Idle"
+
+[node name="GunAnimationPlayer" type="AnimationPlayer" parent="." unique_id=908089711]
+libraries/ = SubResource("AnimationLibrary_pqe5h")
+
+[node name="TankHFSM" type="Node" parent="." unique_id=1366335646 node_paths=PackedStringArray("animator", "character")]
+script = ExtResource("10_tmahb")
+animator = NodePath("../AnimationPlayer")
+character = NodePath("..")
+
+[node name="Idle" type="Node" parent="TankHFSM" unique_id=1764601004]
+script = ExtResource("10_7s2fp")
+move_name = "Idle"
+
+[node name="Alive" type="Node" parent="TankHFSM" unique_id=2041894362 node_paths=PackedStringArray("rush_series")]
+script = ExtResource("11_e2c3t")
+rush_series = NodePath("RushSeries")
+move_name = "Alive"
+
+[node name="RushSeries" type="Node" parent="TankHFSM/Alive" unique_id=1546890223]
+script = ExtResource("12_vg5dq")
+move_name = "RushSeries"
+
+[node name="RushWindup" type="Node" parent="TankHFSM/Alive/RushSeries" unique_id=2099091824 node_paths=PackedStringArray("next_attacks")]
+script = ExtResource("12_e2c3t")
+next_attacks = [NodePath("../RushFireBurst"), NodePath("../RushFireRadial")]
+move_name = "RushWindup"
+animation = "RushWindup"
+
+[node name="RushFireBurst" type="Node" parent="TankHFSM/Alive/RushSeries" unique_id=1284350871]
+script = ExtResource("13_43gej")
+fire_type = "GunFireBurst"
+move_name = "RushFireBurst"
+animation = "Rushing"
+
+[node name="RushFireRadial" type="Node" parent="TankHFSM/Alive/RushSeries" unique_id=1934493377]
+script = ExtResource("13_43gej")
+fire_type = "GunFireRadial"
+move_name = "RushFireRadial"
+animation = "Rushing"
+
+[node name="RushWinddown" type="Node" parent="TankHFSM/Alive/RushSeries" unique_id=250448596]
+script = ExtResource("14_q4bqe")
+move_name = "RushWinddown"
+animation = "RushWinddown"
+
+[node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 node_paths=PackedStringArray("hfsm") instance=ExtResource("17_silce")]
+offset_left = 23.0
+offset_top = -54.0
+offset_right = 126.0
+offset_bottom = -29.0
+hfsm = NodePath("../TankHFSM")

@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dhc3xltm4mims" path="res://Source/Entities/Environment/StageOne/Art/offwhitebg.png" id="6_r12yy"]
 [ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="6_yxuq4"]
 [ext_resource type="Texture2D" uid="uid://x8n2aq26kuv7" path="res://Source/Entities/Environment/StageOne/Art/stagebackground.png" id="7_yxuq4"]
+[ext_resource type="PackedScene" uid="uid://cv31ib6mqu0ga" path="res://Source/Entities/Bosses/TankBoss/hfsm_tank_boss.tscn" id="10_ifc7m"]
 
 [sub_resource type="Environment" id="Environment_f8vh1"]
 background_mode = 3
@@ -34,6 +35,7 @@ shake_magnitude = 40.0
 [node name="Camera2D" type="Camera2D" parent="." unique_id=763257347]
 
 [node name="TankBoss" parent="." unique_id=861177616 instance=ExtResource("3_f8vh1")]
+process_mode = 4
 z_index = 1
 position = Vector2(256, -214)
 
@@ -516,3 +518,7 @@ color = Color(0, 0, 0, 1)
 [node name="BetterPlayer" parent="." unique_id=1864309119 instance=ExtResource("6_jv2fq")]
 z_index = 1
 position = Vector2(-41, -186)
+
+[node name="TankBoss2" parent="." unique_id=1115428638 node_paths=PackedStringArray("player") instance=ExtResource("10_ifc7m")]
+position = Vector2(-248, -239)
+player = NodePath("../BetterPlayer")
