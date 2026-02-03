@@ -1,4 +1,4 @@
-extends Node2D
+extends Projectile
 
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var timer:Timer = $Timer
@@ -14,7 +14,6 @@ func _ready():
 
 func _physics_process(delta: float) -> void:
 	position += velocity * delta
-
 
 
 

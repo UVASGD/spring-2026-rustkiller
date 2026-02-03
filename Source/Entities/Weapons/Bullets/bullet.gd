@@ -1,21 +1,8 @@
 class_name Bullet
-extends Node2D
-
-var damage: float
-var direction: Vector2 = Vector2.DOWN
-var speed: float = 800.0
-var lifetime: float = 0.5
+extends Projectile
 
 var _lifetime_timer: float = 0.0
 var _has_hit: bool = false
-
-@onready var hitbox: HitboxComponent = $HitboxComponent
-@export var hit_owner:String
-
-func _ready() -> void:
-	hitbox.damage = damage
-	hitbox.area_entered.connect(_on_hitbox_area_entered)
-	hitbox.hit_owner = hit_owner
 
 func _process(delta: float) -> void:
 	if _has_hit:
