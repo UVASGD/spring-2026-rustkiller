@@ -200,6 +200,7 @@ func shoot_single() -> void:
 	var projectile := WRENCH_PROJECTILE.instantiate()
 
 	projectile.global_position = muzzle.global_position
+	projectile.hit_owner = "player"
 
 	var dir := (get_global_mouse_position() - muzzle.global_position).normalized()
 	if dir == Vector2.ZERO:
