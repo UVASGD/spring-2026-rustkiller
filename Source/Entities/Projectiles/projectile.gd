@@ -8,12 +8,22 @@ var speed: float = 800.0
 var lifetime: float = 0.5
 var hit_owner: String
 
+var _lifetime_timer: float = 0.0
+
 @onready var hitbox: HitboxComponent = $HitboxComponent
 
 func _ready() -> void:
 	hitbox.damage = damage
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
 	hitbox.hit_owner = hit_owner
+	
+func _process(delta: float) -> void:
+	# can be overriden, should be called by child classes if overridden
+	global_position += direction * speed * delta
+
+	_lifetime_timer += delta
+	if _lifetime_timer >= lifetime:
+		queue_free()
 
 func _on_hitbox_area_entered(_area: Area2D) -> void:
 	pass # does nothing by default, override
