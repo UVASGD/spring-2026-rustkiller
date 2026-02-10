@@ -1,0 +1,136 @@
+[gd_scene format=3 uid="uid://ckif5hgi5j0q7"]
+
+[ext_resource type="Texture2D" uid="uid://nwhdorveemf" path="res://Source/Entities/Bosses/FurnaceBoss/Art/body.png" id="1_ssbxh"]
+[ext_resource type="Texture2D" uid="uid://b04php2ei1p2k" path="res://Source/Entities/Bosses/FurnaceBoss/Art/jaw_bottom.png" id="2_cnbgx"]
+[ext_resource type="Texture2D" uid="uid://byfh72b87eljy" path="res://Source/Entities/Bosses/FurnaceBoss/Art/tongue.png" id="3_gy0ic"]
+[ext_resource type="Texture2D" uid="uid://cpl74c36x7nwp" path="res://Source/Entities/Bosses/FurnaceBoss/Art/jaw_top.png" id="4_t03wp"]
+[ext_resource type="Texture2D" uid="uid://djg8r2tgjvxg0" path="res://Source/Entities/Bosses/FurnaceBoss/Art/whistle.png" id="5_q4ii8"]
+[ext_resource type="PackedScene" uid="uid://cccn2edq2kj7x" path="res://Source/Entities/Components/HealthComponent/health_component.tscn" id="6_w2phj"]
+[ext_resource type="PackedScene" uid="uid://ccu0np30bscvr" path="res://Source/Entities/Components/HurtboxComponent/hurtbox_component.tscn" id="7_0xocv"]
+[ext_resource type="PackedScene" uid="uid://cmy1ds7wda1qa" path="res://Source/Entities/Components/LockOnComponent/lockon_component.tscn" id="8_cbjyb"]
+[ext_resource type="PackedScene" uid="uid://csvmkjqtav4p3" path="res://Source/Entities/Components/HurtFlashComponent/hurt_flash_component.tscn" id="9_sqjvn"]
+[ext_resource type="Script" uid="uid://dowpu6whwm2jf" path="res://Source/Entities/Bosses/FurnaceBoss/furnace_hfsm.gd" id="10_654er"]
+[ext_resource type="Script" uid="uid://sgmqjr8t8sas" path="res://Source/Entities/Bosses/FurnaceBoss/idle.gd" id="11_uw02a"]
+[ext_resource type="Script" uid="uid://148l6dvi1fxr" path="res://Source/Entities/Bosses/FurnaceBoss/alive.gd" id="12_d465v"]
+[ext_resource type="PackedScene" uid="uid://co3gr1quly52h" path="res://Source/Entities/Components/HFSM/HFSMDebugLabelComponent/HFSMDebugLabelComponent.tscn" id="17_8xws3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_27ykr"]
+size = Vector2(161, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1l3g5"]
+size = Vector2(161, 72)
+
+[sub_resource type="Animation" id="Animation_a6fv3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_10emf"]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(0.5, 1, 2),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 0.8), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1guws"]
+_data = {
+&"RESET": SubResource("Animation_a6fv3"),
+&"idle": SubResource("Animation_10emf")
+}
+
+[node name="TankBoss" type="CharacterBody2D" unique_id=1115428638 groups=["boss"]]
+motion_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1237583900]
+position = Vector2(4.5, 33)
+shape = SubResource("RectangleShape2D_27ykr")
+debug_color = Color(0, 0.5764706, 0.80784315, 0.13725491)
+
+[node name="Visuals" type="Node2D" parent="." unique_id=189685411]
+
+[node name="Body" type="Sprite2D" parent="Visuals" unique_id=1253289267]
+position = Vector2(25, -29)
+texture = ExtResource("1_ssbxh")
+
+[node name="JawBottom" type="Sprite2D" parent="Visuals" unique_id=385271594]
+position = Vector2(11, -30)
+texture = ExtResource("2_cnbgx")
+
+[node name="Tongue" type="Sprite2D" parent="Visuals" unique_id=1512516031]
+position = Vector2(3, -26)
+texture = ExtResource("3_gy0ic")
+
+[node name="JawTop" type="Sprite2D" parent="Visuals" unique_id=594174456]
+position = Vector2(12, -25)
+texture = ExtResource("4_t03wp")
+
+[node name="Whistle" type="Sprite2D" parent="Visuals" unique_id=628978767]
+position = Vector2(68, -57)
+texture = ExtResource("5_q4ii8")
+
+[node name="HealthComponent" parent="." unique_id=1970387855 instance=ExtResource("6_w2phj")]
+max_health = 10000.0
+
+[node name="HurtboxComponent" parent="." unique_id=542877514 node_paths=PackedStringArray("health_component") instance=ExtResource("7_0xocv")]
+visible = false
+health_component = NodePath("../HealthComponent")
+entity_name = "boss"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=1630858623]
+position = Vector2(4.5, 18)
+shape = SubResource("RectangleShape2D_1l3g5")
+debug_color = Color(0.972549, 0, 0.44313726, 0.105882354)
+
+[node name="LockonComponent" parent="." unique_id=1678096961 instance=ExtResource("8_cbjyb")]
+visible = false
+position = Vector2(8, -21)
+
+[node name="HurtFlashComponent" parent="." unique_id=457934623 node_paths=PackedStringArray("hurtbox_component", "sprite") instance=ExtResource("9_sqjvn")]
+hurtbox_component = NodePath("../HurtboxComponent")
+sprite = NodePath("")
+
+[node name="FurnaceHFSM" type="Node" parent="." unique_id=1366335646 node_paths=PackedStringArray("animator", "character")]
+script = ExtResource("10_654er")
+animator = NodePath("../AnimationPlayer")
+character = NodePath("..")
+
+[node name="Idle" type="Node" parent="FurnaceHFSM" unique_id=1764601004]
+script = ExtResource("11_uw02a")
+move_name = "Idle"
+
+[node name="Alive" type="Node" parent="FurnaceHFSM" unique_id=2041894362]
+script = ExtResource("12_d465v")
+move_name = "Alive"
+
+[node name="Rush" type="Node" parent="FurnaceHFSM/Alive" unique_id=1546890223]
+
+[node name="Chill" type="Node" parent="FurnaceHFSM/Alive" unique_id=1270827835]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2085557924]
+libraries/ = SubResource("AnimationLibrary_1guws")
+
+[node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 node_paths=PackedStringArray("hfsm") instance=ExtResource("17_8xws3")]
+offset_left = 23.0
+offset_top = -54.0
+offset_right = 126.0
+offset_bottom = -29.0
+hfsm = NodePath("../FurnaceHFSM")
+metadata/_edit_use_anchors_ = true
