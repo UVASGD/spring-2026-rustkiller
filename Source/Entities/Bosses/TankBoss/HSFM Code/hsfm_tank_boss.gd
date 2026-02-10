@@ -53,12 +53,9 @@ func _fire_burst():
 		var bullet_direction = Vector2.from_angle(base_angle + random_angle)
 		
 		var bullet = pellet_scene.instantiate()
-		bullet.damage = bullet_damage
-		bullet.hit_owner = "boss"
-		bullet.direction = bullet_direction
-		bullet.speed = bullet_speed
-		bullet.lifetime = bullet_lifetime
-		bullet.global_position = tank_sprite_gun.global_position
+		bullet.set_damage(bullet_damage)
+		bullet.set_lifetime(bullet_lifetime)
+		bullet.shoot(tank_sprite_gun.global_position, bullet_direction, bullet_speed, "boss")
 		
 		get_tree().current_scene.add_child(bullet)
 
@@ -72,12 +69,9 @@ func _fire_radial():
 		var angle = angle_step * i
 		var bullet_direction = Vector2.from_angle(angle)
 		
-		var bullet = pellet_scene.instantiate()
-		bullet.damage = bullet_damage
-		bullet.hit_owner = "boss"
-		bullet.direction = bullet_direction
-		bullet.speed = bullet_speed
-		bullet.lifetime = bullet_lifetime
-		bullet.global_position = tank_sprite_gun.global_position
+		var bullet : Projectile = pellet_scene.instantiate()
+		bullet.set_damage(bullet_damage)
+		bullet.set_lifetime(bullet_lifetime)
+		bullet.shoot(tank_sprite_gun.global_position, bullet_direction, bullet_speed, "boss")
 		
 		get_tree().current_scene.add_child(bullet)
