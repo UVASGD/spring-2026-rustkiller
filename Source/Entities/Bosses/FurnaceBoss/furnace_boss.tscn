@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://ckif5hgi5j0q7"]
 
 [ext_resource type="Texture2D" uid="uid://nwhdorveemf" path="res://Source/Entities/Bosses/FurnaceBoss/Art/body.png" id="1_ssbxh"]
+[ext_resource type="Script" uid="uid://sa0pc6ad2d1h" path="res://Source/Entities/Bosses/FurnaceBoss/furnace_boss.gd" id="1_ucgct"]
 [ext_resource type="Texture2D" uid="uid://b04php2ei1p2k" path="res://Source/Entities/Bosses/FurnaceBoss/Art/jaw_bottom.png" id="2_cnbgx"]
 [ext_resource type="Texture2D" uid="uid://byfh72b87eljy" path="res://Source/Entities/Bosses/FurnaceBoss/Art/tongue.png" id="3_gy0ic"]
 [ext_resource type="Texture2D" uid="uid://cpl74c36x7nwp" path="res://Source/Entities/Bosses/FurnaceBoss/Art/jaw_top.png" id="4_t03wp"]
@@ -12,10 +13,16 @@
 [ext_resource type="Script" uid="uid://dowpu6whwm2jf" path="res://Source/Entities/Bosses/FurnaceBoss/furnace_hfsm.gd" id="10_654er"]
 [ext_resource type="Script" uid="uid://sgmqjr8t8sas" path="res://Source/Entities/Bosses/FurnaceBoss/idle.gd" id="11_uw02a"]
 [ext_resource type="Script" uid="uid://148l6dvi1fxr" path="res://Source/Entities/Bosses/FurnaceBoss/alive.gd" id="12_d465v"]
+[ext_resource type="Script" uid="uid://i0flxlp4xdo2" path="res://Source/Entities/Bosses/FurnaceBoss/charge.gd" id="14_ix7ae"]
+[ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="16_l62nx"]
 [ext_resource type="PackedScene" uid="uid://co3gr1quly52h" path="res://Source/Entities/Components/HFSM/HFSMDebugLabelComponent/HFSMDebugLabelComponent.tscn" id="17_8xws3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_27ykr"]
 size = Vector2(161, 40)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ssbxh"]
+radius = 23.0
+height = 104.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1l3g5"]
 size = Vector2(161, 72)
@@ -34,9 +41,106 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(1, 1)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/JawTop:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(12, -25)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals/JawTop:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visuals/JawBottom:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visuals/Tongue/HitboxComponent:process_mode")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Visuals/Tongue:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(3, -26)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Visuals/Tongue:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Visuals/Tongue:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_10emf"]
 resource_name = "idle"
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -50,17 +154,132 @@ tracks/0/keys = {
 "values": [Vector2(1, 1), Vector2(1.2, 0.8), Vector2(1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_d465v"]
+resource_name = "mouth_charge_start"
+length = 0.15
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/JawTop:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(-2),
+"update": 0,
+"values": [Vector2(12, -25)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/JawTop:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.10231729),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [0.0, 0.9144847]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals/JawBottom:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.10546552),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [0.0, -1.2520226]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visuals:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.029908132, 0.094446726),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.225, 0.725), Vector2(1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visuals/Tongue/HitboxComponent:process_mode")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.09916907),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [4, 0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Visuals/Tongue:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(3, -26)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Visuals/Tongue:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Visuals/Tongue:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.06666667, 0.11805841),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1), Vector2(3.76, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1guws"]
 _data = {
 &"RESET": SubResource("Animation_a6fv3"),
-&"idle": SubResource("Animation_10emf")
+&"idle": SubResource("Animation_10emf"),
+&"mouth_charge_start": SubResource("Animation_d465v")
 }
 
-[node name="TankBoss" type="CharacterBody2D" unique_id=1115428638 groups=["boss"]]
+[node name="FurnaceBoss" type="CharacterBody2D" unique_id=1115428638 groups=["boss"]]
 motion_mode = 1
+script = ExtResource("1_ucgct")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1237583900]
-position = Vector2(4.5, 33)
+position = Vector2(222, -44)
 shape = SubResource("RectangleShape2D_27ykr")
 debug_color = Color(0, 0.5764706, 0.80784315, 0.13725491)
 
@@ -78,6 +297,16 @@ texture = ExtResource("2_cnbgx")
 position = Vector2(3, -26)
 texture = ExtResource("3_gy0ic")
 
+[node name="HitboxComponent" parent="Visuals/Tongue" unique_id=930663673 instance=ExtResource("16_l62nx")]
+process_mode = 4
+position = Vector2(-19, -8)
+hit_owner = "boss"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Visuals/Tongue/HitboxComponent" unique_id=612792991]
+position = Vector2(-17.000002, 3.0000005)
+rotation = 1.3904076
+shape = SubResource("CapsuleShape2D_ssbxh")
+
 [node name="JawTop" type="Sprite2D" parent="Visuals" unique_id=594174456]
 position = Vector2(12, -25)
 texture = ExtResource("4_t03wp")
@@ -90,7 +319,6 @@ texture = ExtResource("5_q4ii8")
 max_health = 10000.0
 
 [node name="HurtboxComponent" parent="." unique_id=542877514 node_paths=PackedStringArray("health_component") instance=ExtResource("7_0xocv")]
-visible = false
 health_component = NodePath("../HealthComponent")
 entity_name = "boss"
 
@@ -100,12 +328,11 @@ shape = SubResource("RectangleShape2D_1l3g5")
 debug_color = Color(0.972549, 0, 0.44313726, 0.105882354)
 
 [node name="LockonComponent" parent="." unique_id=1678096961 instance=ExtResource("8_cbjyb")]
-visible = false
 position = Vector2(8, -21)
 
 [node name="HurtFlashComponent" parent="." unique_id=457934623 node_paths=PackedStringArray("hurtbox_component", "sprite") instance=ExtResource("9_sqjvn")]
 hurtbox_component = NodePath("../HurtboxComponent")
-sprite = NodePath("")
+sprite = NodePath("../Visuals/Body")
 
 [node name="FurnaceHFSM" type="Node" parent="." unique_id=1366335646 node_paths=PackedStringArray("animator", "character")]
 script = ExtResource("10_654er")
@@ -115,22 +342,24 @@ character = NodePath("..")
 [node name="Idle" type="Node" parent="FurnaceHFSM" unique_id=1764601004]
 script = ExtResource("11_uw02a")
 move_name = "Idle"
+animation = "idle"
 
 [node name="Alive" type="Node" parent="FurnaceHFSM" unique_id=2041894362]
 script = ExtResource("12_d465v")
 move_name = "Alive"
+animation = "idle"
 
-[node name="Rush" type="Node" parent="FurnaceHFSM/Alive" unique_id=1546890223]
-
-[node name="Chill" type="Node" parent="FurnaceHFSM/Alive" unique_id=1270827835]
+[node name="Charge" type="Node" parent="FurnaceHFSM/Alive" unique_id=1505114940]
+script = ExtResource("14_ix7ae")
+move_name = "Charge"
+animation = "mouth_charge_start"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2085557924]
 libraries/ = SubResource("AnimationLibrary_1guws")
 
 [node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 node_paths=PackedStringArray("hfsm") instance=ExtResource("17_8xws3")]
-offset_left = 23.0
-offset_top = -54.0
-offset_right = 126.0
-offset_bottom = -29.0
+offset_left = 31.0
+offset_top = -52.0
+offset_right = 134.0
+offset_bottom = -27.0
 hfsm = NodePath("../FurnaceHFSM")
-metadata/_edit_use_anchors_ = true

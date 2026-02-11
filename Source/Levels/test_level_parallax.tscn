@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="6_yxuq4"]
 [ext_resource type="Texture2D" uid="uid://x8n2aq26kuv7" path="res://Source/Entities/Environment/StageOne/Art/stagebackground.png" id="7_yxuq4"]
 [ext_resource type="PackedScene" uid="uid://cv31ib6mqu0ga" path="res://Source/Entities/Bosses/TankBoss/hfsm_tank_boss.tscn" id="10_ifc7m"]
+[ext_resource type="PackedScene" uid="uid://ckif5hgi5j0q7" path="res://Source/Entities/Bosses/FurnaceBoss/furnace_boss.tscn" id="11_bmmtr"]
 
 [sub_resource type="Environment" id="Environment_f8vh1"]
 background_mode = 3
@@ -521,4 +522,8 @@ position = Vector2(-41, -186)
 
 [node name="TankBoss2" parent="." unique_id=1115428638 node_paths=PackedStringArray("player") instance=ExtResource("10_ifc7m")]
 position = Vector2(-248, -239)
+player = NodePath("../BetterPlayer")
+
+[node name="TankBoss3" parent="." unique_id=1995595152 node_paths=PackedStringArray("player") instance=ExtResource("11_bmmtr")]
+position = Vector2(46, -305)
 player = NodePath("../BetterPlayer")
