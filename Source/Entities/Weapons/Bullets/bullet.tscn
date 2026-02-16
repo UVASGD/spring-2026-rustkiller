@@ -27,3 +27,5 @@ texture = ExtResource("3_p72mb")
 
 [node name="ProjectileMotionComponent" parent="." unique_id=874195743 instance=ExtResource("4_o2qxm")]
 scale = Vector2(0.9999998, 0.9999998)
+
+[connection signal="area_entered" from="HitboxComponent" to="." method="_on_hitbox_area_entered"]

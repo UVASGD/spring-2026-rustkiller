@@ -9,7 +9,7 @@ func _process(_delta: float) -> void:
 	pass
 
 func _ready() -> void:
-	hitbox.area_entered.connect(_on_hitbox_area_entered)
+	pass
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area is HurtboxComponent:
