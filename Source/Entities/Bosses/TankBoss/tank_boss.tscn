@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dfwb6fkkl614"]
 
 [ext_resource type="Script" uid="uid://qsfe54fuv2x0" path="res://Source/Entities/Bosses/TankBoss/tank_boss.gd" id="1_2kk66"]
-[ext_resource type="PackedScene" uid="uid://cdvbfv2n8bbaf" path="res://Source/Entities/Weapons/Bullets/bullet.tscn" id="2_vf868"]
+[ext_resource type="PackedScene" uid="uid://cdvbfv2n8bbaf" path="res://Source/Entities/Projectiles/Bullets/bullet.tscn" id="2_vf868"]
 [ext_resource type="Texture2D" uid="uid://blhr1feom5pqf" path="res://Source/Entities/Bosses/TankBoss/TankEnemyShadow.png" id="3_0mmrh"]
 [ext_resource type="Texture2D" uid="uid://u6rx381ob4tf" path="res://Source/Entities/Bosses/TankBoss/Art/TankEnemyGun.png" id="4_5jmeq"]
 [ext_resource type="Texture2D" uid="uid://by7dyh0itnf2g" path="res://Source/Entities/Bosses/TankBoss/Art/TankEnemyBody.png" id="5_pbt1s"]
