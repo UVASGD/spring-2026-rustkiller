@@ -2,24 +2,19 @@ extends Node2D
 class_name Bullet
 
 @onready var hitbox: HitboxComponent = $HitboxComponent
-@export var hit_owner:String
 var _has_hit: bool = false
-var damage: float
 
 
 func _process(_delta: float) -> void:
 	pass
 
 func _ready() -> void:
-	hitbox.damage = damage
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
-	hitbox.hit_owner = hit_owner	
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area is HurtboxComponent:
 		var hurtbox = area as HurtboxComponent
-		
-		if hurtbox.can_accept_bullet_collision() and hurtbox.entity_name != "boss":
+		if hurtbox.can_accept_bullet_collision() and hurtbox.entity_name != hitbox.hit_owner:
 			_has_hit = true
 			
 			# Spawn impact effect if available

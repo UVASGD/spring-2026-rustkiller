@@ -18,6 +18,7 @@ func _process(delta: float) -> void:
 	if _lifetime_timer >= lifetime:
 		get_parent().queue_free()
 		
+# todo in the future, could use optional arguments (arg1=val) just for clarity		
 func shoot(initial_loc: Vector2, new_direction: Vector2, new_speed: float, new_lifetime: float) -> void:
 	get_parent().global_position = initial_loc
 	direction = new_direction.normalized()

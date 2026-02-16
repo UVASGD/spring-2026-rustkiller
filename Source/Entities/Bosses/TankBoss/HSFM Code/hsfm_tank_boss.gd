@@ -53,8 +53,7 @@ func _fire_burst():
 		var bullet_direction = Vector2.from_angle(base_angle + random_angle)
 		
 		var bullet = pellet_scene.instantiate()
-		bullet.damage = bullet_damage
-		bullet.hit_owner = "boss"
+		HitboxComponent.get_child_component(bullet).init(bullet_damage, "boss")
 		ProjectileMotionComponent.get_child_component(bullet).shoot(
 			tank_sprite_gun.global_position,
 			bullet_direction,
@@ -75,8 +74,7 @@ func _fire_radial():
 		var bullet_direction = Vector2.from_angle(angle)
 		
 		var bullet = pellet_scene.instantiate()
-		bullet.damage = bullet_damage
-		bullet.hit_owner = "boss"
+		HitboxComponent.get_child_component(bullet).init(bullet_damage, "boss")
 		ProjectileMotionComponent.get_child_component(bullet).shoot(
 			tank_sprite_gun.global_position,
 			bullet_direction,
