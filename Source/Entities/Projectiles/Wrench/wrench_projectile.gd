@@ -1,4 +1,4 @@
-extends Projectile
+extends Node2D
 
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var timer:Timer = $Timer
@@ -8,20 +8,13 @@ var velocity: Vector2 = Vector2.ZERO
 func _ready():
 	anim.play("wrench")
 	timer.start()
-	# on the projectile root
-	$HitboxComponent.hit_owner = hit_owner
 
 func _physics_process(delta: float) -> void:
-	position += velocity * delta
-
-
-
+	pass
 
 
 func _on_timer_timeout():
 	queue_free()
-
-
 
 
 func _on_hitbox_area_entered(area):
