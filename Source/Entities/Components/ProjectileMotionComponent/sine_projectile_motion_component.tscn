@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dftr0nrym4kf3"]
+
+[ext_resource type="Script" uid="uid://d022mmvcvkagt" path="res://Source/Entities/Components/ProjectileMotionComponent/sine_projectile_motion_component.gd" id="1_fnpom"]
+
+[node name="SineProjectileMotionComponent" type="Node2D" unique_id=1722714623]
+script = ExtResource("1_fnpom")

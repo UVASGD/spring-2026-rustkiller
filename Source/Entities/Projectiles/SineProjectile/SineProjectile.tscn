@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://lvwaimk4j0nb"]
+
+[ext_resource type="Texture2D" uid="uid://dpopxngjqj4sd" path="res://Source/Entities/Projectiles/SineProjectile/extremedemon.png" id="1_yj88j"]
+[ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="2_kagd5"]
+[ext_resource type="PackedScene" uid="uid://dftr0nrym4kf3" path="res://Source/Entities/Components/ProjectileMotionComponent/sine_projectile_motion_component.tscn" id="3_kagd5"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kagd5"]
+radius = 10.049875
+
+[node name="SineProjectile" type="Node2D" unique_id=1456989462]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=978296845]
+texture = ExtResource("1_yj88j")
+
+[node name="HitboxComponent" parent="." unique_id=1229514695 instance=ExtResource("2_kagd5")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=2144707297]
+shape = SubResource("CircleShape2D_kagd5")
+
+[node name="SineProjectileMotionComponent" parent="." unique_id=1722714623 instance=ExtResource("3_kagd5")]

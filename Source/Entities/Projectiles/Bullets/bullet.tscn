@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://cdvbfv2n8bbaf"]
 
-[ext_resource type="Script" uid="uid://d1uho0r3aiuf7" path="res://Source/Entities/Weapons/Bullets/bullet.gd" id="1_7ff0x"]
+[ext_resource type="Script" uid="uid://d1uho0r3aiuf7" path="res://Source/Entities/Projectiles/Bullets/bullet.gd" id="1_7ff0x"]
 [ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="2_p72mb"]
-[ext_resource type="Texture2D" uid="uid://2owpruemkh0a" path="res://Source/Entities/Weapons/Bullets/boss_projectile.png" id="3_p72mb"]
+[ext_resource type="Texture2D" uid="uid://2owpruemkh0a" path="res://Source/Entities/Projectiles/Bullets/boss_projectile.png" id="3_p72mb"]
+[ext_resource type="PackedScene" uid="uid://bu00fuexphyj0" path="res://Source/Entities/Components/ProjectileMotionComponent/projectile_motion_component.tscn" id="4_o2qxm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p72mb"]
 size = Vector2(2, 2)
@@ -23,3 +24,8 @@ self_modulate = Color(1.353256, 1.353256, 1.353256, 1)
 z_index = 1
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("3_p72mb")
+
+[node name="ProjectileMotionComponent" parent="." unique_id=874195743 instance=ExtResource("4_o2qxm")]
+scale = Vector2(0.9999998, 0.9999998)
+
+[connection signal="area_entered" from="HitboxComponent" to="." method="_on_hitbox_area_entered"]

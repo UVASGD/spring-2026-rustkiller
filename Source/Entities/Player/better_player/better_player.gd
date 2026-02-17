@@ -199,18 +199,18 @@ func fire_burst() -> void:
 func shoot_single() -> void:
 	var projectile := WRENCH_PROJECTILE.instantiate()
 
-	projectile.global_position = muzzle.global_position
-
 	var dir := (get_global_mouse_position() - muzzle.global_position).normalized()
 	if dir == Vector2.ZERO:
 		dir = attack_direction
 
 	projectile.rotation = dir.angle()
-
-	if projectile is RigidBody2D:
-		projectile.linear_velocity = dir * PROJECTILE_SPEED
-	else:
-		projectile.velocity = dir * PROJECTILE_SPEED
+	ProjectileMotionComponent.get_child_component(projectile).shoot(
+		muzzle.global_position,
+		dir,
+		PROJECTILE_SPEED,
+		-1
+	)
+	HitboxComponent.get_child_component(projectile).init(1, "player")
 
 	get_tree().current_scene.add_child(projectile)
 

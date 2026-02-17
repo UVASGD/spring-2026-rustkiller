@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bl4xoc1lnqv6g" path="res://Source/Entities/Projectiles/Wrench/wrench_projectile.gd" id="1_nmrti"]
 [ext_resource type="Texture2D" uid="uid://bwabsprrqwrn3" path="res://Source/Entities/Projectiles/Wrench/ProjectileWrenchNoBg.png" id="2_nmrti"]
 [ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="3_ol3ts"]
+[ext_resource type="PackedScene" uid="uid://bu00fuexphyj0" path="res://Source/Entities/Components/ProjectileMotionComponent/projectile_motion_component.tscn" id="4_efvkt"]
 
 [sub_resource type="Animation" id="Animation_wnkdr"]
 length = 0.001
@@ -58,7 +59,6 @@ libraries/ = SubResource("AnimationLibrary_xh7q1")
 speed_scale = 3.0
 
 [node name="Timer" type="Timer" parent="." unique_id=1029728341]
-wait_time = 10.0
 
 [node name="HitboxComponent" parent="." unique_id=913797275 instance=ExtResource("3_ol3ts")]
 
@@ -66,5 +66,7 @@ wait_time = 10.0
 visible = false
 shape = SubResource("CircleShape2D_efvkt")
 
+[node name="ProjectileMotionComponent" parent="." unique_id=1218429710 instance=ExtResource("4_efvkt")]
+
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
-[connection signal="area_entered" from="HitboxComponent" to="." method="_on_hitbox_component_area_entered"]
+[connection signal="area_entered" from="HitboxComponent" to="." method="_on_hitbox_area_entered"]
