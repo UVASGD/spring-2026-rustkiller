@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://bufuw0bgygutx"]
+
+[ext_resource type="Script" uid="uid://doeqfxqebsq6b" path="res://Source/Entities/Projectiles/SteamBurst/steam_burst.gd" id="1_3nmdy"]
+[ext_resource type="Texture2D" uid="uid://yl7ismcq41ad" path="res://icon.svg" id="2_irhcd"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kvcvr"]
+
+[node name="SteamBurst" type="Area2D" unique_id=1620365194]
+script = ExtResource("1_3nmdy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1381541870]
+shape = SubResource("CircleShape2D_kvcvr")
+
+[node name="Visuals" type="Node2D" parent="." unique_id=1090126558]
+
+[node name="Sprite2D" type="Sprite2D" parent="Visuals" unique_id=622577925]
+position = Vector2(4.7683716e-07, -4.7683716e-07)
+scale = Vector2(10, 10)
+texture = ExtResource("2_irhcd")
+region_enabled = true
+region_rect = Rect2(63, 66, 2, 2)
