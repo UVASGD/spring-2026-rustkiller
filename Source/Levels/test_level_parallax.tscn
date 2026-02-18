@@ -2,14 +2,12 @@
 
 [ext_resource type="Script" uid="uid://fb2dxk6ifnmk" path="res://Source/Levels/test_level_parallax.gd" id="1_r12yy"]
 [ext_resource type="Script" uid="uid://np8yjxnxxm8m" path="res://Source/Entities/Components/LockOnComponent/lockon_system.gd" id="2_jv2fq"]
-[ext_resource type="PackedScene" uid="uid://dfwb6fkkl614" path="res://Source/Entities/Bosses/TankBoss/tank_boss.tscn" id="3_f8vh1"]
 [ext_resource type="Texture2D" uid="uid://bktdkuma36eod" path="res://Source/Entities/Environment/StageOne/Art/Stage.png" id="5_r12yy"]
 [ext_resource type="Texture2D" uid="uid://cdkm5mxrhden3" path="res://Source/Entities/Environment/StageOne/Art/pillar.png" id="6_f8vh1"]
 [ext_resource type="PackedScene" uid="uid://crvepxby1imcj" path="res://Source/Entities/Player/better_player/better_player.tscn" id="6_jv2fq"]
 [ext_resource type="Texture2D" uid="uid://dhc3xltm4mims" path="res://Source/Entities/Environment/StageOne/Art/offwhitebg.png" id="6_r12yy"]
 [ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="6_yxuq4"]
 [ext_resource type="Texture2D" uid="uid://x8n2aq26kuv7" path="res://Source/Entities/Environment/StageOne/Art/stagebackground.png" id="7_yxuq4"]
-[ext_resource type="PackedScene" uid="uid://cv31ib6mqu0ga" path="res://Source/Entities/Bosses/TankBoss/hfsm_tank_boss.tscn" id="10_ifc7m"]
 [ext_resource type="PackedScene" uid="uid://ckif5hgi5j0q7" path="res://Source/Entities/Bosses/FurnaceBoss/furnace_boss.tscn" id="11_bmmtr"]
 
 [sub_resource type="Environment" id="Environment_f8vh1"]
@@ -34,11 +32,6 @@ padding = 300.0
 shake_magnitude = 40.0
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=763257347]
-
-[node name="TankBoss" parent="." unique_id=861177616 instance=ExtResource("3_f8vh1")]
-process_mode = 4
-z_index = 1
-position = Vector2(256, -214)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1131872355]
 environment = SubResource("Environment_f8vh1")
@@ -519,10 +512,6 @@ color = Color(0, 0, 0, 1)
 [node name="BetterPlayer" parent="." unique_id=1864309119 instance=ExtResource("6_jv2fq")]
 z_index = 1
 position = Vector2(-41, -186)
-
-[node name="TankBoss2" parent="." unique_id=1115428638 node_paths=PackedStringArray("player") instance=ExtResource("10_ifc7m")]
-position = Vector2(-248, -239)
-player = NodePath("../BetterPlayer")
 
 [node name="TankBoss3" parent="." unique_id=1995595152 node_paths=PackedStringArray("player") instance=ExtResource("11_bmmtr")]
 position = Vector2(46, -305)
