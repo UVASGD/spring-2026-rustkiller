@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://fwo14605u47e"]
+
+[ext_resource type="Script" uid="uid://dpqbu26t3o26m" path="res://Source/Entities/Hazards/LavaBall/lavaboulder.gd" id="1_7ik3p"]
+[ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="2_5tfk0"]
+[ext_resource type="Texture2D" uid="uid://7ypo3in83dn7" path="res://Source/Resources/Images/aoe.png" id="3_0xgop"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c7ccf"]
+radius = 11.0
+height = 56.0
+
+[node name="LavaBoulder" type="Node2D" unique_id=892398662]
+script = ExtResource("1_7ik3p")
+
+[node name="HitboxComponent" parent="." unique_id=174191540 instance=ExtResource("2_5tfk0")]
+monitoring = false
+monitorable = false
+damage = 10.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=863044118]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_c7ccf")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=834594290]
+texture = ExtResource("3_0xgop")
+hframes = 2
