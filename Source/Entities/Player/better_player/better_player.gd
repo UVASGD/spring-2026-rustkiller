@@ -8,6 +8,7 @@ var current_state: String = "idle"
 
 @export var LUNGE_DISTANCE: float = 80.0
 @export var LUNGE_DURATION: float = 0.12
+@export var knockback_decay := 800.0
 
 var lunge_dir: Vector2 = Vector2.ZERO
 var lunge_time_left: float = 0.0
@@ -26,6 +27,9 @@ var has_melee_hit: bool = false
 
 var attack_direction: Vector2 = Vector2.ZERO
 var last_move_dir: Vector2 = Vector2.RIGHT
+var knockback: Vector2 = Vector2.ZERO
+var can_dash: bool = true
+
 
 const WRENCH_PROJECTILE := preload("res://Source/Entities/Projectiles/Wrench/wrench_projectile.tscn")
 
@@ -34,6 +38,8 @@ const WRENCH_PROJECTILE := preload("res://Source/Entities/Projectiles/Wrench/wre
 @onready var muzzle: Node2D = $SpriteManager/Muzzle
 @onready var hitbox_component: Area2D = $SpriteManager/HitboxComponent
 @onready var parry_window: Area2D = $SpriteManager/ParryWindow     
+@export var dash_distance: float = 100.0  # how far to teleport
+@export var dash_cooldown: float = 0.5   # seconds between dashes
 
 signal parrying
 
@@ -46,6 +52,11 @@ func _ready() -> void:
 	parry_window.monitoring = true
 	parry_window.monitorable = true
 
+func apply_knockback(force: Vector2):
+	knockback = force*5
+	while knockback.length() > 0:
+		knockback = knockback.move_toward(Vector2.ZERO, knockback_decay * get_process_delta_time())
+		await get_tree().process_frame
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("switch_weapon"):
@@ -107,8 +118,8 @@ func _physics_process(delta: float) -> void:
 		elif curr_weapon == "shoot" and not is_shooting:
 			fire_burst()
 
-	velocity = direction * SPEED
-
+	velocity = direction * SPEED + knockback*5
+	
 	if direction.length() > 0.0:
 		if curr_weapon == "shoot":
 			change_state("shooting")
@@ -119,6 +130,28 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
+func _input(event):
+	if Input.is_action_just_pressed("quit"): # Use "ui_cancel" if you chose the default
+		get_tree().quit() # This will close the game
+
+	if Input.is_action_just_pressed("blitz") and can_dash:
+		blitz()
+
+func blitz():
+	# Teleport in the last move direction
+	var dash_dir = Vector2.ZERO
+	if last_move_dir.length() > 0:
+		dash_dir = last_move_dir.normalized()
+		sprite_manager.modulate = Color(1, 0, 1)  # RGB: purple
+	else:
+		dash_dir = last_move_dir  # fallback if no input
+	global_position += dash_dir * dash_distance
+	
+	# Cooldown
+	can_dash = false
+	await get_tree().create_timer(dash_cooldown).timeout
+	sprite_manager.modulate = Color(1, 1, 1)  # Reset to normal (white)
+	can_dash = true
 
 func change_state(new_state: String) -> void:
 	if current_state == new_state:
