@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cy07mpm88jmy1"
+path="res://.godot/imported/Furnace Charge.mp3-f513fd656479207c12673ba1219c603d.mp3str"
+
+[deps]
+
+source_file="res://Source/Entities/Furnace Charge.mp3"
+dest_files=["res://.godot/imported/Furnace Charge.mp3-f513fd656479207c12673ba1219c603d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

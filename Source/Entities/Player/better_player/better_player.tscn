@@ -10,7 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://0i8ka85rtui0" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushParryNoEnergy.png" id="7_36sdt"]
 [ext_resource type="Texture2D" uid="uid://dyrk1d2hnc82x" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushAttackComboEnergy.png" id="9_36sdt"]
 [ext_resource type="Texture2D" uid="uid://he47ke6bx1pr" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushParryEnergy.png" id="10_n5m2y"]
-[ext_resource type="Texture2D" uid="uid://byfh72b87eljy" path="res://Source/Entities/Bosses/FurnaceBoss/Art/tongue.png" id="11_1ysy8"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g17sf"]
 radius = 13.0
@@ -695,10 +694,6 @@ radius = 60.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_02bga"]
 radius = 45.01111
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fctv0"]
-radius = 23.0
-height = 104.0
-
 [node name="BetterPlayer" type="CharacterBody2D" unique_id=462766173 groups=["PLAYER"]]
 script = ExtResource("1_ohtk3")
 
@@ -749,6 +744,7 @@ position = Vector2(-31, -19)
 
 [node name="HitboxComponent" parent="SpriteManager" unique_id=1353647101 instance=ExtResource("7_2jere")]
 visible = false
+knockback_strength = 40.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SpriteManager/HitboxComponent" unique_id=2048539670]
 shape = SubResource("CircleShape2D_2jere")
@@ -776,20 +772,5 @@ visible = false
 self_modulate = Color(1.353256, 1.353256, 1.353256, 1)
 texture = ExtResource("10_n5m2y")
 hframes = 6
-
-[node name="Tongue" type="Sprite2D" parent="." unique_id=1182662577]
-position = Vector2(3, -26)
-rotation = 2.617925
-texture = ExtResource("11_1ysy8")
-
-[node name="HitboxComponent" parent="Tongue" unique_id=19098783 instance=ExtResource("7_2jere")]
-process_mode = 4
-position = Vector2(-19, -8)
-hit_owner = "boss"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Tongue/HitboxComponent" unique_id=550085320]
-position = Vector2(-17.000002, 3.0000005)
-rotation = 1.3904076
-shape = SubResource("CapsuleShape2D_fctv0")
 
 [connection signal="animation_finished" from="PlayerAnimation" to="." method="_on_player_animation_animation_finished"]
