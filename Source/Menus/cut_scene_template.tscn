@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://7kvb3yvbc40l"]
+
+[ext_resource type="Script" uid="uid://bl1yjamcxqh15" path="res://Source/Menus/cut_scene_template.gd" id="1_w4s7g"]
+[ext_resource type="Texture2D" uid="uid://yl7ismcq41ad" path="res://icon.svg" id="2_2yq5u"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ooyih"]
+atlas = ExtResource("2_2yq5u")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2yq5u"]
+atlas = ExtResource("2_2yq5u")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ehan0"]
+atlas = ExtResource("2_2yq5u")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2n57a"]
+atlas = ExtResource("2_2yq5u")
+
+[sub_resource type="Animation" id="Animation_2yq5u"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ooyih"]
+resource_name = "Shake"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(10, 0), Vector2(5, 5), Vector2(-2, 10), Vector2(6, -2), Vector2(-7, -7), Vector2(2, 3), Vector2(5, 1), Vector2(-6, 7), Vector2(6, 1), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2n57a"]
+_data = {
+&"RESET": SubResource("Animation_2yq5u"),
+&"Shake": SubResource("Animation_ooyih")
+}
+
+[node name="Cut Scene Template" type="Node2D" unique_id=1027891201]
+script = ExtResource("1_w4s7g")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=584865898]
+
+[node name="Panel1" type="TextureRect" parent="CanvasLayer" unique_id=807216131]
+visible = false
+offset_right = 480.0
+offset_bottom = 270.0
+texture = SubResource("AtlasTexture_ooyih")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Panel2" type="TextureRect" parent="CanvasLayer" unique_id=179467731]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -480.0
+offset_bottom = 270.0
+grow_horizontal = 0
+texture = SubResource("AtlasTexture_2yq5u")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Panel3" type="TextureRect" parent="CanvasLayer" unique_id=2056965064]
+visible = false
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -270.0
+offset_right = 480.0
+grow_vertical = 0
+texture = SubResource("AtlasTexture_ehan0")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Panel4" type="TextureRect" parent="CanvasLayer" unique_id=1972523509]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -480.0
+offset_top = -270.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = SubResource("AtlasTexture_2n57a")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=755584486]
+libraries/ = SubResource("AnimationLibrary_2n57a")
