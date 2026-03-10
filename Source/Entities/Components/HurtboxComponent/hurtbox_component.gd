@@ -9,6 +9,8 @@ signal hit_by_hitbox(hitbox_component: HitboxComponent)
 @export var bullet_impact_scene: PackedScene
 @export var detect_only: bool = false
 @export var entity_name:String
+@export var knockback_strength: float = 400.0
+
 
 func _ready() -> void:
 	area_entered.connect(_on_area_entered)

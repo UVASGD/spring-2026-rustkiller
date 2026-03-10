@@ -744,6 +744,7 @@ position = Vector2(-31, -19)
 
 [node name="HitboxComponent" parent="SpriteManager" unique_id=1353647101 instance=ExtResource("7_2jere")]
 visible = false
+knockback_strength = 40.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SpriteManager/HitboxComponent" unique_id=2048539670]
 shape = SubResource("CircleShape2D_2jere")
