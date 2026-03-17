@@ -17,6 +17,7 @@
 [ext_resource type="AudioStream" uid="uid://cy07mpm88jmy1" path="res://Source/Entities/Furnace Charge.mp3" id="15_ssbxh"]
 [ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="16_l62nx"]
 [ext_resource type="PackedScene" uid="uid://co3gr1quly52h" path="res://Source/Entities/Components/HFSM/HFSMDebugLabelComponent/HFSMDebugLabelComponent.tscn" id="17_8xws3"]
+[ext_resource type="Script" uid="uid://dt1xns3i1tiot" path="res://Source/Entities/Bosses/FurnaceBoss/node.gd" id="17_cnbgx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_27ykr"]
 size = Vector2(91.27016, 100.30404)
@@ -27,6 +28,10 @@ height = 104.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1l3g5"]
 size = Vector2(109.5331, 101.278946)
+
+[sub_resource type="Animation" id="Animation_cnbgx"]
+resource_name = "Pause"
+length = 4.0333333
 
 [sub_resource type="Animation" id="Animation_a6fv3"]
 length = 0.001
@@ -270,6 +275,7 @@ tracks/8/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1guws"]
 _data = {
+&"Pause": SubResource("Animation_cnbgx"),
 &"RESET": SubResource("Animation_a6fv3"),
 &"idle": SubResource("Animation_10emf"),
 &"mouth_charge_start": SubResource("Animation_d465v")
@@ -364,6 +370,11 @@ animation = "mouth_charge_start"
 
 [node name="Charge_Sound" type="AudioStreamPlayer2D" parent="FurnaceHFSM/Alive/Charge" unique_id=1341820451]
 stream = ExtResource("15_ssbxh")
+
+[node name="Pause" type="Node" parent="FurnaceHFSM/Alive" unique_id=1785056654]
+script = ExtResource("17_cnbgx")
+move_name = "Pause"
+animation = "idle"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2085557924]
 libraries/ = SubResource("AnimationLibrary_1guws")

@@ -2,6 +2,8 @@ extends HFSM
 
 @export var rush_series: HFSM
 
+var did_charge := false
+
 func check_transition(_delta) -> TransitionData:
 	#if imdeadlmaoo():
 		#return TransitionData.new(true, "death")
