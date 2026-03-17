@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://mgkbxc5qnmxu"]
+
+[ext_resource type="PackedScene" uid="uid://cccn2edq2kj7x" path="res://Source/Entities/Components/HealthComponent/health_component.tscn" id="1_38s4a"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/SteamBoss/steam_boss.gd" id="1_djx6a"]
+[ext_resource type="PackedScene" uid="uid://ccu0np30bscvr" path="res://Source/Entities/Components/HurtboxComponent/hurtbox_component.tscn" id="2_tcsit"]
+[ext_resource type="PackedScene" uid="uid://cmy1ds7wda1qa" path="res://Source/Entities/Components/LockOnComponent/lockon_component.tscn" id="3_djx6a"]
+[ext_resource type="PackedScene" uid="uid://csvmkjqtav4p3" path="res://Source/Entities/Components/HurtFlashComponent/hurt_flash_component.tscn" id="4_j1j5t"]
+[ext_resource type="PackedScene" uid="uid://co3gr1quly52h" path="res://Source/Entities/Components/HFSM/HFSMDebugLabelComponent/HFSMDebugLabelComponent.tscn" id="5_fflm6"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/SteamBoss/steam_boss_hfsm.gd" id="5_tcsit"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/SteamBoss/idle.gd" id="7_j1j5t"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/SteamBoss/alive.gd" id="8_fflm6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_agvqu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_iwm71"]
+
+[node name="SteamBoss" type="CharacterBody2D" unique_id=2117672993]
+script = ExtResource("1_djx6a")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=619345553]
+shape = SubResource("CircleShape2D_agvqu")
+
+[node name="Visuals" type="Node2D" parent="." unique_id=2115523409]
+
+[node name="HealthComponent" parent="." unique_id=813342211 instance=ExtResource("1_38s4a")]
+
+[node name="HurtboxComponent" parent="." unique_id=1715746792 instance=ExtResource("2_tcsit")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=1274812075]
+shape = SubResource("CircleShape2D_iwm71")
+
+[node name="LockonComponent" parent="." unique_id=1310222347 instance=ExtResource("3_djx6a")]
+
+[node name="HurtFlashComponent" parent="." unique_id=1236687298 instance=ExtResource("4_j1j5t")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1623423611]
+
+[node name="SteamBossHFSM" type="Node" parent="." unique_id=67305199 node_paths=PackedStringArray("animator", "character")]
+script = ExtResource("5_tcsit")
+animator = NodePath("../AnimationPlayer")
+character = NodePath("..")
+
+[node name="Idle" type="Node" parent="SteamBossHFSM" unique_id=1021003717]
+script = ExtResource("7_j1j5t")
+move_name = "Idle"
+animation = "Idle"
+
+[node name="Alive" type="Node" parent="SteamBossHFSM" unique_id=1028483032]
+script = ExtResource("8_fflm6")
+move_name = "Alive"
+animation = "Idle"
+
+[node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 instance=ExtResource("5_fflm6")]
