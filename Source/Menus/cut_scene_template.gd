@@ -5,6 +5,7 @@ var cur_panel = 0
 @onready var panels = [$CanvasLayer/Panel1, $CanvasLayer/Panel2, $CanvasLayer/Panel3, $CanvasLayer/Panel4]
 @onready var canvaslayer = $CanvasLayer
 @onready var player = $AnimationPlayer
+@onready var click_sound = $"Click Sound"
 
 func _ready():
 	# Hide all panels at start
@@ -13,6 +14,8 @@ func _ready():
 
 func _input(event):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		click_sound.play()
+		
 		if cur_panel < panels.size():
 			panels[cur_panel].visible = true
 			cur_panel += 1

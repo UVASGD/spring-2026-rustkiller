@@ -105,3 +105,5 @@ stretch_mode = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=755584486]
 libraries/ = SubResource("AnimationLibrary_2n57a")
+
+[node name="Click Sound" type="AudioStreamPlayer2D" parent="." unique_id=779072269]
