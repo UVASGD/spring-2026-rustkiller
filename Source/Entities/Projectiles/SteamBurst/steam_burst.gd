@@ -10,7 +10,8 @@ var exploding = false
 
 func _ready() -> void:
 	area_entered.connect(_on_area_entered)
-	await get_tree().create_timer(time_until_burst).timeout
+	await get_tree().create_timer(time_until_burst).timeout 	#wait for a bit before exploding 
+															#and being able to do damage
 	exploding = true
 	
 	
