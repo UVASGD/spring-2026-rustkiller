@@ -1,37 +1,14 @@
+class_name PlayerController
 extends CharacterBody2D
 
-var current_state: String = "idle"
-@export var SPEED: float = 200.0
-@export var PROJECTILE_SPEED: float = 500.0
-
 @export var entity_name: String = "player"
+@export var SPEED: float = 200.0
+@export var hp: int = 3
 
-@export var LUNGE_DISTANCE: float = 80.0
-@export var LUNGE_DURATION: float = 0.12
-@export var knockback_decay := 800.0
-
-var lunge_dir: Vector2 = Vector2.ZERO
-var lunge_time_left: float = 0.0
-
-const BURST_COUNT := 3
-const BURST_INTERVAL := 0.08
-
+var current_state: String = ""
 var curr_weapon: String = "melee"
-
-var is_attacking: bool = false
-var is_shooting: bool = false
-var is_parrying: bool = false     
-
-var is_melee_hitbox_active: bool = false
-var has_melee_hit: bool = false
-
-var attack_direction: Vector2 = Vector2.ZERO
 var last_move_dir: Vector2 = Vector2.RIGHT
-var knockback: Vector2 = Vector2.ZERO
-var can_dash: bool = true
-
-
-const WRENCH_PROJECTILE := preload("res://Source/Entities/Projectiles/Wrench/wrench_projectile.tscn")
+signal parrying
 
 @onready var sprite_manager: Node2D = $SpriteManager
 @onready var anim: AnimationPlayer = $PlayerAnimation
@@ -41,7 +18,40 @@ const WRENCH_PROJECTILE := preload("res://Source/Entities/Projectiles/Wrench/wre
 @export var dash_distance: float = 100.0  # how far to teleport
 @export var dash_cooldown: float = 0.5   # seconds between dashes
 
-signal parrying
+
+
+@export var PROJECTILE_SPEED: float = 500.0
+
+
+@export var LUNGE_DISTANCE: float = 80.0
+@export var LUNGE_DURATION: float = 0.12
+@export var knockback_decay := 800.0
+
+var can_be_hit_cooldown = false
+var lunge_dir: Vector2 = Vector2.ZERO
+var lunge_time_left: float = 0.0
+
+const BURST_COUNT := 3
+const BURST_INTERVAL := 0.08
+
+var a2_available: bool = false
+var combo_window: bool = false
+
+var is_attacking: bool = false
+var is_shooting: bool = false
+var is_parrying: bool = false     
+
+var is_melee_hitbox_active: bool = false
+var has_melee_hit: bool = false
+
+var attack_direction: Vector2 = Vector2.ZERO
+var knockback: Vector2 = Vector2.ZERO
+var can_dash: bool = true
+
+
+const WRENCH_PROJECTILE := preload("res://Source/Entities/Projectiles/Wrench/wrench_projectile.tscn")
+
+
 
 func _ready() -> void:
 	anim.animation_finished.connect(_on_animation_finished)
@@ -60,6 +70,7 @@ func apply_knockback(force: Vector2):
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("switch_weapon"):
+		$Cursor.set_weapon_mode(curr_weapon)
 		if curr_weapon == "melee":
 			curr_weapon = "shoot"
 		else:
@@ -80,6 +91,19 @@ func _physics_process(delta: float) -> void:
 			lunge_time_left -= delta
 		else:
 			velocity = Vector2.ZERO
+			if Input.is_action_just_pressed("attack") and a2_available and curr_weapon == "melee":
+				a2_available = false
+				lunge_dir = (get_global_mouse_position() - global_position).normalized()
+				if lunge_dir == Vector2.ZERO:
+					lunge_dir = last_move_dir
+				lunge_time_left = LUNGE_DURATION
+				if lunge_dir.x < 0.0:
+					sprite_manager.scale.x = 1
+				elif lunge_dir.x > 0.0:
+					sprite_manager.scale.x = -1
+				anim.stop()
+				anim.play("a2")
+				anim.seek(0.0, true)
 
 		move_and_slide()
 		return
@@ -111,13 +135,19 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("attack"):
 		if curr_weapon == "melee":
-			start_attack()
+			if combo_window:
+				combo_window = false
+				anim.stop()
+				anim.play("a2")
+				anim.seek(0.0, true)
+				is_attacking = true
+			else:
+				start_attack()
 			velocity = Vector2.ZERO
 			move_and_slide()
 			return
 		elif curr_weapon == "shoot" and not is_shooting:
 			fire_burst()
-
 	velocity = direction * SPEED + knockback*5
 	
 	if direction.length() > 0.0:
@@ -134,6 +164,7 @@ func _input(event):
 	if Input.is_action_just_pressed("quit"): # Use "ui_cancel" if you chose the default
 		get_tree().quit() # This will close the game
 
+#	Bound to shift key
 	if Input.is_action_just_pressed("blitz") and can_dash:
 		blitz()
 
@@ -167,9 +198,14 @@ func change_state(new_state: String) -> void:
 		"shooting":
 			anim.play("shoot")
 		"attack":
-			anim.stop()
-			anim.play("attack")
-			anim.seek(0.0, true)
+			if !a2_available:
+				anim.stop()
+				anim.play("a1")
+				anim.seek(0.0, true)
+			else:
+				anim.stop()
+				anim.play("a2")
+				anim.seek(0.0, true)
 		"parry":
 			anim.stop()
 			anim.play("parry")
@@ -178,18 +214,14 @@ func change_state(new_state: String) -> void:
 
 func start_attack() -> void:
 	is_attacking = true
-
 	lunge_dir = (get_global_mouse_position() - global_position).normalized()
 	if lunge_dir == Vector2.ZERO:
 		lunge_dir = last_move_dir
-
 	lunge_time_left = LUNGE_DURATION
-
 	if lunge_dir.x < 0.0:
 		sprite_manager.scale.x = 1
 	elif lunge_dir.x > 0.0:
 		sprite_manager.scale.x = -1
-
 	change_state("attack")
 
 
@@ -203,13 +235,10 @@ func try_parry() -> void:
 	for area in overlappers:
 		if area is HitboxComponent:
 			var hitbox := area as HitboxComponent
-
 			if hitbox.hit_owner == "boss":
 				var projectile := hitbox.get_parent()
 				if projectile:
 					projectile.queue_free()
-
-
 				is_parrying = true
 				change_state("parry")
 				return
@@ -225,7 +254,6 @@ func fire_burst() -> void:
 		shoot_single()
 		if i < BURST_COUNT - 1:
 			await get_tree().create_timer(BURST_INTERVAL).timeout
-
 	is_shooting = false
 
 
@@ -244,14 +272,18 @@ func shoot_single() -> void:
 		-1
 	)
 	HitboxComponent.get_child_component(projectile).init(1, "player")
-
 	get_tree().current_scene.add_child(projectile)
 
-
-
-
 func _on_animation_finished(anim_name: StringName) -> void:
-	if anim_name == "attack":
+	if anim_name == "a1":
+		is_attacking = false
+		has_melee_hit = false
+		a2_available = false
+		change_state("idle")
+		combo_window = true
+		await get_tree().create_timer(0.5).timeout
+		combo_window = false
+	elif anim_name == "a2":
 		is_attacking = false
 		has_melee_hit = false
 		change_state("idle")
@@ -260,10 +292,11 @@ func _on_animation_finished(anim_name: StringName) -> void:
 		change_state("idle")
 
 
-func update_melee_active():
-	is_melee_hitbox_active = !is_melee_hitbox_active
+func update_melee_active(make_active:bool = false):
+	is_melee_hitbox_active = make_active
 
-
+func update_a2_availability(make_available:bool = false):
+	a2_available = make_available
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area is HurtboxComponent:
 		var hurtbox = area as HurtboxComponent

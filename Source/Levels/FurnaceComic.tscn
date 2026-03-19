@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://5a5klokrw61n"]
+
+[ext_resource type="Script" uid="uid://c3ib8dgds4e22" path="res://Source/Levels/furnace_comic.gd" id="1_wja3a"]
+[ext_resource type="Texture2D" uid="uid://bdxubrun0f1gb" path="res://Source/Resources/Comics/b1 comic panel 1.png" id="2_ocsqb"]
+[ext_resource type="Texture2D" uid="uid://btfx7cuqcmsb4" path="res://Source/Resources/Comics/b1 comic panel 2.png" id="3_jnlkg"]
+[ext_resource type="Texture2D" uid="uid://d2ev4uy4am7gn" path="res://Source/Resources/Comics/b1 comic panel 3.png" id="4_hovol"]
+[ext_resource type="Texture2D" uid="uid://0tig1ikixd16" path="res://Source/Resources/Comics/b1 comic panel 4.png" id="5_euas3"]
+
+[node name="FurnaceComic" type="Node2D" unique_id=1779542933]
+script = ExtResource("1_wja3a")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1780680746]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=945714583]
+z_index = -1
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(25.92, 14.28)
+color = Color(0, 0, 0, 1)
+
+[node name="B1ComicPanel1" type="Sprite2D" parent="." unique_id=499511464]
+position = Vector2(480, 270)
+texture = ExtResource("2_ocsqb")
+
+[node name="B1ComicPanel2" type="Sprite2D" parent="." unique_id=1629653274]
+position = Vector2(480, 270)
+texture = ExtResource("3_jnlkg")
+
+[node name="B1ComicPanel3" type="Sprite2D" parent="." unique_id=947847685]
+position = Vector2(480, 270)
+texture = ExtResource("4_hovol")
+
+[node name="B1ComicPanel4" type="Sprite2D" parent="." unique_id=1059492656]
+position = Vector2(480, 270)
+texture = ExtResource("5_euas3")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=100760204]

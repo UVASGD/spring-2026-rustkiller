@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://ss7g7gsd3t5n"
+path="res://.godot/imported/Intro Comic FurnaceP1.wav-767738376c1d7870708747910451e7bd.sample"
+
+[deps]
+
+source_file="res://Source/Resources/Audio/SFX/Intro Comic FurnaceP1.wav"
+dest_files=["res://.godot/imported/Intro Comic FurnaceP1.wav-767738376c1d7870708747910451e7bd.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
