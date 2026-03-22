@@ -1,10 +1,57 @@
 extends Node2D
-@onready var ComicSprite: Sprite2D = $FurnaceComicSpriteSheetTransparent
-@onready var audioplayer: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
-var audio_paths = [
-	"res://Source/Resources/Audio/SFX/Intro Comic FurnaceP1.wav",
-	""
+@export var panel_sounds: Array[AudioStream] = []
+
+@onready var panels = [
+	$PanelsContainer/Panel1,
+	$PanelsContainer/Panel2,
+	$PanelsContainer/Panel3,
+	$PanelsContainer/Panel4,
+	$PanelsContainer/Panel5
 ]
 
-var frameNumber = 0
+@onready var sfx_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
+@onready var sfx_constant: AudioStreamPlayer2D = $Constant
+
+var current_panel := -1
+
+signal cutscene_finished
+
+func _ready() -> void:
+	for panel in panels:
+		panel.modulate.a = 0.0
+
+	sfx_constant.finished.connect(_on_constant_finished)
+	sfx_constant.play()
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton \
+	and event.pressed \
+	and event.button_index == MOUSE_BUTTON_LEFT:
+		advance_panel()
+
+func advance_panel() -> void:
+	current_panel += 1
+
+	if current_panel >= panels.size():
+		cutscene_finished.emit()
+		queue_free()
+		return
+
+	phase_in_panel(panels[current_panel])
+	play_panel_sfx(current_panel)
+
+func phase_in_panel(panel) -> void:
+	panel.modulate.a = 0.0
+	var tween := create_tween()
+	tween.tween_property(panel, "modulate:a", 1.0, 0.4) \
+		.set_trans(Tween.TRANS_SINE) \
+		.set_ease(Tween.EASE_OUT)
+
+func play_panel_sfx(index: int) -> void:
+	if index < panel_sounds.size() and panel_sounds[index] != null:
+		sfx_player.stream = panel_sounds[index]
+		sfx_player.play()
+
+func _on_constant_finished() -> void:
+	sfx_constant.play()

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bwtokyjniupwm"
+path="res://.godot/imported/Panel 1.mp3-85b3c1f2e76f640d423d75da140a8f3a.mp3str"
+
+[deps]
+
+source_file="res://Source/Resources/Audio/SFX/Comic1/Panel 1.mp3"
+dest_files=["res://.godot/imported/Panel 1.mp3-85b3c1f2e76f640d423d75da140a8f3a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

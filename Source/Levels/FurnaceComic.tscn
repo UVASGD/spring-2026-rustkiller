@@ -1,13 +1,21 @@
 [gd_scene format=3 uid="uid://5a5klokrw61n"]
 
 [ext_resource type="Script" uid="uid://c3ib8dgds4e22" path="res://Source/Levels/furnace_comic.gd" id="1_wja3a"]
+[ext_resource type="AudioStream" uid="uid://bwtokyjniupwm" path="res://Source/Resources/Audio/SFX/Comic1/Panel 1.mp3" id="2_3teua"]
 [ext_resource type="Texture2D" uid="uid://bdxubrun0f1gb" path="res://Source/Resources/Comics/b1 comic panel 1.png" id="2_ocsqb"]
 [ext_resource type="Texture2D" uid="uid://btfx7cuqcmsb4" path="res://Source/Resources/Comics/b1 comic panel 2.png" id="3_jnlkg"]
+[ext_resource type="AudioStream" uid="uid://nwxxdkti5ri8" path="res://Source/Resources/Audio/SFX/Comic1/Panel 2.mp3" id="3_quv8e"]
+[ext_resource type="AudioStream" uid="uid://c63tl4bsbov5y" path="res://Source/Resources/Audio/SFX/Comic1/Panel 3.mp3" id="4_h7x22"]
 [ext_resource type="Texture2D" uid="uid://d2ev4uy4am7gn" path="res://Source/Resources/Comics/b1 comic panel 3.png" id="4_hovol"]
 [ext_resource type="Texture2D" uid="uid://0tig1ikixd16" path="res://Source/Resources/Comics/b1 comic panel 4.png" id="5_euas3"]
+[ext_resource type="AudioStream" uid="uid://dtcaw1cju2r68" path="res://Source/Resources/Audio/SFX/Comic1/Panel 4.mp3" id="5_p5fl1"]
+[ext_resource type="AudioStream" uid="uid://b5tu85dgfqcmg" path="res://Source/Resources/Audio/SFX/Comic1/Panel 5.mp3" id="6_muwsy"]
+[ext_resource type="AudioStream" uid="uid://burqv7a3yr2w5" path="res://Source/Resources/Audio/SFX/Comic1/Comic Background.mp3" id="11_qn48w"]
+[ext_resource type="Texture2D" uid="uid://cxu436twxhe0c" path="res://Source/Resources/Comics/Frame-Boss-1-BACKUP.jpg" id="11_quv8e"]
 
 [node name="FurnaceComic" type="Node2D" unique_id=1779542933]
 script = ExtResource("1_wja3a")
+panel_sounds = Array[AudioStream]([ExtResource("2_3teua"), ExtResource("3_quv8e"), ExtResource("4_h7x22"), ExtResource("5_p5fl1"), ExtResource("6_muwsy")])
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1780680746]
 
@@ -16,22 +24,41 @@ z_index = -1
 offset_right = 40.0
 offset_bottom = 40.0
 scale = Vector2(25.92, 14.28)
-color = Color(0, 0, 0, 1)
+mouse_filter = 2
+color = Color(0.039215688, 0.039215688, 0.078431375, 1)
 
-[node name="B1ComicPanel1" type="Sprite2D" parent="." unique_id=499511464]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=100760204]
+stream = ExtResource("2_3teua")
+
+[node name="PanelsContainer" type="Control" parent="." unique_id=570041909]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel1" type="Sprite2D" parent="PanelsContainer" unique_id=499511464]
 position = Vector2(480, 270)
 texture = ExtResource("2_ocsqb")
 
-[node name="B1ComicPanel2" type="Sprite2D" parent="." unique_id=1629653274]
+[node name="Panel2" type="Sprite2D" parent="PanelsContainer" unique_id=1629653274]
 position = Vector2(480, 270)
 texture = ExtResource("3_jnlkg")
 
-[node name="B1ComicPanel3" type="Sprite2D" parent="." unique_id=947847685]
+[node name="Panel3" type="Sprite2D" parent="PanelsContainer" unique_id=947847685]
 position = Vector2(480, 270)
 texture = ExtResource("4_hovol")
 
-[node name="B1ComicPanel4" type="Sprite2D" parent="." unique_id=1059492656]
+[node name="Panel4" type="Sprite2D" parent="PanelsContainer" unique_id=1059492656]
+z_index = -1
 position = Vector2(480, 270)
 texture = ExtResource("5_euas3")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=100760204]
+[node name="Panel5" type="Sprite2D" parent="PanelsContainer" unique_id=1767768301]
+position = Vector2(480, 270)
+texture = ExtResource("11_quv8e")
+
+[node name="Constant" type="AudioStreamPlayer2D" parent="." unique_id=1657235264]
+stream = ExtResource("11_qn48w")
+volume_db = -2.0
+
+[connection signal="finished" from="Constant" to="." method="_on_constant_finished"]
