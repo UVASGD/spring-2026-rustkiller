@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cxsmc53ohcmod"
-path="res://.godot/imported/Boss1_ph1_chase.png-3f12d331deea87ad0c37906a57901db4.ctex"
+path="res://.godot/imported/Boss1_ph1_chase.png-6f28ebc46986879a8cea667c64e05f8c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Source/Entities/Bosses/FurnaceBoss/NewArt/Boss1_ph1_chase.png"
-dest_files=["res://.godot/imported/Boss1_ph1_chase.png-3f12d331deea87ad0c37906a57901db4.ctex"]
+source_file="res://Source/Entities/Bosses/FurnaceBoss/NewArt/ph1/Boss1_ph1_chase.png"
+dest_files=["res://.godot/imported/Boss1_ph1_chase.png-6f28ebc46986879a8cea667c64e05f8c.ctex"]
 
 [params]
 

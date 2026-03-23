@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dq2bexuaraosa"
-path="res://.godot/imported/Combo_1.png-2c193195efc0a01734df66ec32e073a7.ctex"
+uid="uid://b277i8s7dxck3"
+path="res://.godot/imported/Boss1_ph1_idle.png-cf45aa01ed8b711e79f27bb4fb976765.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Source/Entities/Bosses/FurnaceBoss/NewArt/Combo_1.png"
-dest_files=["res://.godot/imported/Combo_1.png-2c193195efc0a01734df66ec32e073a7.ctex"]
+source_file="res://Source/Entities/Bosses/FurnaceBoss/NewArt/ph1/Boss1_ph1_idle.png"
+dest_files=["res://.godot/imported/Boss1_ph1_idle.png-cf45aa01ed8b711e79f27bb4fb976765.ctex"]
 
 [params]
 

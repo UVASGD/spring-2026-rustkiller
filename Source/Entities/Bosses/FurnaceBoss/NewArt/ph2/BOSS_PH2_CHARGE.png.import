@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b277i8s7dxck3"
-path="res://.godot/imported/Boss1_ph1_idle.png-33a95d5e155ece6de01cdbcaf2830f96.ctex"
+uid="uid://dva1j8ueithv"
+path="res://.godot/imported/BOSS_PH2_CHARGE.png-4a0f6f93bbee71eb227c7de713b5602d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Source/Entities/Bosses/FurnaceBoss/NewArt/Boss1_ph1_idle.png"
-dest_files=["res://.godot/imported/Boss1_ph1_idle.png-33a95d5e155ece6de01cdbcaf2830f96.ctex"]
+source_file="res://Source/Entities/Bosses/FurnaceBoss/NewArt/ph2/BOSS_PH2_CHARGE.png"
+dest_files=["res://.godot/imported/BOSS_PH2_CHARGE.png-4a0f6f93bbee71eb227c7de713b5602d.ctex"]
 
 [params]
 
