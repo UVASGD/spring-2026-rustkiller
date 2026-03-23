@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b5b4wokjxrs2b"
+path="res://.godot/imported/Combo Wands.mp3-c6e1484e0a415eef2bcf3322becf3d15.mp3str"
+
+[deps]
+
+source_file="res://Source/Entities/Player/better_player/SFX/Combo Wands.mp3"
+dest_files=["res://.godot/imported/Combo Wands.mp3-c6e1484e0a415eef2bcf3322becf3d15.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

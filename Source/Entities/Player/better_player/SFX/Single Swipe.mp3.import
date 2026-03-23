@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cdte6nuxxupb6"
+path="res://.godot/imported/Single Swipe.mp3-f84ce7c05a1e3c5df2157ef12d243f91.mp3str"
+
+[deps]
+
+source_file="res://Source/Entities/Player/better_player/SFX/Single Swipe.mp3"
+dest_files=["res://.godot/imported/Single Swipe.mp3-f84ce7c05a1e3c5df2157ef12d243f91.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0.2
+bpm=0.0
+beat_count=0
+bar_beats=4
