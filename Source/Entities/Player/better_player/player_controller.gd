@@ -6,11 +6,14 @@ extends CharacterBody2D
 @export var hp: int = 3
 @export var damage_hitstop_duration: float = 0.08
 @export var damage_flash_duration: float = 0.08
+@export var parry_invulnerability_duration: float = 0.5
 
 var current_state: String = "idle"
 var curr_weapon: String = "melee"
 var last_move_dir: Vector2 = Vector2.RIGHT
 var _damage_flash_generation: int = 0
+var _invulnerability_generation: int = 0
+var _is_invulnerable: bool = false
 
 signal parrying
 
@@ -93,6 +96,17 @@ func set_state(new_state: String) -> void:
 
 func emit_parrying() -> void:
 	emit_signal("parrying")
+
+func is_invulnerable() -> bool:
+	return _is_invulnerable
+
+func activate_parry_invulnerability() -> void:
+	_invulnerability_generation += 1
+	var invulnerability_generation := _invulnerability_generation
+	_is_invulnerable = true
+	await get_tree().create_timer(parry_invulnerability_duration, true, false, true).timeout
+	if invulnerability_generation == _invulnerability_generation:
+		_is_invulnerable = false
 
 func _on_hurtbox_hit_by_hitbox(_hitbox: HitboxComponent) -> void:
 	_flash_damage_white()

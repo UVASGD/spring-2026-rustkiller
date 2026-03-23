@@ -3,7 +3,7 @@ class_name HurtFlashComponent
 extends Node2D
 
 @export var hurtbox_component: HurtboxComponent
-@export var sprite: Sprite2D
+@export var sprite: CanvasItem
 @export var flash_color: Color = Color.RED
 @export var flash_duration := 0.01
 

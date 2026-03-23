@@ -4,6 +4,8 @@ extends HFSM
 @export var shot_interval := 0.35
 @export var startup_delay := 0.15
 @export var recovery_delay := 0.2
+@export var projectile_rows := 1
+@export var row_spacing := 28.0
 
 var _shots_fired := 0
 var _timer := 0.0
@@ -26,7 +28,7 @@ func update(delta):
 
 	if _timer <= 0.0 and _shots_fired < shot_count:
 		if character.has_method("fire_sine_projectile"):
-			character.fire_sine_projectile()
+			character.fire_sine_projectile(projectile_rows, row_spacing)
 		_shots_fired += 1
 		_timer = shot_interval
 		if _shots_fired >= shot_count:

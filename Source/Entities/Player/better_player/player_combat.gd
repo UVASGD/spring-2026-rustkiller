@@ -37,6 +37,7 @@ func setup(player: CharacterBody2D) -> void:
 
 	_anim.animation_finished.connect(_on_animation_finished)
 	_hitbox.hit_owner = player.entity_name
+	_hitbox.damage_enabled = false
 	_hitbox.area_entered.connect(_on_hitbox_area_entered)
 	_parry_window.monitoring = true
 	_parry_window.monitorable = true
@@ -78,6 +79,7 @@ func try_parry() -> void:
 
 				if not parry_succeeded:
 					continue
+				_player.activate_parry_invulnerability()
 				_player.set_state("parrying")
 				_anim.stop()
 				_anim.play("parry")
@@ -94,6 +96,7 @@ func fire_burst() -> void:
 
 func update_melee_active(make_active: bool = false) -> void:
 	is_melee_hitbox_active = make_active
+	_hitbox.damage_enabled = make_active
 	if not make_active:
 		has_melee_hit = false
 
@@ -144,6 +147,7 @@ func _check_combo_input() -> void:
 func _play_attack_anim(anim_name: String) -> void:
 	_player.set_state("attacking")
 	is_melee_hitbox_active = false
+	_hitbox.damage_enabled = false
 	_anim.stop()
 	_anim.play(anim_name)
 	_anim.seek(0.0, true)
@@ -172,12 +176,14 @@ func _on_animation_finished(anim_name: StringName) -> void:
 		"a1":
 			_player.set_state("idle")
 			is_melee_hitbox_active = false
+			_hitbox.damage_enabled = false
 			has_melee_hit = false
 			a2_available = false
 			_start_combo_window()
 		"a2":
 			_player.set_state("idle")
 			is_melee_hitbox_active = false
+			_hitbox.damage_enabled = false
 			has_melee_hit = false
 		"parry":
 			_player.set_state("idle")

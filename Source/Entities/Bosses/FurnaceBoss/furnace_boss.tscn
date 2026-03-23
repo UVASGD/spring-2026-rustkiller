@@ -16,10 +16,12 @@
 [ext_resource type="PackedScene" uid="uid://csvmkjqtav4p3" path="res://Source/Entities/Components/HurtFlashComponent/hurt_flash_component.tscn" id="9_sqjvn"]
 [ext_resource type="Script" uid="uid://dowpu6whwm2jf" path="res://Source/Entities/Bosses/FurnaceBoss/furnace_hfsm.gd" id="10_654er"]
 [ext_resource type="Texture2D" uid="uid://dq2bexuaraosa" path="res://Source/Entities/Bosses/FurnaceBoss/NewArt/Combo_1.png" id="11_1guws"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/FurnaceBoss/awaken.gd" id="11_q1a2z"]
 [ext_resource type="Script" uid="uid://sgmqjr8t8sas" path="res://Source/Entities/Bosses/FurnaceBoss/idle.gd" id="11_uw02a"]
 [ext_resource type="Texture2D" uid="uid://bk1q5geuhxvtu" path="res://Source/Entities/Bosses/FurnaceBoss/NewArt/Boss1_ph1_shoot.png" id="12_10emf"]
 [ext_resource type="Script" uid="uid://148l6dvi1fxr" path="res://Source/Entities/Bosses/FurnaceBoss/alive.gd" id="12_d465v"]
 [ext_resource type="Script" uid="uid://dlwx7n31sul31" path="res://Source/Entities/Bosses/FurnaceBoss/shoot.gd" id="13_2n8fk"]
+[ext_resource type="Script" uid="uid://d0wnvuyq0u6yn" path="res://Source/Entities/Bosses/FurnaceBoss/combo.gd" id="13_tq7kp"]
 [ext_resource type="Script" uid="uid://i0flxlp4xdo2" path="res://Source/Entities/Bosses/FurnaceBoss/charge.gd" id="14_ix7ae"]
 [ext_resource type="AudioStream" uid="uid://cy07mpm88jmy1" path="res://Source/Entities/Furnace Charge.mp3" id="15_ssbxh"]
 [ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="16_l62nx"]
@@ -1332,6 +1334,9 @@ size = Vector2(207, 136.63947)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_charge_hitbox"]
 size = Vector2(146, 171.61734)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_combo_hitbox"]
+size = Vector2(150, 170)
+
 [sub_resource type="Animation" id="Animation_cnbgx"]
 resource_name = "Pause"
 length = 4.0333333
@@ -1482,6 +1487,18 @@ tracks/11/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("ComboHitboxComponent:position")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_vka2l"]
 resource_name = "awaken"
@@ -1592,6 +1609,42 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ComboHitboxComponent:process_mode")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.1, 2.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [4, 0, 4]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ComboHitboxComponent/CollisionShape2D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1.1, 2.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ComboHitboxComponent:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1.52, 1.58, 1.61, 1.68, 1.77, 1.97, 2.16),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-13, -44), Vector2(-20, -49), Vector2(-26, 40), Vector2(-37, 84), Vector2(-39, 98), Vector2(-37, 78), Vector2(-32, 57)]
 }
 
 [sub_resource type="Animation" id="Animation_10emf"]
@@ -1859,12 +1912,23 @@ knockback_strength = 550.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ChargeHitboxComponent" unique_id=534182809]
 shape = SubResource("RectangleShape2D_charge_hitbox")
 
+[node name="ComboHitboxComponent" parent="." unique_id=32422881 instance=ExtResource("16_l62nx")]
+process_mode = 4
+scale = Vector2(1, 0.72829646)
+damage = 20.0
+hit_owner = "boss"
+knockback_strength = 550.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ComboHitboxComponent" unique_id=277989492]
+shape = SubResource("RectangleShape2D_combo_hitbox")
+disabled = true
+
 [node name="LockonComponent" parent="." unique_id=1678096961 instance=ExtResource("8_cbjyb")]
 position = Vector2(8, -21)
 
 [node name="HurtFlashComponent" parent="." unique_id=457934623 node_paths=PackedStringArray("hurtbox_component", "sprite") instance=ExtResource("9_sqjvn")]
 hurtbox_component = NodePath("../HurtboxComponent")
-sprite = NodePath("../Visuals/Body")
+sprite = NodePath("../Visuals/AnimatedSprite2D")
 
 [node name="FurnaceHFSM" type="Node" parent="." unique_id=1366335646 node_paths=PackedStringArray("animator", "character")]
 script = ExtResource("10_654er")
@@ -1876,8 +1940,14 @@ script = ExtResource("11_uw02a")
 move_name = "Idle"
 animation = "idle_1"
 
+[node name="Awaken" type="Node" parent="FurnaceHFSM" unique_id=748669095]
+script = ExtResource("11_q1a2z")
+move_name = "Awaken"
+animation = "awaken"
+
 [node name="Alive" type="Node" parent="FurnaceHFSM" unique_id=2041894362]
 script = ExtResource("12_d465v")
+use_predetermined_order = true
 move_name = "Alive"
 animation = "idle_1"
 
@@ -1897,8 +1967,15 @@ animation = "idle_1"
 
 [node name="Shoot" type="Node" parent="FurnaceHFSM/Alive" unique_id=585043801]
 script = ExtResource("13_2n8fk")
+shot_count = 8
+shot_interval = 0.2
 move_name = "Shoot"
 animation = "shoot_1"
+
+[node name="Combo" type="Node" parent="FurnaceHFSM/Alive" unique_id=1988082417]
+script = ExtResource("13_tq7kp")
+move_name = "Combo"
+animation = "combo_1"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2085557924]
 libraries/ = SubResource("AnimationLibrary_1guws")
