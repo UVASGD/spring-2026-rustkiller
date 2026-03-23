@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bam7exbn0kxgb"
-path="res://.godot/imported/PlayerBossRushShoot.png-f84e3f0d955ebf0e58faa65c47fbffbf.ctex"
+uid="uid://btfx7cuqcmsb4"
+path="res://.godot/imported/b1 comic panel 2.png-9337e8afa4d9da64694682fde45b6068.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Source/Entities/Player/better_player/Art/PlayerBossRushShoot.png"
-dest_files=["res://.godot/imported/PlayerBossRushShoot.png-f84e3f0d955ebf0e58faa65c47fbffbf.ctex"]
+source_file="res://Source/Resources/Comics/b1 comic panel 2.png"
+dest_files=["res://.godot/imported/b1 comic panel 2.png-9337e8afa4d9da64694682fde45b6068.ctex"]
 
 [params]
 

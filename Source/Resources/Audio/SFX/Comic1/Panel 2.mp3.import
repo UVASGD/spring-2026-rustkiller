@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://nwxxdkti5ri8"
+path="res://.godot/imported/Panel 2.mp3-1da48b8064e695205f7a8a8011534aed.mp3str"
+
+[deps]
+
+source_file="res://Source/Resources/Audio/SFX/Comic1/Panel 2.mp3"
+dest_files=["res://.godot/imported/Panel 2.mp3-1da48b8064e695205f7a8a8011534aed.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
