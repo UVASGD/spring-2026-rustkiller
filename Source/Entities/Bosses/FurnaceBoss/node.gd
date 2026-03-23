@@ -6,8 +6,11 @@ func on_enter():
 	if animator.has_animation("RESET"):
 		animator.play("RESET")
 		animator.advance(0.0)
-	animator.play(animation)
-	timer = animator.get_animation(animation).length
+
+	var active_animation := _get_active_animation_name()
+	animation = active_animation
+	animator.play(active_animation)
+	timer = animator.get_animation(active_animation).length
 
 func update(delta):
 	timer -= delta
@@ -21,3 +24,8 @@ func check_transition(_delta) -> TransitionData:
 		
 
 	return TransitionData.new(false, "")
+
+func _get_active_animation_name() -> String:
+	if animation == "idle_1" and character and character.has_method("is_phase_2") and character.is_phase_2():
+		return "idle_2"
+	return animation

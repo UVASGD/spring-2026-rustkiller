@@ -4,6 +4,7 @@ extends Node
 @export var lunge_distance: float   = 80.0
 @export var lunge_duration: float   = 0.12
 @export var projectile_speed: float = 500.0
+@export var melee_damage: float = 1.0
 
 const BURST_COUNT := 3
 const BURST_INTERVAL := 0.08
@@ -19,6 +20,7 @@ var has_melee_hit: bool = false
 var lunge_dir: Vector2 = Vector2.ZERO
 var lunge_time_left: float = 0.0
 var attack_direction: Vector2 = Vector2.ZERO
+var _hitstop_generation: int = 0
 
 var _player: CharacterBody2D
 var _anim: AnimationPlayer
@@ -37,6 +39,7 @@ func setup(player: CharacterBody2D) -> void:
 
 	_anim.animation_finished.connect(_on_animation_finished)
 	_hitbox.hit_owner = player.entity_name
+	_hitbox.damage = melee_damage
 	_hitbox.damage_enabled = false
 	_hitbox.area_entered.connect(_on_hitbox_area_entered)
 	_parry_window.monitoring = true
@@ -96,6 +99,7 @@ func fire_burst() -> void:
 
 func update_melee_active(make_active: bool = false) -> void:
 	is_melee_hitbox_active = make_active
+	_hitbox.damage = melee_damage
 	_hitbox.damage_enabled = make_active
 	if not make_active:
 		has_melee_hit = false
@@ -106,8 +110,13 @@ func update_a2_availability(make_available: bool = false) -> void:
 	a2_available = make_available
 
 func hitstop(duration: float, emit_parry_signal: bool = true) -> void:
+	_hitstop_generation += 1
+	var hitstop_generation := _hitstop_generation
 	Engine.time_scale = 0.0
 	await _player.get_tree().create_timer(duration, true, false, true).timeout
+	if hitstop_generation != _hitstop_generation:
+		return
+
 	Engine.time_scale = 1.0
 	if emit_parry_signal:
 		_player.emit_parrying()
@@ -213,6 +222,7 @@ func _try_hit_area(area: Area2D) -> void:
 	and is_melee_hitbox_active \
 	and not has_melee_hit:
 		has_melee_hit = true
+		hurtbox._on_area_entered(_hitbox)
 
 		if hurtbox.bullet_impact_scene:
 			var impact = hurtbox.bullet_impact_scene.instantiate()

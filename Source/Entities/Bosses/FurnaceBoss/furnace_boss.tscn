@@ -30,8 +30,13 @@
 [ext_resource type="AudioStream" uid="uid://cy07mpm88jmy1" path="res://Source/Entities/Furnace Charge.mp3" id="15_ssbxh"]
 [ext_resource type="Texture2D" uid="uid://b722cv1htj2bq" path="res://Source/Entities/Bosses/FurnaceBoss/NewArt/ph2/BOSS_PH2_MOVE.png" id="16_cmvpf"]
 [ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="16_l62nx"]
+[ext_resource type="Script" uid="uid://b0ods7s84du4d" path="res://Source/Entities/Bosses/FurnaceBoss/shoot_2.gd" id="16_q92mk"]
+[ext_resource type="Script" uid="uid://cp0d6wdooy8wv" path="res://Source/Entities/Bosses/FurnaceBoss/combo_2.gd" id="16_w5egf"]
 [ext_resource type="PackedScene" uid="uid://co3gr1quly52h" path="res://Source/Entities/Components/HFSM/HFSMDebugLabelComponent/HFSMDebugLabelComponent.tscn" id="17_8xws3"]
 [ext_resource type="Script" uid="uid://dt1xns3i1tiot" path="res://Source/Entities/Bosses/FurnaceBoss/node.gd" id="17_cnbgx"]
+[ext_resource type="PackedScene" uid="uid://dbnhgp03q0xpy" path="res://Source/Entities/Components/HealthbarComponent/Healthbar.tscn" id="18_88xy5"]
+[ext_resource type="Script" uid="uid://dki11klrqkwj7" path="res://Source/Entities/Bosses/FurnaceBoss/awaken_2.gd" id="19_dyq4c"]
+[ext_resource type="Script" uid="uid://dt4tgr1ys3qdl" path="res://Source/Entities/Bosses/FurnaceBoss/charge_2.gd" id="20_6v7pt"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1guws"]
 radius = 46.010868
@@ -2725,6 +2730,35 @@ tracks/1/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 }
 
+[sub_resource type="Animation" id="Animation_a8q1y"]
+resource_name = "idle_2"
+length = 1.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"idle_2"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.90000004, 1, 1.1, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0]
+}
+
 [sub_resource type="Animation" id="Animation_d465v"]
 resource_name = "mouth_charge_start"
 length = 0.2
@@ -2907,6 +2941,7 @@ _data = {
 &"combo_1": SubResource("Animation_xylrq"),
 &"combo_2": SubResource("Animation_soki0"),
 &"idle_1": SubResource("Animation_10emf"),
+&"idle_2": SubResource("Animation_a8q1y"),
 &"mouth_charge_start": SubResource("Animation_d465v"),
 &"shoot_1": SubResource("Animation_3a4k4"),
 &"shoot_2": SubResource("Animation_1haop")
@@ -2971,7 +3006,14 @@ animation = &"idle_1"
 position = Vector2(-11, 29)
 
 [node name="HealthComponent" parent="." unique_id=1970387855 instance=ExtResource("6_w2phj")]
-max_health = 10000.0
+max_health = 10.0
+
+[node name="Healthbar" parent="." unique_id=1218839401 node_paths=PackedStringArray("health_component") instance=ExtResource("18_88xy5")]
+offset_left = -120.0
+offset_top = -110.0
+offset_right = 120.0
+offset_bottom = -102.0
+health_component = NodePath("../HealthComponent")
 
 [node name="HurtboxComponent" parent="." unique_id=542877514 node_paths=PackedStringArray("health_component") instance=ExtResource("7_0xocv")]
 health_component = NodePath("../HealthComponent")
@@ -3026,6 +3068,11 @@ script = ExtResource("11_q1a2z")
 move_name = "Awaken"
 animation = "awaken"
 
+[node name="Awaken2" type="Node" parent="FurnaceHFSM" unique_id=1412069983]
+script = ExtResource("19_dyq4c")
+move_name = "Awaken2"
+animation = "awaken_2"
+
 [node name="Alive" type="Node" parent="FurnaceHFSM" unique_id=2041894362]
 script = ExtResource("12_d465v")
 use_predetermined_order = true
@@ -3041,6 +3088,14 @@ animation = "charge_1"
 [node name="Charge_Sound" type="AudioStreamPlayer2D" parent="FurnaceHFSM/Alive/Charge" unique_id=1341820451]
 stream = ExtResource("15_ssbxh")
 
+[node name="Charge2" type="Node" parent="FurnaceHFSM/Alive" unique_id=1417733084]
+script = ExtResource("20_6v7pt")
+move_name = "Charge2"
+animation = "charge_2"
+
+[node name="Charge_Sound" type="AudioStreamPlayer2D" parent="FurnaceHFSM/Alive/Charge2" unique_id=1445368356]
+stream = ExtResource("15_ssbxh")
+
 [node name="Pause" type="Node" parent="FurnaceHFSM/Alive" unique_id=1785056654]
 script = ExtResource("17_cnbgx")
 move_name = "Pause"
@@ -3053,15 +3108,28 @@ shot_interval = 0.2
 move_name = "Shoot"
 animation = "shoot_1"
 
+[node name="Shoot2" type="Node" parent="FurnaceHFSM/Alive" unique_id=564114228]
+script = ExtResource("16_q92mk")
+volley_count = 3
+row_spacing = 50.0
+move_name = "Shoot2"
+animation = "shoot_2"
+
 [node name="Combo" type="Node" parent="FurnaceHFSM/Alive" unique_id=1988082417]
 script = ExtResource("13_tq7kp")
 move_name = "Combo"
 animation = "combo_1"
 
+[node name="Combo2" type="Node" parent="FurnaceHFSM/Alive" unique_id=1086328289]
+script = ExtResource("16_w5egf")
+move_name = "Combo2"
+animation = "combo_2"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2085557924]
 libraries/ = SubResource("AnimationLibrary_1guws")
 
 [node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 node_paths=PackedStringArray("hfsm") instance=ExtResource("17_8xws3")]
+visible = false
 offset_left = 31.0
 offset_top = -52.0
 offset_right = 134.0
