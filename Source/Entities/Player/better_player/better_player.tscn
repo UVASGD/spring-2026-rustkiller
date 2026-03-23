@@ -5,6 +5,8 @@
 [ext_resource type="Script" uid="uid://bl41g785xak2s" path="res://Source/Entities/Player/better_player/player_movement.gd" id="2_ht1kh"]
 [ext_resource type="Texture2D" uid="uid://3nm7o2d1toch" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushIdleAnimation.png" id="3_g17sf"]
 [ext_resource type="Texture2D" uid="uid://b3p1sxjpd2yug" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushWalkAnimationLessFrames.png" id="3_vlks3"]
+[ext_resource type="PackedScene" uid="uid://cccn2edq2kj7x" path="res://Source/Entities/Components/HealthComponent/health_component.tscn" id="4_7n4jp"]
+[ext_resource type="PackedScene" uid="uid://ccu0np30bscvr" path="res://Source/Entities/Components/HurtboxComponent/hurtbox_component.tscn" id="5_ay8nu"]
 [ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="7_2jere"]
 [ext_resource type="Texture2D" uid="uid://0i8ka85rtui0" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushParryNoEnergy.png" id="7_36sdt"]
 [ext_resource type="Texture2D" uid="uid://he47ke6bx1pr" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushParryEnergy.png" id="10_n5m2y"]
@@ -16,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://dooriumn623a3" path="res://Source/Entities/Player/better_player/Art/Energy/PlayerBossRushAttackCombo_SecondOneEnergy.png" id="15_wsevn"]
 [ext_resource type="Texture2D" uid="uid://k6exgvlccenu" path="res://Source/Entities/Player/better_player/Art/Energy/PlayerBossRushShootEnergy.png" id="16_c2joo"]
 [ext_resource type="Script" uid="uid://dg7ga8cxg6ow7" path="res://Source/Entities/Player/better_player/player_combat.gd" id="16_oah5i"]
+[ext_resource type="Shader" uid="uid://tioybr8qi5hn" path="res://Source/Entities/Player/better_player/shaders/color_tint_shader.gdshader" id="17_6pmbg"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g17sf"]
 radius = 13.0
@@ -100,7 +103,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
- tracks/6/path = NodePath("SpriteManager/HitboxComponent/CollisionShape2D:disabled")
+tracks/6/path = NodePath("SpriteManager/HitboxComponent/CollisionShape2D:disabled")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -147,7 +150,7 @@ step = 0.1
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
- tracks/0/path = NodePath("PlayerCombat")
+tracks/0/path = NodePath("PlayerCombat")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -236,7 +239,7 @@ tracks/6/keys = {
 tracks/7/type = "method"
 tracks/7/imported = false
 tracks/7/enabled = true
- tracks/7/path = NodePath("PlayerCombat")
+tracks/7/path = NodePath("PlayerCombat")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -332,7 +335,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
- tracks/6/path = NodePath("SpriteManager/HitboxComponent/CollisionShape2D:disabled")
+tracks/6/path = NodePath("SpriteManager/HitboxComponent/CollisionShape2D:disabled")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -516,6 +519,10 @@ _data = {
 }
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1ysy8"]
+shader = ExtResource("17_6pmbg")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/tint_factor = 0.5
+shader_parameter/fade = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2jere"]
 radius = 60.0
@@ -1057,6 +1064,7 @@ animations = [{
 
 [node name="BetterPlayer" type="CharacterBody2D" unique_id=462766173 groups=["PLAYER"]]
 script = ExtResource("1_ohtk3")
+hp = 200000
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=518126090]
 visible = false
@@ -1067,6 +1075,16 @@ libraries/ = SubResource("AnimationLibrary_g17sf")
 
 [node name="PlayerMovement" type="Node2D" parent="." unique_id=24102843]
 script = ExtResource("2_ht1kh")
+
+[node name="HealthComponent" parent="." unique_id=528490001 instance=ExtResource("4_7n4jp")]
+max_health = 3.0
+
+[node name="HurtboxComponent" parent="." unique_id=1746099221 node_paths=PackedStringArray("health_component") instance=ExtResource("5_ay8nu")]
+health_component = NodePath("../HealthComponent")
+entity_name = "player"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=206003822]
+shape = SubResource("CapsuleShape2D_g17sf")
 
 [node name="SpriteManager" type="Node2D" parent="." unique_id=2063897251]
 material = SubResource("ShaderMaterial_1ysy8")
@@ -1088,7 +1106,6 @@ knockback_strength = 40.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SpriteManager/HitboxComponent" unique_id=2048539670]
 shape = SubResource("CircleShape2D_2jere")
-disabled = true
 
 [node name="ParryWindow" type="Area2D" parent="SpriteManager" unique_id=684080334]
 visible = false
@@ -1098,6 +1115,7 @@ shape = SubResource("CircleShape2D_02bga")
 debug_color = Color(0.2560167, 0.54428214, 0.86958313, 0.41960785)
 
 [node name="PlayerSprites" type="AnimatedSprite2D" parent="SpriteManager" unique_id=1560742200]
+material = SubResource("ShaderMaterial_1ysy8")
 rotation = 3.1415927
 scale = Vector2(-1, -1)
 sprite_frames = SubResource("SpriteFrames_n5m2y")
@@ -1105,6 +1123,7 @@ animation = &"idle"
 
 [node name="EnergySprites" type="AnimatedSprite2D" parent="SpriteManager" unique_id=455404141]
 self_modulate = Color(1.353256, 1.353256, 1.353256, 1)
+material = SubResource("ShaderMaterial_1ysy8")
 rotation = 3.1415927
 scale = Vector2(-1, -1)
 sprite_frames = SubResource("SpriteFrames_tads2")
@@ -1119,5 +1138,3 @@ script = ExtResource("11_1ysy8")
 script = ExtResource("16_oah5i")
 
 [node name="Node2D" type="Node2D" parent="." unique_id=1356494313]
-
-[connection signal="animation_finished" from="PlayerAnimation" to="." method="_on_player_animation_animation_finished"]

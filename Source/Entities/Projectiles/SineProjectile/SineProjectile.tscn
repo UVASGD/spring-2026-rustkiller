@@ -1,15 +1,48 @@
 [gd_scene format=3 uid="uid://lvwaimk4j0nb"]
 
+[ext_resource type="Script" uid="uid://dfkc7kr8bnn7i" path="res://Source/Entities/Projectiles/SineProjectile/sine_projectile.gd" id="1_a8x41"]
 [ext_resource type="Texture2D" uid="uid://dpopxngjqj4sd" path="res://Source/Entities/Projectiles/SineProjectile/extremedemon.png" id="1_yj88j"]
 [ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="2_kagd5"]
 [ext_resource type="PackedScene" uid="uid://dftr0nrym4kf3" path="res://Source/Entities/Components/ProjectileMotionComponent/sine_projectile_motion_component.tscn" id="3_kagd5"]
+[ext_resource type="Texture2D" uid="uid://dxje6l2infdhv" path="res://Source/Entities/Projectiles/fireball/Projectile_4_Spiral.png" id="5_rue77"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kagd5"]
 radius = 10.049875
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ohhw1"]
+atlas = ExtResource("5_rue77")
+region = Rect2(0, 0, 300, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fq0ue"]
+atlas = ExtResource("5_rue77")
+region = Rect2(300, 0, 300, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7n4jw"]
+atlas = ExtResource("5_rue77")
+region = Rect2(600, 0, 300, 300)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2pf37"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ohhw1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fq0ue")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7n4jw")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="SineProjectile" type="Node2D" unique_id=1456989462]
+script = ExtResource("1_a8x41")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=978296845]
+visible = false
 texture = ExtResource("1_yj88j")
 
 [node name="HitboxComponent" parent="." unique_id=1229514695 instance=ExtResource("2_kagd5")]
@@ -18,3 +51,7 @@ texture = ExtResource("1_yj88j")
 shape = SubResource("CircleShape2D_kagd5")
 
 [node name="SineProjectileMotionComponent" parent="." unique_id=1722714623 instance=ExtResource("3_kagd5")]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=373068999]
+position = Vector2(-39, -110)
+sprite_frames = SubResource("SpriteFrames_2pf37")

@@ -4,23 +4,33 @@ extends CharacterBody2D
 @export var entity_name: String = "player"
 @export var speed: float = 200.0
 @export var hp: int = 3
+@export var damage_hitstop_duration: float = 0.08
+@export var damage_flash_duration: float = 0.08
 
 var current_state: String = "idle"
 var curr_weapon: String = "melee"
 var last_move_dir: Vector2 = Vector2.RIGHT
+var _damage_flash_generation: int = 0
 
 signal parrying
 
 @onready var sprite_manager: Node2D       = $SpriteManager
 @onready var anim_player: AnimationPlayer = $PlayerAnimation
 @onready var cursor: Node2D               = $Cursor
+@onready var health_component: HealthComponent = $HealthComponent
+@onready var hurtbox_component: HurtboxComponent = $HurtboxComponent
 
 @onready var _movement: PlayerMovement = $PlayerMovement
 @onready var _combat: PlayerCombat     = $PlayerCombat
 
 func _ready() -> void:
+	health_component.max_health = hp
+	health_component.health = hp
+	health_component.died.connect(_on_health_died)
+	hurtbox_component.hit_by_hitbox.connect(_on_hurtbox_hit_by_hitbox)
 	_combat.setup(self)
 	_movement.setup(self)
+	_set_damage_flash_enabled(false)
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("quit"):
@@ -83,3 +93,30 @@ func set_state(new_state: String) -> void:
 
 func emit_parrying() -> void:
 	emit_signal("parrying")
+
+func _on_hurtbox_hit_by_hitbox(_hitbox: HitboxComponent) -> void:
+	_flash_damage_white()
+	_combat.hitstop(damage_hitstop_duration, false)
+
+func _on_health_died() -> void:
+	set_physics_process(false)
+	set_process_input(false)
+	velocity = Vector2.ZERO
+	hide()
+
+func _flash_damage_white() -> void:
+	_damage_flash_generation += 1
+	var flash_generation := _damage_flash_generation
+	_set_damage_flash_enabled(true)
+	await get_tree().create_timer(damage_flash_duration, true, false, true).timeout
+	if flash_generation == _damage_flash_generation:
+		_set_damage_flash_enabled(false)
+
+func _set_damage_flash_enabled(enabled: bool) -> void:
+	var shader_material := sprite_manager.material as ShaderMaterial
+	if shader_material == null:
+		return
+
+	shader_material.set_shader_parameter("color", Color.WHITE)
+	shader_material.set_shader_parameter("fade", 0.0)
+	shader_material.set_shader_parameter("tint_factor", 1.0 if enabled else 0.0)

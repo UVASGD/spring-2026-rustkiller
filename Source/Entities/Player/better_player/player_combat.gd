@@ -68,9 +68,16 @@ func try_parry() -> void:
 		if area is HitboxComponent:
 			var hitbox := area as HitboxComponent
 			if hitbox.hit_owner == "boss":
-				var projectile := hitbox.get_parent()
-				if projectile:
-					projectile.queue_free()
+				var hit_source := hitbox.get_parent()
+				var parry_succeeded := false
+				if hit_source and hit_source.has_method("parry_charge_attack"):
+					parry_succeeded = hit_source.parry_charge_attack()
+				elif hit_source:
+					hit_source.queue_free()
+					parry_succeeded = true
+
+				if not parry_succeeded:
+					continue
 				_player.set_state("parrying")
 				_anim.stop()
 				_anim.play("parry")
@@ -95,11 +102,12 @@ func update_a2_availability(make_available: bool = false) -> void:
 	print("update_a2_availability called:", make_available, " anim:", _anim.current_animation)
 	a2_available = make_available
 
-func hitstop(duration: float) -> void:
+func hitstop(duration: float, emit_parry_signal: bool = true) -> void:
 	Engine.time_scale = 0.0
 	await _player.get_tree().create_timer(duration, true, false, true).timeout
 	Engine.time_scale = 1.0
-	_player.emit_parrying()
+	if emit_parry_signal:
+		_player.emit_parrying()
 
 func _start_melee() -> void:
 	if combo_window:

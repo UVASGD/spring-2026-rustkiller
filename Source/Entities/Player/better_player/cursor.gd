@@ -13,10 +13,10 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	global_position = _player.global_position
 	
-	# Convert mouse to local space AFTER setting global_position
+	# Keep the cursor in player-local space so aim direction still comes from
+	# the vector between the player and the mouse, but don't clamp it to a ring.
 	var mouse_local := to_local(get_global_mouse_position())
-	var mouse_dir := mouse_local.normalized()
-	_dot_pos = mouse_dir * orbit_radius
+	_dot_pos = mouse_local
 	queue_redraw()
 
 func _draw() -> void:

@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://cvfn1fomkpxbu"]
+
+[ext_resource type="Texture2D" uid="uid://dxje6l2infdhv" path="res://Source/Entities/Projectiles/fireball/Projectile_4_Spiral.png" id="1_scli3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ohhw1"]
+atlas = ExtResource("1_scli3")
+region = Rect2(0, 0, 300, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fq0ue"]
+atlas = ExtResource("1_scli3")
+region = Rect2(300, 0, 300, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7n4jw"]
+atlas = ExtResource("1_scli3")
+region = Rect2(600, 0, 300, 300)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fhda4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ohhw1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fq0ue")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7n4jw")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Fireball" type="Node2D" unique_id=144045227]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2047201243]
+position = Vector2(-38, -111)
+sprite_frames = SubResource("SpriteFrames_fhda4")
+frame = 2
+frame_progress = 0.42791355

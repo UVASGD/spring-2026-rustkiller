@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cmy1ds7wda1qa"]
+[gd_scene format=3 uid="uid://cmy1ds7wda1qa"]
 
 [ext_resource type="Script" uid="uid://d1pkpoovi8h05" path="res://Source/Entities/Components/LockOnComponent/lockon_component.gd" id="1_5d7ku"]
 [ext_resource type="Texture2D" uid="uid://bvtbe7xv6am45" path="res://Source/Resources/Images/Screenshot 2025-12-20 181127.png" id="2_n1ow5"]
@@ -40,14 +40,13 @@ _data = {
 &"lockonsymbol": SubResource("Animation_n1ow5")
 }
 
-[node name="LockonComponent" type="Node2D"]
+[node name="LockonComponent" type="Node2D" unique_id=1329576770]
 script = ExtResource("1_5d7ku")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_i0wai")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=633614202]
+libraries/ = SubResource("AnimationLibrary_i0wai")
 
-[node name="LockonSymbol" type="Sprite2D" parent="."]
+[node name="LockonSymbol" type="Sprite2D" parent="." unique_id=671808756]
+visible = false
 scale = Vector2(0.01, 0.01)
 texture = ExtResource("2_n1ow5")
