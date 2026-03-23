@@ -50,6 +50,10 @@ func process_attack(delta: float) -> void:
 		_player.velocity = Vector2.ZERO
 		_check_combo_input()
 
+	if is_melee_hitbox_active:
+		for area in _hitbox.get_overlapping_areas():
+			_try_hit_area(area)
+
 func handle_attack_input() -> void:
 	if _player.curr_weapon == "melee":
 		_start_melee()
@@ -82,15 +86,10 @@ func fire_burst() -> void:
 	is_shooting = false
 
 func update_melee_active(make_active: bool = false) -> void:
-	print("update_melee_active called:", make_active, " anim:", _anim.current_animation)
 	is_melee_hitbox_active = make_active
+	if not make_active:
+		has_melee_hit = false
 
-	# Important: area_entered only fires when overlap begins.
-	# If the hitbox is already overlapping when active frames start,
-	# manually check current overlaps right now.
-	if make_active:
-		for area in _hitbox.get_overlapping_areas():
-			_try_hit_area(area)
 
 func update_a2_availability(make_available: bool = false) -> void:
 	print("update_a2_availability called:", make_available, " anim:", _anim.current_animation)

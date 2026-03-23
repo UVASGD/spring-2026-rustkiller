@@ -10,12 +10,13 @@
 [ext_resource type="Texture2D" uid="uid://0tig1ikixd16" path="res://Source/Resources/Comics/b1 comic panel 4.png" id="5_euas3"]
 [ext_resource type="AudioStream" uid="uid://dtcaw1cju2r68" path="res://Source/Resources/Audio/SFX/Comic1/Panel 4.mp3" id="5_p5fl1"]
 [ext_resource type="AudioStream" uid="uid://b5tu85dgfqcmg" path="res://Source/Resources/Audio/SFX/Comic1/Panel 5.mp3" id="6_muwsy"]
+[ext_resource type="Texture2D" uid="uid://d0pjjansvjyv2" path="res://Source/Resources/Comics/Panel5-1.png" id="11_h7x22"]
 [ext_resource type="AudioStream" uid="uid://burqv7a3yr2w5" path="res://Source/Resources/Audio/SFX/Comic1/Comic Background.mp3" id="11_qn48w"]
-[ext_resource type="Texture2D" uid="uid://cxu436twxhe0c" path="res://Source/Resources/Comics/Frame-Boss-1-BACKUP.jpg" id="11_quv8e"]
+[ext_resource type="Texture2D" uid="uid://p4etmv1v35fh" path="res://Source/Resources/Comics/Panel5-2.png" id="12_p5fl1"]
 
 [node name="FurnaceComic" type="Node2D" unique_id=1779542933]
 script = ExtResource("1_wja3a")
-panel_sounds = Array[AudioStream]([ExtResource("2_3teua"), ExtResource("3_quv8e"), ExtResource("4_h7x22"), ExtResource("5_p5fl1"), ExtResource("6_muwsy")])
+panel_sounds = Array[AudioStream]([ExtResource("2_3teua"), ExtResource("3_quv8e"), ExtResource("4_h7x22"), ExtResource("5_p5fl1"), ExtResource("6_muwsy"), ExtResource("6_muwsy")])
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1780680746]
 
@@ -55,7 +56,11 @@ texture = ExtResource("5_euas3")
 
 [node name="Panel5" type="Sprite2D" parent="PanelsContainer" unique_id=1767768301]
 position = Vector2(480, 270)
-texture = ExtResource("11_quv8e")
+texture = ExtResource("11_h7x22")
+
+[node name="Panel6" type="Sprite2D" parent="PanelsContainer" unique_id=666543981]
+position = Vector2(480, 270)
+texture = ExtResource("12_p5fl1")
 
 [node name="Constant" type="AudioStreamPlayer2D" parent="." unique_id=1657235264]
 stream = ExtResource("11_qn48w")
