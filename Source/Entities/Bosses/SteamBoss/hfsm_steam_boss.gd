@@ -82,6 +82,13 @@ func _enter_phase_3() -> void:
 	if animator and animator.has_animation("phase_2_to_3"):
 		animator.play("phase_2_to_3")
 
+func get_push_strength() -> float:
+	if phase == 1:
+		return steam_push_strength_p1
+	elif phase == 2:
+		return steam_push_strength_p1 * steam_push_multiplier_p2
+	else:
+		return steam_push_strength_p1 * steam_push_multiplier_p3
 
 # ---------- utilities used by states ----------
 func now_ms() -> int:
@@ -124,19 +131,14 @@ func do_steam_blast_cone() -> void:
 	var cone_half_angle := deg_to_rad(35.0)  # 70° total cone
 	var cone_range := steam_blast_range
 	var push_strength := 0.0
-	if phase == 1:
-		push_strength = steam_push_strength_p1
-	elif phase == 2:
-		push_strength = steam_push_strength_p1 * steam_push_multiplier_p2
-	else:
-		push_strength = steam_push_strength_p1 * steam_push_multiplier_p3
+
 	
 	# Damage + push anything in the cone (just the player for now)
 	var to_player := (player.global_position - global_position)
 	if to_player.length() <= cone_range:
 		var angle_to_player := push_dir.angle_to(to_player.normalized())
 		if abs(angle_to_player) <= cone_half_angle:
-			player.velocity += push_dir * push_strength
+			player.velocity += push_dir * get_push_strength()
 			_deal_damage_to_player(15)
 
 	# VFX: spawn particles
@@ -183,7 +185,7 @@ func do_explosive_burst() -> void:
 	# Check if player is in range
 	if player and dist_to_player() <= burst_radius:
 		var knockback_dir := (player.global_position - global_position).normalized()
-		player.velocity += knockback_dir * steam_push_strength * 1.2
+		player.velocity += knockback_dir * get_push_strength() * 1.2
 		_deal_damage_to_player(burst_damage)
 
 	# VFX: expanding ring
@@ -223,7 +225,7 @@ func do_slash() -> void:
 	if player and dist_to_player() <= slash_range:
 		var angle_to_player := dir_to_player().angle()
 		if abs(angle_to_player) <= slash_half_angle:
-			player.velocity += dir_to_player() * steam_push_strength * 0.8
+			player.velocity += dir_to_player() * get_push_strength() * 0.8
 			_deal_damage_to_player(slash_damage)
 
 	# VFX: radial slash effect
