@@ -51,3 +51,5 @@ move_name = "Alive"
 animation = "Idle"
 
 [node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 instance=ExtResource("5_fflm6")]
+
+[node name="Awaken" type="AnimationPlayer" parent="." unique_id=39504174]
