@@ -21,6 +21,18 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_iwm71"]
 
+[sub_resource type="Animation" id="Animation_dhv1y"]
+resource_name = "Awaken"
+
+[sub_resource type="Animation" id="Animation_hbabe"]
+resource_name = "idle"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dhv1y"]
+_data = {
+&"Awaken": SubResource("Animation_dhv1y"),
+&"idle": SubResource("Animation_hbabe")
+}
+
 [node name="SteamBoss" type="CharacterBody2D" unique_id=2117672993]
 script = ExtResource("1_udhqj")
 
@@ -41,9 +53,12 @@ shape = SubResource("CircleShape2D_iwm71")
 [node name="HurtFlashComponent" parent="." unique_id=1236687298 instance=ExtResource("4_j1j5t")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1623423611]
+libraries/ = SubResource("AnimationLibrary_dhv1y")
 
-[node name="SteamBossHFSM" type="Node" parent="." unique_id=67305199]
+[node name="SteamBossHFSM" type="Node" parent="." unique_id=67305199 node_paths=PackedStringArray("animator", "character")]
 script = ExtResource("6_udhqj")
+animator = NodePath("../AnimationPlayer")
+character = NodePath("..")
 
 [node name="Alive" type="Node" parent="SteamBossHFSM" unique_id=2140677997]
 script = ExtResource("6_j1j5t")
@@ -52,30 +67,37 @@ move_name = "Alive"
 [node name="Idle" type="Node" parent="SteamBossHFSM/Alive" unique_id=634059191]
 script = ExtResource("7_fflm6")
 move_name = "Idle"
+animation = "idle"
 
 [node name="Chase" type="Node" parent="SteamBossHFSM/Alive" unique_id=749522464]
 script = ExtResource("7_agvqu")
 move_name = "Chase"
+animation = "idle"
 
 [node name="SteamBlast" type="Node" parent="SteamBossHFSM/Alive" unique_id=853641976]
 script = ExtResource("9_k6d11")
 move_name = "Steamblast"
+animation = "idle"
 
 [node name="ExplosiveBlast" type="Node" parent="SteamBossHFSM/Alive" unique_id=1855048189]
 script = ExtResource("10_k6d11")
 move_name = "Explosiveblast"
+animation = "idle"
 
 [node name="Slash" type="Node" parent="SteamBossHFSM/Alive" unique_id=1634164472]
 script = ExtResource("11_qs1b0")
 move_name = "Slash"
+animation = "idle"
 
 [node name="Lunge" type="Node" parent="SteamBossHFSM/Alive" unique_id=272444599]
 script = ExtResource("12_hbabe")
 move_name = "Lunge"
+animation = "idle"
 
 [node name="Dormant" type="Node" parent="SteamBossHFSM" unique_id=1305096278]
 script = ExtResource("8_fflm6")
 move_name = "Dormant"
+animation = "idle"
 
 [node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 instance=ExtResource("5_fflm6")]
 
