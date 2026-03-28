@@ -99,7 +99,8 @@ script = ExtResource("8_fflm6")
 move_name = "Dormant"
 animation = "idle"
 
-[node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 instance=ExtResource("5_fflm6")]
+[node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 node_paths=PackedStringArray("hfsm") instance=ExtResource("5_fflm6")]
+hfsm = NodePath("../SteamBossHFSM")
 
 [node name="Awaken" type="AnimationPlayer" parent="." unique_id=39504174]
 
