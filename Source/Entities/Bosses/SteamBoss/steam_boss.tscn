@@ -47,27 +47,35 @@ script = ExtResource("6_udhqj")
 
 [node name="Alive" type="Node" parent="SteamBossHFSM" unique_id=2140677997]
 script = ExtResource("6_j1j5t")
+move_name = "Alive"
 
 [node name="Idle" type="Node" parent="SteamBossHFSM/Alive" unique_id=634059191]
 script = ExtResource("7_fflm6")
+move_name = "Idle"
 
 [node name="Chase" type="Node" parent="SteamBossHFSM/Alive" unique_id=749522464]
 script = ExtResource("7_agvqu")
+move_name = "Chase"
 
 [node name="SteamBlast" type="Node" parent="SteamBossHFSM/Alive" unique_id=853641976]
 script = ExtResource("9_k6d11")
+move_name = "Steamblast"
 
 [node name="ExplosiveBlast" type="Node" parent="SteamBossHFSM/Alive" unique_id=1855048189]
 script = ExtResource("10_k6d11")
+move_name = "Explosiveblast"
 
 [node name="Slash" type="Node" parent="SteamBossHFSM/Alive" unique_id=1634164472]
 script = ExtResource("11_qs1b0")
+move_name = "Slash"
 
 [node name="Lunge" type="Node" parent="SteamBossHFSM/Alive" unique_id=272444599]
 script = ExtResource("12_hbabe")
+move_name = "Lunge"
 
 [node name="Dormant" type="Node" parent="SteamBossHFSM" unique_id=1305096278]
 script = ExtResource("8_fflm6")
+move_name = "Dormant"
 
 [node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 instance=ExtResource("5_fflm6")]
 
