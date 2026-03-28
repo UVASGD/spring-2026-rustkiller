@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dhc3xltm4mims" path="res://Source/Entities/Environment/StageOne/Art/offwhitebg.png" id="6_r12yy"]
 [ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="6_yxuq4"]
 [ext_resource type="Texture2D" uid="uid://x8n2aq26kuv7" path="res://Source/Entities/Environment/StageOne/Art/stagebackground.png" id="7_yxuq4"]
+[ext_resource type="PackedScene" uid="uid://cqubqt0w5eg8m" path="res://Source/Entities/Bosses/SteamBoss/steam_boss.tscn" id="9_r12yy"]
 [ext_resource type="PackedScene" uid="uid://fwo14605u47e" path="res://Source/Entities/Hazards/LavaBall/lavaboulder.tscn" id="10_ifc7m"]
 [ext_resource type="PackedScene" uid="uid://ckif5hgi5j0q7" path="res://Source/Entities/Bosses/FurnaceBoss/furnace_boss.tscn" id="11_bmmtr"]
 
@@ -529,3 +530,7 @@ position = Vector2(-67, -299)
 
 [node name="LavaBoulder2" parent="." unique_id=712016127 instance=ExtResource("10_ifc7m")]
 position = Vector2(-186, -168)
+
+[node name="SteamBoss" parent="." unique_id=2117672993 node_paths=PackedStringArray("player") instance=ExtResource("9_r12yy")]
+position = Vector2(60, -176)
+player = NodePath("../BetterPlayer")
