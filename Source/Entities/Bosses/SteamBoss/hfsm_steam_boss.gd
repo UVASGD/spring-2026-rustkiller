@@ -35,7 +35,7 @@ class_name HFSMSteamBoss
 @export var phase2_health_threshold := 0.5 # enter p2 at <= 50%
 @export var phase3_health_threshold := 0.15 # enter p3 at <= 15%
 
-@onready var state_machine := $SteamHFSM as HFSM
+@onready var state_machine := $SteamBossHFSM as HFSM
 @onready var animator := $AnimationPlayer as AnimationPlayer
 @onready var lunge_hitbox := $LungeHitbox as Area2D
 
