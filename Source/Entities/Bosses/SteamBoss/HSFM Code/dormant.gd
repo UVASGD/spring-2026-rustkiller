@@ -26,16 +26,13 @@ func update(_delta: float) -> void:
 		_set_boss_active(false)
 
 func check_transition(_delta: float) -> TransitionData:
-	# IMPORTANT: do not transition to "Alive" here.
-	# Clear dormancy and let top steam_hsfm.gd choose Alive.
 	if _awaken_started and animation_ended():
 		_set_boss_active(true)
 
 		var boss := character as HFSMSteamBoss
 		if boss:
 			boss.is_dormant = false
-
-		return TransitionData.new(false, "awaken complete; top hfsm will switch to Alive")
+		return TransitionData.new(true, "Alive")
 
 	return TransitionData.new(false, "")
 

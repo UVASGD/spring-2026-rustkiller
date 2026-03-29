@@ -76,12 +76,12 @@ animation = "idle"
 
 [node name="SteamBlast" type="Node" parent="SteamBossHFSM/Alive" unique_id=853641976]
 script = ExtResource("9_k6d11")
-move_name = "Steamblast"
+move_name = "SteamBlast"
 animation = "idle"
 
 [node name="ExplosiveBlast" type="Node" parent="SteamBossHFSM/Alive" unique_id=1855048189]
 script = ExtResource("10_k6d11")
-move_name = "Explosiveblast"
+move_name = "ExplosiveBlast"
 animation = "idle"
 
 [node name="Slash" type="Node" parent="SteamBossHFSM/Alive" unique_id=1634164472]
