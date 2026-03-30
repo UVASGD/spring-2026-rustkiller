@@ -408,7 +408,8 @@ func do_warp_burst() -> void:
 
 	# Small timing window, then burst
 	await get_tree().create_timer(0.12).timeout
-	do_explosive_burst()
+	# reset cooldown
+	set_cd("explosive_burst", 0.0)
 	warp_burst_over.emit()
 
 func wake_up() -> void:

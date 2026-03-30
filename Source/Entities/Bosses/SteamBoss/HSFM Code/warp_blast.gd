@@ -23,7 +23,7 @@ func update(_delta: float) -> void:
 
 func check_transition(_delta: float) -> TransitionData:
 	if _can_transition:
-		return TransitionData.new(true, "Chase")
+		return TransitionData.new(true, "ExplosiveBlast")
 	return TransitionData.new(false, "")
 	
 func _on_warp_over():
