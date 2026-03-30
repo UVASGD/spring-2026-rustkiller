@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://cov6uwa3x5w6o" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/explosive_blast.gd" id="10_k6d11"]
 [ext_resource type="Script" uid="uid://ijtklukgkcb6" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/slash.gd" id="11_qs1b0"]
 [ext_resource type="Script" uid="uid://n173oyr2d0sh" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/lunge.gd" id="12_hbabe"]
+[ext_resource type="Script" uid="uid://cgkmmqeswbdax" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/warp_blast.gd" id="14_dhv1y"]
 [ext_resource type="Texture2D" uid="uid://dpopxngjqj4sd" path="res://Source/Entities/Projectiles/SineProjectile/extremedemon.png" id="16_hbabe"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_agvqu"]
@@ -43,14 +44,17 @@ shape = SubResource("CircleShape2D_agvqu")
 
 [node name="HealthComponent" parent="." unique_id=813342211 instance=ExtResource("1_38s4a")]
 
-[node name="HurtboxComponent" parent="." unique_id=1715746792 instance=ExtResource("2_tcsit")]
+[node name="HurtboxComponent" parent="." unique_id=1715746792 node_paths=PackedStringArray("health_component") instance=ExtResource("2_tcsit")]
+health_component = NodePath("../HealthComponent")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=1274812075]
 shape = SubResource("CircleShape2D_iwm71")
 
 [node name="LockonComponent" parent="." unique_id=1310222347 instance=ExtResource("3_djx6a")]
 
-[node name="HurtFlashComponent" parent="." unique_id=1236687298 instance=ExtResource("4_j1j5t")]
+[node name="HurtFlashComponent" parent="." unique_id=1236687298 node_paths=PackedStringArray("hurtbox_component", "sprite") instance=ExtResource("4_j1j5t")]
+hurtbox_component = NodePath("../HurtboxComponent")
+sprite = NodePath("../Sprite2D")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1623423611]
 libraries/ = SubResource("AnimationLibrary_dhv1y")
@@ -92,6 +96,11 @@ animation = "idle"
 [node name="Lunge" type="Node" parent="SteamBossHFSM/Alive" unique_id=272444599]
 script = ExtResource("12_hbabe")
 move_name = "Lunge"
+animation = "idle"
+
+[node name="WarpBlast" type="Node" parent="SteamBossHFSM/Alive" unique_id=675608776]
+script = ExtResource("14_dhv1y")
+move_name = "WarpBlast"
 animation = "idle"
 
 [node name="Dormant" type="Node" parent="SteamBossHFSM" unique_id=1305096278]

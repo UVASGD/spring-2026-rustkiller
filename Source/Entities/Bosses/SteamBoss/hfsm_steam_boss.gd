@@ -39,6 +39,8 @@ class_name HFSMSteamBoss
 @onready var animator := $AnimationPlayer as AnimationPlayer
 @onready var lunge_hitbox := $LungeHitbox as Area2D
 
+signal warp_burst_over
+
 var _cooldowns := {} # String -> next-ready ms timestamp
 var health := 100
 var phase := 1
@@ -365,6 +367,7 @@ func can_use_warp_burst() -> bool:
 
 func do_warp_burst() -> void:
 	if not can_use_warp_burst():
+		warp_burst_over.emit()
 		return
 
 	# Start cooldown immediately so it can't be retriggered during sequence
@@ -381,6 +384,7 @@ func do_warp_burst() -> void:
 	await get_tree().create_timer(warp_burst_pre_delay).timeout
 
 	if not player:
+		warp_burst_over.emit()
 		return
 
 	# Reappear behind player (opposite player's facing/movement direction fallback)
@@ -405,6 +409,7 @@ func do_warp_burst() -> void:
 	# Small timing window, then burst
 	await get_tree().create_timer(0.12).timeout
 	do_explosive_burst()
+	warp_burst_over.emit()
 
 func wake_up() -> void:
 	is_dormant = false

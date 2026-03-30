@@ -11,6 +11,9 @@ func check_transition(_delta: float) -> TransitionData:
 		return TransitionData.new(false, "")
 
 	var d := boss.dist_to_player()
+	
+	if boss.cd_ready("warp_burst"):
+		return TransitionData.new(true, "WarpBlast")
 
 	# Close: Explosive (if ready) else Slash
 	if d <= boss.close_range:
