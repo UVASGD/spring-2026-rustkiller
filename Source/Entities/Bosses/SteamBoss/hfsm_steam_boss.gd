@@ -10,11 +10,11 @@ class_name HFSMSteamBoss
 
 @export_group("Ranges")
 @export var close_range := 80.0          # Slash / ExplosiveBurst
-@export var steam_blast_range := 240.0   # SteamBlast cone
+@export var steam_blast_range := 200.0   # Range in order to attempt a steam blast
 @export var out_of_range := 320.0        # Lunge if player farther than this
 
 @export_group("SteamBlast")
-@export var steam_push_strength_p1 := 650.0
+@export var steam_push_strength_p1 := 60.0
 @export var steam_blast_cooldown_p1 := 15.0
 @export var steam_blast_cooldown_p2 := 10.0
 @export var steam_blast_cooldown_p3 := 7.0
@@ -123,6 +123,8 @@ func do_lunge_step(_delta: float, dir: Vector2) -> void:
 
 # ----- attack hooks -----
 
+# This attack will almost always connect because it only triggers if the player is in range.
+# That's fine just keep that in mind.
 func do_steam_blast_cone() -> void:
 	if not player:
 		return
@@ -130,7 +132,6 @@ func do_steam_blast_cone() -> void:
 	var push_dir := (player.global_position - global_position).normalized()
 	var cone_half_angle := deg_to_rad(35.0)  # 70° total cone
 	var cone_range := steam_blast_range
-	var push_strength := 0.0
 
 	
 	# Damage + push anything in the cone (just the player for now)
@@ -138,7 +139,7 @@ func do_steam_blast_cone() -> void:
 	if to_player.length() <= cone_range:
 		var angle_to_player := push_dir.angle_to(to_player.normalized())
 		if abs(angle_to_player) <= cone_half_angle:
-			player.velocity += push_dir * get_push_strength()
+			player.apply_knockback(push_dir * get_push_strength())
 			_deal_damage_to_player(15)
 
 	# VFX: spawn particles
