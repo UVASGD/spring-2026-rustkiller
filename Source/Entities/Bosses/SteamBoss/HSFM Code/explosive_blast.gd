@@ -8,7 +8,7 @@ var _fired := false
 
 func on_enter() -> void:
 	var boss := character as HFSMSteamBoss
-	boss.set_cd("explosive", cooldown)
+	boss.set_cd("explosive_blast", cooldown)
 	boss.stop_motion()
 	_start_ms = boss.now_ms()
 	_fired = false

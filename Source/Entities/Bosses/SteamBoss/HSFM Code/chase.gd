@@ -17,7 +17,7 @@ func check_transition(_delta: float) -> TransitionData:
 
 	# Close: Explosive (if ready) else Slash
 	if d <= boss.close_range:
-		if boss.cd_ready("explosive_burst"):
+		if boss.cd_ready("explosive_blast"):
 			return TransitionData.new(true, "ExplosiveBlast")
 		return TransitionData.new(true, "Slash")
 
