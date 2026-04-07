@@ -18,6 +18,16 @@ func _ready() -> void:
 func can_accept_bullet_collision() -> bool:
 	return health_component.has_health_remaining if health_component else false
 
+func can_receive_damage() -> bool:
+	if not can_accept_bullet_collision():
+		return false
+
+	var owner := get_parent()
+	if owner and owner.has_method("is_invulnerable") and owner.is_invulnerable():
+		return false
+
+	return true
+
 func _deal_damage_with_resistances(damage: float) -> float:
 	var final_damage: float = damage
 	if resistance_component:
@@ -29,8 +39,17 @@ func _deal_damage_with_resistances(damage: float) -> float:
 	return final_damage
 
 func _on_area_entered(other_area: Area2D) -> void:
-	if other_area is HitboxComponent and other_area.hit_owner == "player":
-		var hitbox_component := other_area as HitboxComponent
-		if !detect_only:
-			_deal_damage_with_resistances(hitbox_component.damage)
-		hit_by_hitbox.emit(hitbox_component)
+	if not (other_area is HitboxComponent):
+		return
+
+	var hitbox_component := other_area as HitboxComponent
+	if entity_name != "" and hitbox_component.hit_owner == entity_name:
+		return
+	if not hitbox_component.damage_enabled:
+		return
+	if not can_receive_damage():
+		return
+
+	if !detect_only:
+		_deal_damage_with_resistances(hitbox_component.damage)
+	hit_by_hitbox.emit(hitbox_component)

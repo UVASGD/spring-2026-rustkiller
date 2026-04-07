@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6ntw37guntat"
-path="res://.godot/imported/PlayerBossRushAttackComboNoEnergy.png-60f624f564efaffa92d8b037846be824.ctex"
+uid="uid://dawb3c1fsgcpu"
+path="res://.godot/imported/BOSS_PH2_COMBO.png-2a540dc8b59ebe828e6374d50a8693b9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Source/Entities/Player/better_player/Art/PlayerBossRushAttackComboNoEnergy.png"
-dest_files=["res://.godot/imported/PlayerBossRushAttackComboNoEnergy.png-60f624f564efaffa92d8b037846be824.ctex"]
+source_file="res://Source/Entities/Bosses/FurnaceBoss/NewArt/ph2/BOSS_PH2_COMBO.png"
+dest_files=["res://.godot/imported/BOSS_PH2_COMBO.png-2a540dc8b59ebe828e6374d50a8693b9.ctex"]
 
 [params]
 

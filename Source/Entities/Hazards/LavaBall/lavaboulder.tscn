@@ -2,13 +2,124 @@
 
 [ext_resource type="Script" uid="uid://dpqbu26t3o26m" path="res://Source/Entities/Hazards/LavaBall/lavaboulder.gd" id="1_7ik3p"]
 [ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="2_5tfk0"]
-[ext_resource type="Texture2D" uid="uid://7ypo3in83dn7" path="res://Source/Resources/Images/aoe.png" id="3_0xgop"]
+[ext_resource type="Texture2D" uid="uid://hq20ptb07q33" path="res://Source/Resources/Images/warning_circle/frame_1.png" id="3_or82b"]
 [ext_resource type="Texture2D" uid="uid://cwsb12cq4syo" path="res://Source/Resources/Images/lavaboulder.png" id="4_5tfk0"]
+[ext_resource type="Texture2D" uid="uid://ov1het82qdox" path="res://Source/Resources/Images/warning_circle/frame_2.png" id="4_tpbcf"]
 [ext_resource type="Texture2D" uid="uid://byv1y55k5ewq1" path="res://Source/Resources/Images/fireparticle.png" id="5_0xgop"]
+[ext_resource type="Texture2D" uid="uid://ds4jhham4hw43" path="res://Source/Resources/Images/warning_circle/frame_3.png" id="5_gye68"]
+[ext_resource type="Texture2D" uid="uid://bngluur7b2m4m" path="res://Source/Resources/Images/warning_circle/frame_4.png" id="6_g61yp"]
+[ext_resource type="Texture2D" uid="uid://36uas04j2g3b" path="res://Source/Resources/Images/warning_circle/frame_5.png" id="7_3dex2"]
+[ext_resource type="Texture2D" uid="uid://cnh613duwo7u3" path="res://Source/Resources/Images/warning_circle/frame_6.png" id="8_ybbsq"]
+[ext_resource type="Texture2D" uid="uid://cklh7s6y7enj3" path="res://Source/Resources/Images/warning_circle/frame_7.png" id="9_q1jwl"]
+[ext_resource type="Texture2D" uid="uid://dhrudbyyhxkbc" path="res://Source/Resources/Images/warning_circle/frame_8.png" id="10_1jgjs"]
+[ext_resource type="Texture2D" uid="uid://dixekpwhbvop2" path="res://Source/Resources/Images/warning_circle/frame_9.png" id="11_wplm6"]
+[ext_resource type="Texture2D" uid="uid://cp5hhmhd7xmgl" path="res://Source/Resources/Images/warning_circle/frame_10.png" id="12_yjxaf"]
+[ext_resource type="Texture2D" uid="uid://ckphgobripg6f" path="res://Source/Resources/Images/warning_circle/frame_11.png" id="13_66aeb"]
+[ext_resource type="Texture2D" uid="uid://calhfre6mbl0a" path="res://Source/Resources/Images/warning_circle/frame_12.png" id="14_lmqe6"]
+[ext_resource type="Texture2D" uid="uid://cfhbqxj84j8ie" path="res://Source/Resources/Images/warning_circle/frame_13.png" id="15_8k7i1"]
+[ext_resource type="Texture2D" uid="uid://o484qgtsjykr" path="res://Source/Resources/Images/warning_circle/frame_14.png" id="16_1hpc5"]
+[ext_resource type="Texture2D" uid="uid://brkxowqlwrpol" path="res://Source/Resources/Images/warning_circle/frame_15.png" id="17_oja0b"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c7ccf"]
 radius = 11.0
-height = 56.0
+height = 64.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8tidu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_or82b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_tpbcf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_gye68")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_g61yp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_3dex2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_ybbsq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_q1jwl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_1jgjs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_wplm6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_yjxaf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_66aeb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_lmqe6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_8k7i1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_1hpc5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_oja0b")
+}],
+"loop": false,
+"name": &"enter",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_gye68")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_g61yp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_3dex2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_ybbsq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_q1jwl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_1jgjs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_wplm6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_yjxaf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_66aeb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_lmqe6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_8k7i1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_1hpc5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_oja0b")
+}],
+"loop": true,
+"name": &"loop",
+"speed": 5.0
+}]
 
 [sub_resource type="Animation" id="Animation_0xgop"]
 length = 0.001
@@ -72,9 +183,34 @@ tracks/4/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ExploParticles:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("GroundAOE:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_mvk17"]
 resource_name = "fall"
+length = 2.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -130,11 +266,17 @@ tracks/4/path = NodePath(".")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(1),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(1, 2, 2.5),
+"transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": [],
 "method": &"activate"
+}, {
+"args": [],
+"method": &"deactivate"
+}, {
+"args": [],
+"method": &"queue_free"
 }]
 }
 tracks/5/type = "value"
@@ -148,6 +290,30 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("ExploParticles:emitting")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 1, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("GroundAOE:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 2, 2.25),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_l3wnm"]
@@ -165,12 +331,17 @@ monitorable = false
 damage = 10.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=863044118]
+z_index = 1
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_c7ccf")
 
-[node name="GroundAOE" type="Sprite2D" parent="." unique_id=834594290]
-texture = ExtResource("3_0xgop")
-hframes = 2
+[node name="GroundAOE" type="AnimatedSprite2D" parent="." unique_id=1668893234]
+position = Vector2(5, 3)
+scale = Vector2(0.35, 0.35)
+sprite_frames = SubResource("SpriteFrames_8tidu")
+animation = &"loop"
+autoplay = "enter"
+frame_progress = 0.5159289
 
 [node name="Boulder" type="Sprite2D" parent="." unique_id=908126313]
 visible = false
@@ -181,7 +352,7 @@ texture = ExtResource("4_5tfk0")
 remote_path = NodePath("../../CPUParticles2D")
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1014754607]
-position = Vector2(0, -140)
+rotation = 1.5707964
 emitting = false
 amount = 30
 texture = ExtResource("5_0xgop")
@@ -193,3 +364,17 @@ gravity = Vector2(0, 90)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=36373293]
 libraries/ = SubResource("AnimationLibrary_l3wnm")
+
+[node name="ExploParticles" type="CPUParticles2D" parent="." unique_id=1779386815]
+emitting = false
+amount = 200
+texture = ExtResource("5_0xgop")
+emission_shape = 1
+emission_sphere_radius = 22.05
+direction = Vector2(0, -1)
+spread = 35.0
+gravity = Vector2(0, 49)
+initial_velocity_min = 20.0
+initial_velocity_max = 50.0
+
+[connection signal="animation_finished" from="GroundAOE" to="." method="_on_ground_aoe_animation_finished"]

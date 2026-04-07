@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dyrk1d2hnc82x"
-path="res://.godot/imported/PlayerBossRushAttackComboEnergy.png-dae97f350cbfcfdb0a6875ea14b916a8.ctex"
+uid="uid://btfx7cuqcmsb4"
+path="res://.godot/imported/b1 comic panel 2.png-9337e8afa4d9da64694682fde45b6068.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Source/Entities/Player/better_player/Art/PlayerBossRushAttackComboEnergy.png"
-dest_files=["res://.godot/imported/PlayerBossRushAttackComboEnergy.png-dae97f350cbfcfdb0a6875ea14b916a8.ctex"]
+source_file="res://Source/Resources/Comics/b1 comic panel 2.png"
+dest_files=["res://.godot/imported/b1 comic panel 2.png-9337e8afa4d9da64694682fde45b6068.ctex"]
 
 [params]
 

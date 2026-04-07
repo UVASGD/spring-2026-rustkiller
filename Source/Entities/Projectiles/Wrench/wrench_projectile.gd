@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var timer:Timer = $Timer
+@onready var hitbox: HitboxComponent = $HitboxComponent
 var velocity: Vector2 = Vector2.ZERO
 
 
@@ -21,7 +22,7 @@ func _on_hitbox_area_entered(area):
 	if area is HurtboxComponent:
 		var hurtbox = area as HurtboxComponent
 		
-		if hurtbox.can_accept_bullet_collision():
+		if hurtbox.can_accept_bullet_collision() and hurtbox.entity_name != hitbox.hit_owner:
 			
 			# Spawn impact effect if available
 			if hurtbox.bullet_impact_scene:

@@ -2,14 +2,47 @@ extends HFSM
 
 @export var rush_series: HFSM
 
+var did_charge := false
+var _attack_cycle_phase_1: Array[String] = ["Charge", "Shoot", "Combo"]
+var _attack_cycle_phase_2: Array[String] = ["Charge2", "Shoot2", "Combo2"]
+@export var use_predetermined_order: bool = false
+var _attack_cycle_index: int = 0
+var _last_attack: String = ""
+var _using_phase_2_cycle := false
+
 func check_transition(_delta) -> TransitionData:
-	#if imdeadlmaoo():
-		#return TransitionData.new(true, "death")
-	#if rush_ended():
-		#return TransitionData.new(true, "Idle")	
-		#pass
+	if character and character.has_method("should_enter_phase_2") and character.should_enter_phase_2():
+		return TransitionData.new(true, "Awaken2")
 	return TransitionData.new(false, "")
 	
 func choose_internal_move() -> TransitionData:
-	return TransitionData.new(true, "Charge")
+	return TransitionData.new(true, get_next_attack())
+
+func get_next_attack() -> String:
+	var attack_cycle := _get_attack_cycle()
+
+	if use_predetermined_order:
+		var ordered_attack := attack_cycle[_attack_cycle_index % attack_cycle.size()]
+		_attack_cycle_index = (_attack_cycle_index + 1) % attack_cycle.size()
+		_last_attack = ordered_attack
+		return ordered_attack
+
+	var available_attacks := attack_cycle.filter(func(attack: String) -> bool: return attack != _last_attack)
+	if available_attacks.is_empty():
+		available_attacks = attack_cycle
+
+	var attack_name: String = available_attacks[randi() % available_attacks.size()]
+	_last_attack = attack_name
+	return attack_name
+
+func _get_attack_cycle() -> Array[String]:
+	var is_phase_2_active: bool = character != null and character.has_method("is_phase_2") and character.is_phase_2()
+	if is_phase_2_active != _using_phase_2_cycle:
+		_using_phase_2_cycle = is_phase_2_active
+		_attack_cycle_index = 0
+		_last_attack = ""
+
+	if _using_phase_2_cycle:
+		return _attack_cycle_phase_2
+	return _attack_cycle_phase_1
 	
