@@ -43,6 +43,7 @@ var _walk_sfx_timer: float = 0.0
 func _ready() -> void:
 	health_component.max_health = hp
 	health_component.health = hp
+	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_health_died)
 	hurtbox_component.hit_by_hitbox.connect(_on_hurtbox_hit_by_hitbox)
 	_combat.setup(self)
@@ -168,7 +169,14 @@ func activate_parry_invulnerability() -> void:
 
 func _on_hurtbox_hit_by_hitbox(_hitbox: HitboxComponent) -> void:
 	_flash_damage_white()
-	_combat.hitstop(damage_hitstop_duration, false)
+
+func _on_health_changed(health_update: HealthComponent.HealthUpdate) -> void:
+	var damage_taken := health_update.previous_health - health_update.health
+	if damage_taken <= 0.0:
+		return
+
+	var damage_ratio := clampf(damage_taken / maxf(health_update.max_health, 1.0), 0.0, 1.0)
+	_combat.hitstop(lerpf(damage_hitstop_duration, 1, damage_ratio), false)
 
 func _on_health_died() -> void:
 	set_physics_process(false)
