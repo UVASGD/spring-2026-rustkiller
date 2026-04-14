@@ -1065,7 +1065,7 @@ animations = [{
 
 [node name="BetterPlayer" type="CharacterBody2D" unique_id=462766173 node_paths=PackedStringArray("_sfx_player", "_walk_sfx_player") groups=["PLAYER"]]
 script = ExtResource("1_loo1l")
-hp = 100
+hp = 1000
 _sfx_player = NodePath("SFXPlayer")
 _walk_sfx_player = NodePath("WalkSFXPlayer")
 

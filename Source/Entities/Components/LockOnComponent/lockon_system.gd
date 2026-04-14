@@ -22,7 +22,7 @@ func _ready() -> void:
 	# Connect to player's "parrying" signal
 	if player and player.has_signal("parrying"):
 		player.parrying.connect(_on_player_parrying)
-	
+	player.get_node("HealthComponent").health_changed.connect(_on_player_health_changed)
 
 func _physics_process(delta: float) -> void:
 	if current_target and is_instance_valid(current_target):
@@ -46,6 +46,15 @@ func _apply_camera_shake(delta: float) -> void:
 		camera.offset = offset
 	else:
 		camera.offset = Vector2.ZERO
+
+func _on_player_health_changed(health_update: HealthComponent.HealthUpdate) -> void:
+	var damage_taken := health_update.previous_health - health_update.health
+	if damage_taken <= 0.0:
+			return
+
+	var damage_ratio := clampf(damage_taken / maxf(health_update.max_health, 1.0), 0.0, 1.0)
+	shake_timer = maxf(shake_timer, lerpf(0.1, 0.3, damage_ratio))
+	shake_magnitude = lerpf(20.0, 40.0, damage_ratio)
 
 func _input(event):
 	if event.is_action_pressed("lockon"):

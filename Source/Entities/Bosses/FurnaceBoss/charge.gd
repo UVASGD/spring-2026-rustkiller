@@ -3,12 +3,15 @@ extends HFSM
 @export var aim_time := 0.6
 @export var charge_duration := 0.25
 @export var charge_speed := 850.0
+@export var hit_slowdown_duration := 0.25
 @export var charge_hitbox_distance := 70.0
 @export var charge_hit_radius := 95.0
 
 var timer := 0.0
 var locked_charge_direction := Vector2.RIGHT
 var is_charging := false
+var has_hit := false
+var hit_slowdown_timer := 0.0
 var _charge_hitbox: HitboxComponent
 var _charge_hitbox_shape: CollisionShape2D
 var _damaged_targets: Dictionary = {}
@@ -21,6 +24,8 @@ func on_enter():
 	character.velocity = Vector2.ZERO
 	timer = aim_time
 	is_charging = false
+	has_hit = false
+	hit_slowdown_timer = 0.0
 	_damaged_targets.clear()
 	locked_charge_direction = _get_target_direction()
 	_flip_visuals(locked_charge_direction)
@@ -44,7 +49,12 @@ func update(delta : float):
 			character.velocity = locked_charge_direction * charge_speed
 	else:
 		_update_charge_hitbox_transform(locked_charge_direction)
-		character.velocity = locked_charge_direction * charge_speed
+		if has_hit:
+			hit_slowdown_timer -= delta
+			var slow_ratio := maxf(hit_slowdown_timer / hit_slowdown_duration, 0.0)
+			character.velocity = locked_charge_direction * charge_speed * slow_ratio
+		else:
+			character.velocity = locked_charge_direction * charge_speed
 
 	var previous_position := character.global_position
 	character.move_and_slide()
@@ -53,6 +63,10 @@ func update(delta : float):
 
 func check_transition(_delta) -> TransitionData:
 	if is_charging and timer <= 0.0:
+		_set_charge_hitbox_enabled(false)
+		character.velocity = Vector2.ZERO
+		return TransitionData.new(true, "Pause")
+	if has_hit and hit_slowdown_timer <= 0.0:
 		_set_charge_hitbox_enabled(false)
 		character.velocity = Vector2.ZERO
 		return TransitionData.new(true, "Pause")
@@ -129,6 +143,8 @@ func _try_apply_charge_hit(hurtbox: HurtboxComponent) -> void:
 
 	_damaged_targets[target_id] = true
 	hurtbox._on_area_entered(_charge_hitbox)
+	has_hit = true
+	hit_slowdown_timer = hit_slowdown_duration
 
 func _closest_point_on_segment(point: Vector2, segment_start: Vector2, segment_end: Vector2) -> Vector2:
 	var segment := segment_end - segment_start
