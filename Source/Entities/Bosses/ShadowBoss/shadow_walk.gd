@@ -26,6 +26,8 @@ func update(delta: float) -> void:
 		character.move_toward_target(delta)
 
 func check_transition(_delta: float) -> TransitionData:
+	if _time_until_slash <= 0.0 and character and character.has_method("should_use_range_attack") and character.should_use_range_attack():
+		return TransitionData.new(true, "Range")
 	if _time_until_slash <= 0.0 and character and character.has_method("can_start_slash") and character.can_start_slash():
 		return TransitionData.new(true, "Slash")
 	return TransitionData.new(false, "")

@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://np8yjxnxxm8m" path="res://Source/Entities/Components/LockOnComponent/lockon_system.gd" id="2_jv2fq"]
 [ext_resource type="Texture2D" uid="uid://bktdkuma36eod" path="res://Source/Entities/Environment/StageOne/Art/Stage.png" id="5_r12yy"]
 [ext_resource type="Texture2D" uid="uid://cdkm5mxrhden3" path="res://Source/Entities/Environment/StageOne/Art/pillar.png" id="6_f8vh1"]
+[ext_resource type="Texture2D" uid="uid://d1t4cckuncenq" path="res://Source/Entities/Environment/StageOne/Art/StagePillar.png" id="6_ifc7m"]
 [ext_resource type="PackedScene" uid="uid://crvepxby1imcj" path="res://Source/Entities/Player/better_player/better_player.tscn" id="6_jv2fq"]
 [ext_resource type="Texture2D" uid="uid://dhc3xltm4mims" path="res://Source/Entities/Environment/StageOne/Art/offwhitebg.png" id="6_r12yy"]
 [ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="6_yxuq4"]
@@ -483,6 +484,10 @@ position = Vector2(111.17021, 102.83401)
 position = Vector2(-75, -103.643715)
 shape = SubResource("RectangleShape2D_86f36")
 debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="StagePillar" type="Sprite2D" parent="Environment" unique_id=1789628808]
+scale = Vector2(5.6400003, 1.235)
+texture = ExtResource("6_ifc7m")
 
 [node name="Offwhitebg" type="Sprite2D" parent="Environment" unique_id=209026157]
 z_index = -1

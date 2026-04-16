@@ -2,12 +2,15 @@
 
 [ext_resource type="Script" uid="uid://vwgemqi868u5" path="res://Source/Entities/Bosses/ShadowBoss/shadow_boss.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cccn2edq2kj7x" path="res://Source/Entities/Components/HealthComponent/health_component.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://h7or2cmofbjy" path="res://Source/Entities/Bosses/ShadowBoss/light_circle.png" id="2_chk8f"]
 [ext_resource type="Texture2D" uid="uid://clr3c57plh81d" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_player/ShadowDisappear.png" id="2_dj4xv"]
 [ext_resource type="PackedScene" uid="uid://ccu0np30bscvr" path="res://Source/Entities/Components/HurtboxComponent/hurtbox_component.tscn" id="3"]
+[ext_resource type="Texture2D" uid="uid://yj7xvs80x24a" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_player/ShadowBossAttack_Loop.png" id="3_4eyhv"]
+[ext_resource type="Texture2D" uid="uid://s71tce3nowg5" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_player/ShadowBossAttack_end.png" id="3_qwknq"]
 [ext_resource type="Texture2D" uid="uid://d3eyqjhyf02r7" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_player/ShadowSlash_1.png" id="3_r83rk"]
 [ext_resource type="PackedScene" uid="uid://cmy1ds7wda1qa" path="res://Source/Entities/Components/LockOnComponent/lockon_component.tscn" id="4"]
+[ext_resource type="Texture2D" uid="uid://bud2hebn74aoe" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_player/ShadowBossRangeAttack_Start.png" id="4_qwknq"]
 [ext_resource type="Texture2D" uid="uid://b3e5tm8icu5po" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_player/ShadowSlash_2.png" id="4_xwegw"]
-[ext_resource type="PackedScene" uid="uid://csvmkjqtav4p3" path="res://Source/Entities/Components/HurtFlashComponent/hurt_flash_component.tscn" id="5"]
 [ext_resource type="Texture2D" uid="uid://cpbcfaiswpcaa" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_player/ShadowBossWalk.png" id="5_mnhk5"]
 [ext_resource type="PackedScene" uid="uid://co3gr1quly52h" path="res://Source/Entities/Components/HFSM/HFSMDebugLabelComponent/HFSMDebugLabelComponent.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://dbnhgp03q0xpy" path="res://Source/Entities/Components/HealthbarComponent/Healthbar.tscn" id="7"]
@@ -16,6 +19,17 @@
 [ext_resource type="Script" uid="uid://c6pxayoldunds" path="res://Source/Entities/Bosses/ShadowBoss/shadow_idle.gd" id="10"]
 [ext_resource type="Script" uid="uid://dlhen686ontdt" path="res://Source/Entities/Bosses/ShadowBoss/shadow_walk.gd" id="11"]
 [ext_resource type="Script" uid="uid://bxcmiqn8tlkie" path="res://Source/Entities/Bosses/ShadowBoss/shadow_slash.gd" id="12"]
+[ext_resource type="Script" uid="uid://decg5j2fyn3lf" path="res://Source/Entities/Bosses/ShadowBoss/shadow_hit_particles.gd" id="13"]
+[ext_resource type="Script" uid="uid://cb0rm3gwjgm4q" path="res://Source/Entities/Bosses/ShadowBoss/shadow_range.gd" id="14"]
+[ext_resource type="Shader" uid="uid://drrk6mpqbk48q" path="res://Source/Entities/Bosses/ShadowBoss/light_circle_platform_mask.gdshader" id="15"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_light_circle_mask"]
+shader = ExtResource("15")
+shader_parameter/platform_global_position = Vector2(0, 0)
+shader_parameter/platform_scale = Vector2(1, 1)
+shader_parameter/platform_rotation = 0.0
+shader_parameter/platform_texture_size = Vector2(1, 1)
+shader_parameter/alpha_cutoff = 0.05
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4eyhv"]
 radius = 18.0
@@ -40,6 +54,86 @@ region = Rect2(300, 0, 100, 100)
 [sub_resource type="AtlasTexture" id="AtlasTexture_qvkig"]
 atlas = ExtResource("2_dj4xv")
 region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0p4vv"]
+atlas = ExtResource("3_qwknq")
+region = Rect2(0, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lf0dq"]
+atlas = ExtResource("3_qwknq")
+region = Rect2(200, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_brh3u"]
+atlas = ExtResource("3_qwknq")
+region = Rect2(400, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2p607"]
+atlas = ExtResource("3_qwknq")
+region = Rect2(600, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0va5o"]
+atlas = ExtResource("3_qwknq")
+region = Rect2(800, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6jfdc"]
+atlas = ExtResource("3_qwknq")
+region = Rect2(1000, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w8nko"]
+atlas = ExtResource("3_qwknq")
+region = Rect2(1200, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_48xef"]
+atlas = ExtResource("3_4eyhv")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jq0xn"]
+atlas = ExtResource("3_4eyhv")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ltwve"]
+atlas = ExtResource("3_4eyhv")
+region = Rect2(300, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r3pqh"]
+atlas = ExtResource("3_4eyhv")
+region = Rect2(450, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x8g07"]
+atlas = ExtResource("3_4eyhv")
+region = Rect2(600, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ya816"]
+atlas = ExtResource("3_4eyhv")
+region = Rect2(750, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mbrw6"]
+atlas = ExtResource("3_4eyhv")
+region = Rect2(900, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k434t"]
+atlas = ExtResource("3_4eyhv")
+region = Rect2(1050, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8h7e3"]
+atlas = ExtResource("3_4eyhv")
+region = Rect2(1200, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mk5vl"]
+atlas = ExtResource("4_qwknq")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ghury"]
+atlas = ExtResource("4_qwknq")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hkxci"]
+atlas = ExtResource("4_qwknq")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kqd2w"]
+atlas = ExtResource("4_qwknq")
+region = Rect2(300, 0, 100, 100)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eth8q"]
 atlas = ExtResource("3_r83rk")
@@ -138,6 +232,81 @@ animations = [{
 "loop": false,
 "name": &"disappear",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0p4vv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lf0dq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_brh3u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2p607")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0va5o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6jfdc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w8nko")
+}],
+"loop": true,
+"name": &"range_end",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_48xef")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jq0xn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ltwve")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r3pqh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x8g07")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ya816")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mbrw6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k434t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8h7e3")
+}],
+"loop": true,
+"name": &"range_loop",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mk5vl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ghury")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hkxci")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kqd2w")
+}],
+"loop": true,
+"name": &"range_start",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -248,6 +417,18 @@ tracks/2/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LightCircle:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
 
 [sub_resource type="Animation" id="Animation_ltwve"]
 resource_name = "disappear"
@@ -289,6 +470,177 @@ tracks/2/keys = {
 "update": 1,
 "values": [true, false]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LightCircle:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(8, 8)]
+}
+
+[sub_resource type="Animation" id="Animation_qwknq"]
+resource_name = "range_end"
+length = 0.7
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"range_end"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/AnimatedSprite2D:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LightCircle:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(8, 8), Vector2(0.5, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_psqdv"]
+resource_name = "range_loop"
+length = 0.9
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"range_loop"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/AnimatedSprite2D:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LightCircle:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(8, 8), Vector2(8, 8)]
+}
+
+[sub_resource type="Animation" id="Animation_chk8f"]
+resource_name = "range_start"
+length = 0.4
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"range_start"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/AnimatedSprite2D:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LightCircle:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(8, 8)]
+}
 
 [sub_resource type="Animation" id="Animation_r3pqh"]
 resource_name = "slash"
@@ -329,6 +681,18 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LightCircle:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(8, 8), Vector2(8, 8)]
 }
 
 [sub_resource type="Animation" id="Animation_x8g07"]
@@ -372,11 +736,26 @@ tracks/2/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LightCircle:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
 
 [sub_resource type="AnimationLibrary" id="3"]
 _data = {
 &"RESET": SubResource("Animation_jq0xn"),
 &"disappear": SubResource("Animation_ltwve"),
+&"range_end": SubResource("Animation_qwknq"),
+&"range_loop": SubResource("Animation_psqdv"),
+&"range_start": SubResource("Animation_chk8f"),
 &"slash": SubResource("Animation_r3pqh"),
 &"walk": SubResource("Animation_x8g07")
 }
@@ -386,6 +765,15 @@ motion_mode = 1
 script = ExtResource("1")
 move_speed = 60.0
 orbit_radius = 100.0
+range_attack_chance = 1.0
+range_cooldown = 2.0
+skulls_per_range_loop = 5
+skull_spawn_chance = 1.0
+
+[node name="LightCircle" type="Sprite2D" parent="." unique_id=100654360]
+material = SubResource("ShaderMaterial_light_circle_mask")
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_chk8f")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1461963904]
 position = Vector2(-2, 0)
@@ -413,7 +801,7 @@ sprite_frames = SubResource("SpriteFrames_48xef")
 animation = &"walk"
 
 [node name="HealthComponent" parent="." unique_id=60048974 instance=ExtResource("2")]
-max_health = 10.0
+max_health = 100.0
 
 [node name="Healthbar" parent="." unique_id=2088047844 instance=ExtResource("7")]
 offset_left = -120.0
@@ -433,10 +821,27 @@ shape = SubResource("2")
 [node name="LockonComponent" parent="." unique_id=1332623489 instance=ExtResource("4")]
 position = Vector2(0, -28)
 
-[node name="HurtFlashComponent" parent="." unique_id=649219152 node_paths=PackedStringArray("hurtbox_component", "sprite") instance=ExtResource("5")]
+[node name="HitParticles" type="Node2D" parent="." unique_id=951699091 node_paths=PackedStringArray("hurtbox_component")]
+script = ExtResource("13")
 hurtbox_component = NodePath("../HurtboxComponent")
-sprite = NodePath("../Visuals/AnimatedSprite2D")
-flash_color = Color(0.702, 0.702, 0.878, 1)
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="HitParticles" unique_id=790631010]
+emitting = false
+amount = 50
+lifetime = 0.35
+one_shot = true
+explosiveness = 1.0
+randomness = 0.75
+emission_shape = 1
+emission_sphere_radius = 0.01
+direction = Vector2(0, -1)
+spread = 180.0
+gravity = Vector2(0, 220)
+initial_velocity_min = 45.0
+initial_velocity_max = 110.0
+scale_amount_min = 0.8
+scale_amount_max = 1.8
+color = Color(0, 0, 0, 0.9)
 
 [node name="ShadowHFSM" type="Node" parent="." unique_id=889477739 node_paths=PackedStringArray("animator", "character")]
 script = ExtResource("8")
@@ -458,6 +863,10 @@ move_name = "Walk"
 [node name="Slash" type="Node" parent="ShadowHFSM/Alive" unique_id=701892504]
 script = ExtResource("12")
 move_name = "Slash"
+
+[node name="Range" type="Node" parent="ShadowHFSM/Alive" unique_id=1777104117]
+script = ExtResource("14")
+move_name = "Range"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1678892094]
 libraries/ = SubResource("3")
