@@ -23,6 +23,11 @@ func _ready() -> void:
 	if player and player.has_signal("parrying"):
 		player.parrying.connect(_on_player_parrying)
 	player.get_node("HealthComponent").health_changed.connect(_on_player_health_changed)
+	var boss := get_tree().get_first_node_in_group("boss")
+	if boss:
+		var boss_health_component := boss.get_node_or_null("HealthComponent")
+		if boss_health_component and boss_health_component.has_signal("health_changed"):
+			boss_health_component.health_changed.connect(_on_boss_health_changed)
 
 func _physics_process(delta: float) -> void:
 	if current_target and is_instance_valid(current_target):
@@ -48,6 +53,12 @@ func _apply_camera_shake(delta: float) -> void:
 		camera.offset = Vector2.ZERO
 
 func _on_player_health_changed(health_update: HealthComponent.HealthUpdate) -> void:
+	_apply_damage_shake(health_update)
+
+func _on_boss_health_changed(health_update: HealthComponent.HealthUpdate) -> void:
+	_apply_damage_shake(health_update)
+
+func _apply_damage_shake(health_update: HealthComponent.HealthUpdate) -> void:
 	var damage_taken := health_update.previous_health - health_update.health
 	if damage_taken <= 0.0:
 			return
