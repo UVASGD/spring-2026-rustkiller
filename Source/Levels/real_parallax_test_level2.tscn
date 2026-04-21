@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://fb2dxk6ifnmk" path="res://Source/Levels/test_level_parallax.gd" id="1_hflr5"]
 [ext_resource type="Script" uid="uid://np8yjxnxxm8m" path="res://Source/Entities/Components/LockOnComponent/lockon_system.gd" id="2_7pkhe"]
 [ext_resource type="Texture2D" uid="uid://x8n2aq26kuv7" path="res://Source/Entities/Environment/StageOne/Art/stagebackground.png" id="3_smuon"]
-[ext_resource type="Texture2D" uid="uid://cdkm5mxrhden3" path="res://Source/Entities/Environment/StageOne/Art/pillar.png" id="4_222w1"]
 [ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="6_vb77k"]
 [ext_resource type="Texture2D" uid="uid://bktdkuma36eod" path="res://Source/Entities/Environment/StageOne/Art/Stage.png" id="7_fc4tw"]
 [ext_resource type="Texture2D" uid="uid://drd6wac3wdcwt" path="res://Source/Entities/Environment/StageOne/Art/Layer1FULLHD.png" id="8_222w1"]
@@ -13,12 +12,15 @@
 [ext_resource type="Texture2D" uid="uid://bjem35vc0026c" path="res://Source/Entities/Environment/StageOne/Art/Layer3FULLHD.png" id="10_vb77k"]
 [ext_resource type="Texture2D" uid="uid://uibck00sx44p" path="res://Source/Entities/Environment/StageOne/Art/Layer4FULLHD.png" id="11_fc4tw"]
 [ext_resource type="Texture2D" uid="uid://b5ujmw0xuxv1y" path="res://Source/Entities/Environment/StageOne/Art/Layer5FULLHD.png" id="12_srunv"]
+[ext_resource type="Script" uid="uid://cd87nakfhhedy" path="res://Source/Levels/sprite_2d_3.gd" id="14_e8qr8"]
 
 [sub_resource type="Environment" id="Environment_f8vh1"]
 background_mode = 3
 glow_enabled = true
 glow_hdr_threshold = 0.1
 adjustment_enabled = true
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_222w1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_222w1"]
 size = Vector2(24.600004, 12.145748)
@@ -63,15 +65,6 @@ rotation = 0.5235988
 scale = Vector2(19.134907, 19.134907)
 texture = ExtResource("3_smuon")
 
-[node name="Pillar4" type="Sprite2D" parent="Environment" unique_id=1707300526]
-visible = false
-modulate = Color(0.79607844, 0.9019608, 1, 0.50980395)
-z_index = 1
-position = Vector2(-632, 34.999985)
-rotation = 0.7853982
-scale = Vector2(9.398168, 26.395927)
-texture = ExtResource("4_222w1")
-
 [node name="Ashes" type="Sprite2D" parent="Environment" unique_id=658814904]
 visible = false
 z_index = -1
@@ -93,9 +86,17 @@ scale_amount_max = 2.5
 color = Color(0, 0, 0, 1)
 
 [node name="Platform" type="Sprite2D" parent="Environment" unique_id=1548850663]
-position = Vector2(0, 100)
+position = Vector2(0, 150)
 scale = Vector2(5.6, 1.2)
 texture = ExtResource("7_fc4tw")
+
+[node name="Area2D" type="Area2D" parent="Environment/Platform" unique_id=1795663207]
+position = Vector2(0, -175)
+scale = Vector2(16.2, 16.2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Area2D" unique_id=343205879]
+shape = SubResource("CircleShape2D_222w1")
+debug_color = Color(0.84705883, 0, 0.9098039, 1)
 
 [node name="Wall3" type="StaticBody2D" parent="Environment/Platform" unique_id=1389684402]
 position = Vector2(0, 77.73279)
@@ -511,17 +512,31 @@ show_behind_parent = true
 repeat_size = Vector2(57, 0)
 autoscroll = Vector2(50, 0)
 repeat_times = 25
+ignore_camera_scroll = true
 
 [node name="Sprite2D2" type="Sprite2D" parent="Parallax2D2" unique_id=1564247411]
 position = Vector2(0, -350)
 scale = Vector2(0.3, 0.4)
 texture = ExtResource("8_222w1")
 
+[node name="ParallaxBackMount" type="Parallax2D" parent="." unique_id=2097997998]
+show_behind_parent = true
+scroll_scale = Vector2(0.8, 0.8)
+scroll_offset = Vector2(500, 0)
+repeat_size = Vector2(570, 0)
+repeat_times = 25
+
+[node name="Sprite2D5" type="Sprite2D" parent="ParallaxBackMount" unique_id=500459332]
+position = Vector2(0, -350)
+scale = Vector2(0.3, 0.4)
+texture = ExtResource("11_fc4tw")
+
 [node name="Parallax2D3" type="Parallax2D" parent="." unique_id=2139392021]
 show_behind_parent = true
 repeat_size = Vector2(400, 0)
 autoscroll = Vector2(30, 0)
 repeat_times = 20
+ignore_camera_scroll = true
 
 [node name="Sprite2D3" type="Sprite2D" parent="Parallax2D3" unique_id=650027117]
 position = Vector2(0, -350)
@@ -533,17 +548,29 @@ position = Vector2(0, -350)
 scale = Vector2(0.3, 0.4)
 texture = ExtResource("10_vb77k")
 
-[node name="Parallax2D" type="Parallax2D" parent="." unique_id=196446968]
+[node name="ParallaxFrontMount" type="Parallax2D" parent="." unique_id=196446968]
+show_behind_parent = true
+scroll_scale = Vector2(2, 2)
+scroll_offset = Vector2(0, -350)
+repeat_size = Vector2(575, 0)
+repeat_times = 50
+ignore_camera_scroll = true
+
+[node name="Sprite2D6" type="Sprite2D" parent="ParallaxFrontMount" unique_id=192654702]
+scale = Vector2(0.3, 0.4)
+texture = ExtResource("12_srunv")
+
+[node name="ParallaxNormal" type="Parallax2D" parent="." unique_id=2128957809]
 show_behind_parent = true
 scroll_offset = Vector2(0, -350)
 repeat_size = Vector2(575, 0)
 repeat_times = 50
 ignore_camera_scroll = true
 
-[node name="Sprite2D" type="Sprite2D" parent="Parallax2D" unique_id=810997820]
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxNormal" unique_id=351855961]
 texture = SubResource("CanvasTexture_fkve3")
 
-[node name="Offwhitebg" type="Sprite2D" parent="Parallax2D" unique_id=209026157]
+[node name="Offwhitebg" type="Sprite2D" parent="ParallaxNormal" unique_id=1417424850]
 modulate = Color(0.11764706, 0.101960786, 0.21568628, 1)
 z_index = -1
 position = Vector2(-66.33348, -608.49994)
@@ -551,15 +578,7 @@ scale = Vector2(8, 2.51)
 texture = SubResource("CompressedTexture2D_x8bep")
 offset = Vector2(0, 500)
 
-[node name="Sprite2D5" type="Sprite2D" parent="Parallax2D" unique_id=500459332]
-scale = Vector2(0.3, 0.4)
-texture = ExtResource("11_fc4tw")
-
-[node name="Sprite2D6" type="Sprite2D" parent="Parallax2D" unique_id=192654702]
-scale = Vector2(0.3, 0.4)
-texture = ExtResource("12_srunv")
-
-[node name="Sprite2D7" type="Sprite2D" parent="Parallax2D" unique_id=1094557923]
+[node name="Sprite2D7" type="Sprite2D" parent="ParallaxNormal" unique_id=1853929474]
 scale = Vector2(0.3, 0.4)
 texture = ExtResource("10_hflr5")
 
@@ -567,13 +586,16 @@ texture = ExtResource("10_hflr5")
 layer = 1
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground" unique_id=1151164728]
+visible = false
 motion_offset = Vector2(0, 50)
 motion_mirroring = Vector2(1800, 0)
 
-[node name="Sprite2D3" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer" unique_id=581961300]
+[node name="Sprite2D3" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer" unique_id=581961300 node_paths=PackedStringArray("player")]
 position = Vector2(-66, -332)
 texture = ExtResource("10_hflr5")
 offset = Vector2(0, 100)
+script = ExtResource("14_e8qr8")
+player = NodePath("../../../BetterPlayer")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=486206147]
 libraries/ = SubResource("AnimationLibrary_e8qr8")
