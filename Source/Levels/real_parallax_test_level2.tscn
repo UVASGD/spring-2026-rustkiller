@@ -531,19 +531,19 @@ position = Vector2(0, -350)
 scale = Vector2(0.3, 0.4)
 texture = ExtResource("11_fc4tw")
 
-[node name="Parallax2D3" type="Parallax2D" parent="." unique_id=2139392021]
+[node name="ParallaxClouds" type="Parallax2D" parent="." unique_id=2139392021]
 show_behind_parent = true
 repeat_size = Vector2(400, 0)
 autoscroll = Vector2(30, 0)
 repeat_times = 20
 ignore_camera_scroll = true
 
-[node name="Sprite2D3" type="Sprite2D" parent="Parallax2D3" unique_id=650027117]
+[node name="Sprite2D3" type="Sprite2D" parent="ParallaxClouds" unique_id=650027117]
 position = Vector2(0, -350)
 scale = Vector2(0.3, 0.4)
 texture = ExtResource("9_e8qr8")
 
-[node name="Sprite2D4" type="Sprite2D" parent="Parallax2D3" unique_id=1146182086]
+[node name="Sprite2D4" type="Sprite2D" parent="ParallaxClouds" unique_id=1146182086]
 position = Vector2(0, -350)
 scale = Vector2(0.3, 0.4)
 texture = ExtResource("10_vb77k")

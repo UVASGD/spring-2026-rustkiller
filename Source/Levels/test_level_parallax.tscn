@@ -38,46 +38,77 @@ environment = SubResource("Environment_f8vh1")
 
 [node name="Environment" type="Node2D" parent="." unique_id=1417361352]
 
-[node name="Pillar3" type="Sprite2D" parent="Environment" unique_id=875237494]
-modulate = Color(0.79521304, 0.901673, 1, 1)
-position = Vector2(539.00006, -231)
-scale = Vector2(3.3981662, 9.544174)
-texture = ExtResource("6_f8vh1")
+[node name="ParallaxAshes" type="Parallax2D" parent="Environment" unique_id=561883605]
+scroll_scale = Vector2(0.5, 0.5)
+scroll_offset = Vector2(0, 600)
 
-[node name="Pillar" type="Sprite2D" parent="Environment" unique_id=249386930]
-modulate = Color(0.79521304, 0.901673, 1, 1)
-position = Vector2(941, -177)
-rotation = -0.2617994
-scale = Vector2(9.398168, 26.395927)
-texture = ExtResource("6_f8vh1")
+[node name="Ashes" type="Sprite2D" parent="Environment/ParallaxAshes" unique_id=658814904]
+z_index = -1
+position = Vector2(66.444565, -791.5)
+scale = Vector2(1.8736109, 1.8736111)
+texture = ExtResource("6_yxuq4")
 
-[node name="Gate" type="Sprite2D" parent="Environment" unique_id=260732666]
+[node name="Offwhitebg" type="Sprite2D" parent="Environment/ParallaxAshes/Ashes" unique_id=209026157]
+z_index = -1
+position = Vector2(-70.867455, -89.13266)
+scale = Vector2(1.3395109, 1.3395107)
+texture = ExtResource("6_r12yy")
+
+[node name="ParallaxFrontGate" type="Parallax2D" parent="Environment" unique_id=1269976272]
+scroll_scale = Vector2(2, 2)
+ignore_camera_scroll = true
+
+[node name="Gate" type="Sprite2D" parent="Environment/ParallaxFrontGate" unique_id=260732666]
 modulate = Color(0.79521304, 0.901673, 1, 1)
 position = Vector2(-188, 4260.9995)
 rotation = 0.5235988
 scale = Vector2(19.134907, 19.134907)
 texture = ExtResource("7_yxuq4")
 
-[node name="Pillar2" type="Sprite2D" parent="Environment" unique_id=466119357]
-modulate = Color(0.79521304, 0.901673, 1, 1)
-position = Vector2(1254, -443.00003)
-rotation = -0.2617994
-scale = Vector2(9.398168, 26.395927)
-texture = ExtResource("6_f8vh1")
+[node name="Parallax2D" type="Parallax2D" parent="Environment" unique_id=803658054]
+scroll_scale = Vector2(1.5, 1.5)
+scroll_offset = Vector2(0, -600)
 
-[node name="Gate2" type="Sprite2D" parent="Environment" unique_id=1194214810]
-modulate = Color(0.79607844, 0.9019608, 1, 0.56078434)
-position = Vector2(1304.0001, 2062)
-rotation = -0.2617994
-scale = Vector2(10.6624155, 10.6624155)
-texture = ExtResource("7_yxuq4")
-
-[node name="Pillar4" type="Sprite2D" parent="Environment" unique_id=1707300526]
+[node name="Pillar4" type="Sprite2D" parent="Environment/Parallax2D" unique_id=1707300526]
 modulate = Color(0.79607844, 0.9019608, 1, 0.50980395)
 z_index = 1
 position = Vector2(-632, 34.999985)
 rotation = 0.7853982
 scale = Vector2(9.398168, 26.395927)
+texture = ExtResource("6_f8vh1")
+
+[node name="ParallaxBackGate" type="Parallax2D" parent="Environment" unique_id=548681620]
+scroll_scale = Vector2(0.8, 0.8)
+
+[node name="Gate2" type="Sprite2D" parent="Environment/ParallaxBackGate" unique_id=1194214810]
+modulate = Color(0.79607844, 0.9019608, 1, 0.56078434)
+position = Vector2(1304.0001, 2062)
+rotation = -0.26179937
+scale = Vector2(10.6624155, 10.6624155)
+texture = ExtResource("7_yxuq4")
+
+[node name="Parallax2D2" type="Parallax2D" parent="Environment" unique_id=928282869]
+scroll_scale = Vector2(0.7, 0.7)
+scroll_offset = Vector2(0, 300)
+
+[node name="Pillar2" type="Sprite2D" parent="Environment/Parallax2D2" unique_id=466119357]
+modulate = Color(0.79521304, 0.901673, 1, 1)
+position = Vector2(1254, -443.00003)
+rotation = -0.26179937
+scale = Vector2(9.398166, 26.395924)
+texture = ExtResource("6_f8vh1")
+
+[node name="Pillar3" type="Sprite2D" parent="Environment/Parallax2D2" unique_id=875237494]
+modulate = Color(0.79521304, 0.901673, 1, 1)
+position = Vector2(539.00006, -231)
+scale = Vector2(3.3981662, 9.544174)
+texture = ExtResource("6_f8vh1")
+
+[node name="Pillar" type="Sprite2D" parent="Environment/Parallax2D2" unique_id=249386930]
+modulate = Color(0.79521304, 0.901673, 1, 1)
+position = Vector2(941, -177)
+rotation = -0.2617994
+scale = Vector2(9.398168, 26.395926)
 texture = ExtResource("6_f8vh1")
 
 [node name="Platform" type="Sprite2D" parent="Environment" unique_id=680183571]
@@ -483,18 +514,6 @@ position = Vector2(111.17021, 102.83401)
 position = Vector2(-75, -103.643715)
 shape = SubResource("RectangleShape2D_86f36")
 debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
-
-[node name="Offwhitebg" type="Sprite2D" parent="Environment" unique_id=209026157]
-z_index = -1
-position = Vector2(-66.33348, -958.49994)
-scale = Vector2(2.5097225, 2.5097222)
-texture = ExtResource("6_r12yy")
-
-[node name="Ashes" type="Sprite2D" parent="Environment" unique_id=658814904]
-z_index = -1
-position = Vector2(66.444565, -791.5)
-scale = Vector2(1.8736109, 1.8736111)
-texture = ExtResource("6_yxuq4")
 
 [node name="RainParticles" type="Node2D" parent="Environment" unique_id=1997374975]
 position = Vector2(0, -388)
