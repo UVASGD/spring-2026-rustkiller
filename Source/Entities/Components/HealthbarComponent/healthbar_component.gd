@@ -4,6 +4,8 @@ extends ProgressBar
 @export var damage_bar_tween_duration: float = 0.35
 @export var timer: Timer
 @export var damage_bar: ProgressBar 
+@export var face: HealthFace
+
 
 var health_component: HealthComponent
 var _damage_tween: Tween
@@ -41,6 +43,8 @@ func _on_health_changed(health_update: HealthComponent.HealthUpdate) -> void:
 	damage_bar.max_value = health_update.max_health
 
 	if health_update.health < health_update.previous_health:
+		if face != null:
+			face.play_hurt()
 		timer.start()
 	else:
 		if _damage_tween:
