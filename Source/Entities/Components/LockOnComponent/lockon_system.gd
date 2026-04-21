@@ -64,6 +64,11 @@ func _input(event):
 func _on_player_parrying() -> void:
 	shake_timer = shake_duration
 
+func trigger_damage_shake(damage_ratio: float = 0.0) -> void:
+	damage_ratio = clampf(damage_ratio, 0.0, 1.0)
+	shake_timer = maxf(shake_timer, lerpf(0.1, 0.3, damage_ratio))
+	shake_magnitude = lerpf(20.0, 40.0, damage_ratio)
+
 func toggle_lock_on() -> void:
 	if current_target:
 		unlock()

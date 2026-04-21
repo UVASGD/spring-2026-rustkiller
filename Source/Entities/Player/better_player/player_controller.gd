@@ -169,6 +169,7 @@ func activate_parry_invulnerability() -> void:
 
 func _on_hurtbox_hit_by_hitbox(_hitbox: HitboxComponent) -> void:
 	_flash_damage_white()
+	_trigger_damage_camera_shake(_hitbox)
 
 func _on_health_changed(health_update: HealthComponent.HealthUpdate) -> void:
 	var damage_taken := health_update.previous_health - health_update.health
@@ -200,3 +201,13 @@ func _set_damage_flash_enabled(enabled: bool) -> void:
 	shader_material.set_shader_parameter("color", Color.WHITE)
 	shader_material.set_shader_parameter("fade", 0.0)
 	shader_material.set_shader_parameter("tint_factor", 1.0 if enabled else 0.0)
+
+func _trigger_damage_camera_shake(hitbox: HitboxComponent) -> void:
+	var lock_on_system := get_tree().root.find_child("LockOnSystem", true, false) as LockOnSystem
+	if lock_on_system == null:
+		return
+
+	var damage_ratio := 0.0
+	if hitbox != null and health_component != null:
+		damage_ratio = clampf(hitbox.damage / maxf(health_component.max_health, 1.0), 0.0, 1.0)
+	lock_on_system.trigger_damage_shake(damage_ratio)

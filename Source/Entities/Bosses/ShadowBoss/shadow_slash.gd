@@ -29,8 +29,8 @@ func update(delta: float) -> void:
 		character.stop_motion()
 	_timer -= delta
 
-	if _phase == SlashPhase.DISAPPEAR and _animation_finished("disappear"):
-		_clear_animation_finished("disappear")
+	if _phase == SlashPhase.DISAPPEAR and _animation_finished("player_disappear"):
+		_clear_animation_finished("player_disappear")
 		_phase = SlashPhase.WAIT_TO_TELEPORT
 		_timer = _get_teleport_delay()
 	elif _phase == SlashPhase.WAIT_TO_TELEPORT and _timer <= 0.0:
@@ -40,8 +40,8 @@ func update(delta: float) -> void:
 		_timer = 0.01
 	elif _phase == SlashPhase.WAIT_TO_SLASH and _timer <= 0.0:
 		_begin_slash_animation()
-	elif _phase == SlashPhase.SLASH and _animation_finished("slash"):
-		_clear_animation_finished("slash")
+	elif _phase == SlashPhase.SLASH and _animation_finished("player_slash"):
+		_clear_animation_finished("player_slash")
 		if _slashes_remaining > 0:
 			_phase = SlashPhase.WAIT_BETWEEN_SLASHES
 			_timer = _get_time_between_slashes()
@@ -53,11 +53,11 @@ func update(delta: float) -> void:
 		_phase = SlashPhase.WAIT_TO_SLASH
 		_timer = 0.01
 	elif _phase == SlashPhase.REVERSE_DISAPPEAR and _timer <= 0.0:
-		_clear_animation_finished("disappear")
+		_clear_animation_finished("player_disappear")
 
 func check_transition(_delta: float) -> TransitionData:
 	if _phase == SlashPhase.REVERSE_DISAPPEAR and _timer <= 0.0:
-		_clear_animation_finished("disappear")
+		_clear_animation_finished("player_disappear")
 		return TransitionData.new(true, "Walk")
 	return TransitionData.new(false, "")
 
@@ -75,22 +75,22 @@ func _get_slash_repeat_count() -> int:
 
 func _begin_slash_animation() -> void:
 	if character and character.has_method("play_visual_animation"):
-		character.play_visual_animation("slash")
+		character.play_visual_animation("player_slash")
 	_phase = SlashPhase.SLASH
-	_timer = _get_animation_length_or("slash", 1.3)
+	_timer = _get_animation_length_or("player_slash", 1.3)
 	_slashes_remaining -= 1
 
 func _start_disappear_phase() -> void:
 	_phase = SlashPhase.DISAPPEAR
-	_timer = _get_animation_length_or("disappear", 0.5)
+	_timer = _get_animation_length_or("player_disappear", 0.5)
 	if character and character.has_method("play_visual_animation"):
-		character.play_visual_animation("disappear")
+		character.play_visual_animation("player_disappear")
 
 func _start_reverse_disappear_phase() -> void:
 	_phase = SlashPhase.REVERSE_DISAPPEAR
-	_timer = _get_animation_length_or("disappear", 0.5)
+	_timer = _get_animation_length_or("player_disappear", 0.5)
 	if character and character.has_method("play_visual_animation_reverse"):
-		character.play_visual_animation_reverse("disappear")
+		character.play_visual_animation_reverse("player_disappear")
 
 func _get_teleport_delay() -> float:
 	if character and "slash_teleport_delay" in character:

@@ -7,6 +7,30 @@ const SHADOW_BAT_SCENE := preload("res://Source/Entities/Projectiles/ShadowBat/s
 
 @export var player: CharacterBody2D
 @export var light_platform_path: NodePath
+@export var machine_path: NodePath
+
+@export_group("Phase")
+@export var start_in_player_phase := false
+@export var animal_idle_animation: StringName = &"animal_idle"
+@export var animal_transform_animation: StringName = &"animal_snake_transform"
+@export var animal_slither_animation: StringName = &"animal_snake_slither"
+@export var animal_ouroboros_animation: StringName = &"animal_snake_ouroboros"
+
+@export_group("Reaper")
+@export var reaper_appear_animation: StringName = &"r_appear"
+@export var reaper_disintegrate_animation: StringName = &"r_disintegrate"
+@export var reaper_idle_animation: StringName = &"r_idle"
+@export var reaper_slash_animation: StringName = &"r_slash"
+@export var reaper_idle_duration := 0.8
+@export var reaper_move_speed := 180.0
+@export var reaper_slash_damage := 25.0
+@export var reaper_slash_cooldown := 1.2
+
+@export_group("Animal")
+@export var animal_idle_duration := 1.25
+@export var animal_move_speed := 90.0
+@export var animal_attack_stop_distance := 72.0
+@export var animal_attack_damage := 20.0
 
 @export_group("Movement")
 @export var move_speed := 120.0
@@ -15,6 +39,7 @@ const SHADOW_BAT_SCENE := preload("res://Source/Entities/Projectiles/ShadowBat/s
 @export var orbit_reengage_radius := 180.0
 @export var orbit_direction := 1.0
 @export var walk_before_slash_time := 2.0
+@export var slash_damage := 20.0
 @export var slash_teleport_offset := 85
 @export var slash_cooldown := 1.5
 @export var slash_repeat_count := 3
@@ -35,22 +60,50 @@ const SHADOW_BAT_SCENE := preload("res://Source/Entities/Projectiles/ShadowBat/s
 @onready var animated_sprite: AnimatedSprite2D = get_node_or_null("Visuals/AnimatedSprite2D")
 @onready var visuals: Node2D = $Visuals
 @onready var light_circle: Sprite2D = $LightCircle
+@onready var health_component: HealthComponent = $HealthComponent
+@onready var hurtbox_component: HurtboxComponent = $HurtboxComponent
+@onready var ouroboros_hitbox: HitboxComponent = $OuroborosHitbox
+@onready var slash_hitbox: HitboxComponent = $PlayerHitbox
+@onready var reaper_hitbox: HitboxComponent = $ReaperHitbox
+@onready var healthbar: CanvasItem = $Healthbar
 
 var _is_invulnerable := false
 var _knockback_velocity := Vector2.ZERO
 var _slash_cooldown_remaining := 0.0
+var _reaper_slash_cooldown_remaining := 0.0
 var _range_cooldown_remaining := 0.0
 var _last_finished_visual_animation := ""
 var _light_platform: Sprite2D
+var _reaper_phase_active := false
+var _reaper_phase_switch_ready := false
+var _reaper_phase_complete := false
+var _player_phase_active := false
+var _player_phase_switch_ready := false
+var _reaper_slash_should_stop := false
+var _machine: ShadowBossMachine
+var _machine_intermission_active := false
+var _machine_waiting_for_defeat := false
+var _machine_waiting_for_restore := false
+var _machine_pending_phase := ""
 
 func _ready() -> void:
 	if not is_instance_valid(player):
 		player = get_tree().get_first_node_in_group(PLAYER_GROUP) as CharacterBody2D
 	_light_platform = _find_light_platform()
+	_machine = _find_machine()
 	_update_light_platform_mask()
+	_reaper_phase_active = start_in_player_phase
+	_reaper_phase_switch_ready = start_in_player_phase
+	_player_phase_active = start_in_player_phase
+	_player_phase_switch_ready = start_in_player_phase
+	_configure_slash_hitbox()
+	_configure_reaper_hitbox()
+	_sync_hurtbox_flip()
 
 	if animation_player:
 		animation_player.animation_finished.connect(_on_visual_animation_finished)
+	if is_instance_valid(_machine):
+		_machine.phase_gate_destroyed.connect(_on_machine_phase_gate_destroyed)
 
 	state_machine.player = player
 	state_machine.character = self
@@ -61,8 +114,29 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if _slash_cooldown_remaining > 0.0:
 		_slash_cooldown_remaining = maxf(_slash_cooldown_remaining - delta, 0.0)
+	if _reaper_slash_cooldown_remaining > 0.0:
+		_reaper_slash_cooldown_remaining = maxf(_reaper_slash_cooldown_remaining - delta, 0.0)
 	if _range_cooldown_remaining > 0.0:
 		_range_cooldown_remaining = maxf(_range_cooldown_remaining - delta, 0.0)
+	if health_component and not health_component.has_health_remaining:
+		if not _reaper_phase_active and not is_instance_valid(_machine):
+			_reaper_phase_switch_ready = true
+		elif not _player_phase_active and not is_instance_valid(_machine):
+			_player_phase_switch_ready = true
+	if _should_begin_machine_intermission():
+		_begin_machine_intermission()
+
+	if _machine_intermission_active:
+		stop_motion()
+		_knockback_velocity = Vector2.ZERO
+		_update_light_platform_mask()
+		if _machine_waiting_for_restore and was_visual_animation_finished("shadow_defeat"):
+			clear_visual_animation_finished("shadow_defeat")
+			_finish_machine_intermission()
+		elif not _machine_waiting_for_defeat and was_visual_animation_finished("shadow_defeat"):
+			clear_visual_animation_finished("shadow_defeat")
+			_open_machine_phase_gate()
+		return
 
 	state_machine._update(delta)
 	_update_light_platform_mask()
@@ -103,8 +177,110 @@ func can_start_slash() -> bool:
 func begin_slash_cooldown() -> void:
 	_slash_cooldown_remaining = slash_cooldown
 
+func can_start_reaper_slash() -> bool:
+	return has_target() and _reaper_slash_cooldown_remaining <= 0.0
+
+func begin_reaper_slash_cooldown() -> void:
+	_reaper_slash_cooldown_remaining = reaper_slash_cooldown
+
 func can_start_range() -> bool:
 	return has_target() and _range_cooldown_remaining <= 0.0
+
+func should_start_in_player_phase() -> bool:
+	return start_in_player_phase
+
+func should_enter_reaper_phase() -> bool:
+	if _reaper_phase_active:
+		return true
+	return _reaper_phase_switch_ready
+
+func enter_reaper_phase() -> void:
+	if not _reaper_phase_active:
+		_refill_health_for_phase()
+	_reaper_phase_active = true
+	_reaper_phase_switch_ready = false
+	_player_phase_switch_ready = false
+	_reaper_phase_complete = false
+	_machine_pending_phase = ""
+	reset_reaper_slash_movement()
+	_restore_after_machine_intermission()
+	stop_motion()
+
+func should_enter_player_phase() -> bool:
+	if _player_phase_active:
+		return true
+	return _player_phase_switch_ready
+
+func enter_player_phase() -> void:
+	if not _player_phase_active:
+		_refill_health_for_phase()
+	_player_phase_active = true
+	_player_phase_switch_ready = false
+	_reaper_phase_complete = false
+	_machine_pending_phase = ""
+	reset_reaper_slash_movement()
+	_restore_after_machine_intermission()
+	stop_motion()
+
+func _refill_health_for_phase() -> void:
+	if health_component == null:
+		return
+
+	health_component.has_died = false
+	health_component.health = health_component.max_health
+
+func get_animal_idle_animation() -> String:
+	return String(animal_idle_animation)
+
+func get_animal_transform_animation() -> String:
+	return String(animal_transform_animation)
+
+func get_animal_slither_animation() -> String:
+	return String(animal_slither_animation)
+
+func get_animal_ouroboros_animation() -> String:
+	return String(animal_ouroboros_animation)
+
+func get_animal_idle_duration() -> float:
+	return maxf(animal_idle_duration, 0.0)
+
+func get_reaper_appear_animation() -> String:
+	return String(reaper_appear_animation)
+
+func get_reaper_disintegrate_animation() -> String:
+	return String(reaper_disintegrate_animation)
+
+func get_reaper_idle_animation() -> String:
+	return String(reaper_idle_animation)
+
+func get_reaper_slash_animation() -> String:
+	return String(reaper_slash_animation)
+
+func get_reaper_idle_duration() -> float:
+	return maxf(reaper_idle_duration, 0.0)
+
+func animal_move_toward_target(delta: float) -> void:
+	if not has_target():
+		stop_motion()
+		return
+
+	var direction := global_position.direction_to(player.global_position)
+	var desired_velocity := direction * animal_move_speed
+	velocity = velocity.move_toward(desired_velocity, acceleration * delta * 100.0)
+	_face_direction(direction)
+
+func is_near_animal_attack_target() -> bool:
+	return has_target() and distance_to_target() <= animal_attack_stop_distance
+
+func reaper_move_toward_target(delta: float) -> void:
+	if not has_target():
+		stop_motion()
+		return
+
+	var direction := global_position.direction_to(player.global_position)
+	var desired_velocity := direction * reaper_move_speed
+	velocity = velocity.move_toward(desired_velocity, acceleration * delta * 100.0)
+	_face_direction(direction)
 
 func should_use_range_attack() -> bool:
 	return can_start_range() and randf() <= range_attack_chance
@@ -192,6 +368,22 @@ func clear_visual_animation_finished(animation_name: String = "") -> void:
 	if animation_name == "" or _last_finished_visual_animation == animation_name:
 		_last_finished_visual_animation = ""
 
+func _configure_slash_hitbox() -> void:
+	if slash_hitbox == null:
+		return
+
+	slash_hitbox.hit_owner = "boss"
+	slash_hitbox.damage = slash_damage
+	slash_hitbox.damage_enabled = true
+
+func _configure_reaper_hitbox() -> void:
+	if reaper_hitbox == null:
+		return
+
+	reaper_hitbox.hit_owner = "boss"
+	reaper_hitbox.damage = reaper_slash_damage
+	reaper_hitbox.damage_enabled = true
+
 func _on_visual_animation_finished(animation_name: StringName) -> void:
 	_last_finished_visual_animation = String(animation_name)
 
@@ -200,6 +392,21 @@ func _face_direction(direction: Vector2) -> void:
 		return
 
 	visuals.scale.x = 1.0 if direction.x < 0.0 else -1.0
+	_sync_hurtbox_flip()
+
+func _sync_hurtbox_flip() -> void:
+	_sync_area_flip(hurtbox_component)
+	_sync_area_flip(ouroboros_hitbox)
+	_sync_area_flip(slash_hitbox)
+	_sync_area_flip(reaper_hitbox)
+
+func _sync_area_flip(area: Area2D) -> void:
+	if area == null:
+		return
+
+	var area_scale := area.scale
+	area_scale.x = visuals.scale.x
+	area.scale = area_scale
 
 func face_target() -> void:
 	if not has_target():
@@ -218,6 +425,22 @@ func teleport_next_to_target() -> void:
 	global_position = player.global_position + Vector2(side * slash_teleport_offset, 0.0)
 	stop_motion()
 	face_target()
+
+func stop_reaper_slash_movement() -> void:
+	_reaper_slash_should_stop = true
+	stop_motion()
+
+func should_stop_reaper_slash_movement() -> bool:
+	return _reaper_slash_should_stop
+
+func reset_reaper_slash_movement() -> void:
+	_reaper_slash_should_stop = false
+
+func mark_reaper_phase_complete() -> void:
+	_reaper_phase_complete = true
+
+func is_reaper_phase_complete() -> bool:
+	return _reaper_phase_complete
 
 func spawn_shadow_skulls_near_player() -> void:
 	if not has_target():
@@ -289,6 +512,88 @@ func _find_light_platform() -> Sprite2D:
 		return platform
 
 	return current_scene.find_child("platform", true, false) as Sprite2D
+
+func _find_machine() -> ShadowBossMachine:
+	if not machine_path.is_empty():
+		var machine_from_path := get_node_or_null(machine_path) as ShadowBossMachine
+		if machine_from_path:
+			return machine_from_path
+
+	var current_scene := get_tree().current_scene
+	if current_scene == null:
+		return null
+
+	return current_scene.find_child("ShadowBossMachine", true, false) as ShadowBossMachine
+
+func _should_begin_machine_intermission() -> bool:
+	if _player_phase_active or _machine_intermission_active:
+		return false
+	if _reaper_phase_switch_ready or _player_phase_switch_ready:
+		return false
+	if _machine_pending_phase != "":
+		return false
+	if health_component == null or health_component.has_health_remaining:
+		return false
+	return is_instance_valid(_machine)
+
+func _begin_machine_intermission() -> void:
+	_machine_intermission_active = true
+	_machine_waiting_for_defeat = false
+	_machine_waiting_for_restore = false
+	_reaper_phase_switch_ready = false
+	_player_phase_switch_ready = false
+	_machine_pending_phase = _get_next_phase_after_current_form()
+	set_invulnerable(true)
+	_set_boss_hittable(false)
+	if healthbar:
+		healthbar.visible = false
+	stop_motion()
+	clear_visual_animation_finished("shadow_defeat")
+	play_visual_animation("shadow_defeat")
+
+func _open_machine_phase_gate() -> void:
+	_machine_waiting_for_defeat = true
+	if is_instance_valid(_machine):
+		_machine.open_phase_gate()
+		return
+	_on_machine_phase_gate_destroyed()
+
+func _on_machine_phase_gate_destroyed() -> void:
+	_machine_waiting_for_defeat = false
+	_machine_waiting_for_restore = true
+	clear_visual_animation_finished("shadow_defeat")
+	play_visual_animation_reverse("shadow_defeat")
+
+func _finish_machine_intermission() -> void:
+	_machine_intermission_active = false
+	_machine_waiting_for_restore = false
+	if _machine_pending_phase == "Reaper":
+		_reaper_phase_switch_ready = true
+	elif _machine_pending_phase == "Player":
+		_player_phase_switch_ready = true
+	_machine_pending_phase = ""
+
+func _restore_after_machine_intermission() -> void:
+	set_invulnerable(false)
+	_set_boss_hittable(true)
+	if healthbar:
+		healthbar.visible = true
+	if light_circle:
+		light_circle.modulate = Color(1, 1, 1, 1)
+	if animated_sprite:
+		animated_sprite.modulate = Color(1, 1, 1, 1)
+
+func _get_next_phase_after_current_form() -> String:
+	if not _reaper_phase_active:
+		return "Reaper"
+	if not _player_phase_active:
+		return "Player"
+	return ""
+
+func _set_boss_hittable(enabled: bool) -> void:
+	if hurtbox_component:
+		hurtbox_component.monitoring = enabled
+		hurtbox_component.monitorable = enabled
 
 func _update_light_platform_mask() -> void:
 	if _light_platform == null:

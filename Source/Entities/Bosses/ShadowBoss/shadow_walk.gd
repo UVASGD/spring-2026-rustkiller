@@ -12,7 +12,7 @@ func on_enter() -> void:
 	_sync_mode()
 	_time_until_slash = _get_walk_before_slash_time()
 	if character and character.has_method("play_visual_animation"):
-		character.play_visual_animation("walk", false)
+		character.play_visual_animation("player_walk", false)
 
 func update(delta: float) -> void:
 	if character == null:

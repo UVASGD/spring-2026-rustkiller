@@ -4,6 +4,7 @@ extends Node
 @export var lunge_distance: float   = 80.0
 @export var lunge_duration: float   = 0.12
 @export var projectile_speed: float = 500.0
+@export var wrench_projectile_damage: float = 1.0
 @export var melee_damage: float = 1.0
 
 const BURST_COUNT := 3
@@ -73,10 +74,13 @@ func try_parry() -> void:
 			var hitbox := area as HitboxComponent
 			if hitbox.hit_owner == "boss":
 				var hit_source := hitbox.get_parent()
+				var parry_receiver := _find_parry_receiver(hit_source)
 				var parry_succeeded := false
-				if hit_source and hit_source.has_method("parry_charge_attack"):
-					parry_succeeded = hit_source.parry_charge_attack()
-				elif hit_source:
+				if parry_receiver and parry_receiver.has_method("parry_charge_attack"):
+					parry_succeeded = parry_receiver.parry_charge_attack()
+				elif _is_boss_attack_source(hit_source):
+					parry_succeeded = true
+				elif _should_destroy_parry_source(hit_source):
 					hit_source.queue_free()
 					parry_succeeded = true
 
@@ -120,6 +124,42 @@ func hitstop(duration: float, emit_parry_signal: bool = true) -> void:
 	Engine.time_scale = 1.0
 	if emit_parry_signal:
 		_player.emit_parrying()
+
+func _find_parry_receiver(hit_source: Node) -> Node:
+	var current := hit_source
+	while current != null:
+		if current.has_method("parry_charge_attack"):
+			return current
+		current = current.get_parent()
+	return null
+
+func _is_boss_attack_source(hit_source: Node) -> bool:
+	var current := hit_source
+	while current != null:
+		if current.is_in_group("boss"):
+			return true
+		if current.has_node("HealthComponent"):
+			return true
+		current = current.get_parent()
+	return false
+
+func _should_destroy_parry_source(hit_source: Node) -> bool:
+	if hit_source == null:
+		return false
+
+	if _is_boss_attack_source(hit_source):
+		return false
+
+	if hit_source.is_in_group("shadow_projectile"):
+		return true
+
+	var script := hit_source.get_script() as Script
+	if script:
+		var script_path := script.resource_path
+		if script_path.contains("/Projectiles/"):
+			return true
+
+	return false
 
 func _start_melee() -> void:
 	if combo_window:
@@ -177,7 +217,7 @@ func _shoot_single() -> void:
 	ProjectileMotionComponent.get_child_component(projectile).shoot(
 		_muzzle.global_position, dir, projectile_speed, -1
 	)
-	HitboxComponent.get_child_component(projectile).init(1, "player")
+	HitboxComponent.get_child_component(projectile).init(wrench_projectile_damage, "player")
 	_player.get_tree().current_scene.add_child(projectile)
 
 func _on_animation_finished(anim_name: StringName) -> void:

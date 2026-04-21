@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="7_x4wbb"]
 [ext_resource type="PackedScene" uid="uid://crvepxby1imcj" path="res://Source/Entities/Player/better_player/better_player.tscn" id="8_rwrje"]
 [ext_resource type="PackedScene" uid="uid://b0u27366q5in1" path="res://Source/Entities/Bosses/ShadowBoss/shadow_boss.tscn" id="9_l30bm"]
+[ext_resource type="PackedScene" uid="uid://cn1ddvofhbwom" path="res://Source/Entities/Bosses/ShadowBoss/shadow_boss_machine.tscn" id="11_w0hja"]
 
 [sub_resource type="Environment" id="Environment_f8vh1"]
 background_mode = 3
@@ -522,3 +523,9 @@ position = Vector2(-41, -186)
 [node name="ShadowBoss" parent="." unique_id=2058246983 node_paths=PackedStringArray("player") instance=ExtResource("9_l30bm")]
 position = Vector2(122, -217)
 player = NodePath("../BetterPlayer")
+animal_move_speed = 400.0
+
+[node name="ShadowBossMachine" parent="." unique_id=1528051355 instance=ExtResource("11_w0hja")]
+position = Vector2(0, -576)
+player_path = NodePath("../BetterPlayer")
+platform_path = NodePath("../Environment/Platform")

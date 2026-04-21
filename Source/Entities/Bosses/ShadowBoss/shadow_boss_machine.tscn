@@ -1,0 +1,191 @@
+[gd_scene format=3 uid="uid://cn1ddvofhbwom"]
+
+[ext_resource type="Texture2D" uid="uid://cmp5nwpjsjwpn" path="res://Source/Entities/Bosses/ShadowBoss/Art/machine/Final_Boss_Idle.png" id="1_bc8un"]
+[ext_resource type="Script" uid="uid://cbbhmbl11vyob" path="res://Source/Entities/Bosses/ShadowBoss/shadow_boss_machine.gd" id="1_k5sxx"]
+[ext_resource type="Texture2D" uid="uid://mlo0mruohike" path="res://Source/Entities/Bosses/ShadowBoss/Art/machine/Final_Boss_Right_Look.png" id="2_g7k33"]
+[ext_resource type="Texture2D" uid="uid://x05el4nhplkb" path="res://Source/Entities/Bosses/ShadowBoss/Art/machine/Final_Boss_EyePopTEMP.png" id="2_uy2a2"]
+[ext_resource type="Texture2D" uid="uid://8v8sryowc6jc" path="res://Source/Entities/Bosses/ShadowBoss/Art/machine/Final_Boss_Left_Look.png" id="3_k5sxx"]
+[ext_resource type="PackedScene" uid="uid://cccn2edq2kj7x" path="res://Source/Entities/Components/HealthComponent/health_component.tscn" id="4_vm3mu"]
+[ext_resource type="PackedScene" uid="uid://ccu0np30bscvr" path="res://Source/Entities/Components/HurtboxComponent/hurtbox_component.tscn" id="5_axghy"]
+[ext_resource type="PackedScene" uid="uid://dbnhgp03q0xpy" path="res://Source/Entities/Components/HealthbarComponent/Healthbar.tscn" id="6_h9svk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b28oa"]
+atlas = ExtResource("2_uy2a2")
+region = Rect2(765, 0, 255, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lnqtw"]
+atlas = ExtResource("2_uy2a2")
+region = Rect2(0, 0, 255, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uq3cn"]
+atlas = ExtResource("2_uy2a2")
+region = Rect2(255, 0, 255, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mrpo1"]
+atlas = ExtResource("2_uy2a2")
+region = Rect2(510, 0, 255, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3kau1"]
+atlas = ExtResource("2_uy2a2")
+region = Rect2(765, 0, 255, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jk8o4"]
+atlas = ExtResource("1_bc8un")
+region = Rect2(0, 0, 255, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g7k33"]
+atlas = ExtResource("1_bc8un")
+region = Rect2(255, 0, 255, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k5sxx"]
+atlas = ExtResource("1_bc8un")
+region = Rect2(510, 0, 255, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uy2a2"]
+atlas = ExtResource("1_bc8un")
+region = Rect2(765, 0, 255, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2kunb"]
+atlas = ExtResource("2_g7k33")
+region = Rect2(0, 0, 255, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8punv"]
+atlas = ExtResource("2_g7k33")
+region = Rect2(255, 0, 255, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n6l47"]
+atlas = ExtResource("2_g7k33")
+region = Rect2(510, 0, 255, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iuag4"]
+atlas = ExtResource("2_g7k33")
+region = Rect2(765, 0, 255, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u4a7c"]
+atlas = ExtResource("3_k5sxx")
+region = Rect2(0, 0, 255, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_61p3o"]
+atlas = ExtResource("3_k5sxx")
+region = Rect2(255, 0, 255, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ujcg"]
+atlas = ExtResource("3_k5sxx")
+region = Rect2(510, 0, 255, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qrr2t"]
+atlas = ExtResource("3_k5sxx")
+region = Rect2(765, 0, 255, 239)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2kunb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b28oa")
+}],
+"loop": true,
+"name": &"eyepop_IDLE",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lnqtw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uq3cn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mrpo1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3kau1")
+}],
+"loop": false,
+"name": &"eyepop_TEMP",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jk8o4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g7k33")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k5sxx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uy2a2")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2kunb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8punv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n6l47")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iuag4")
+}],
+"loop": true,
+"name": &"left",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u4a7c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_61p3o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ujcg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qrr2t")
+}],
+"loop": true,
+"name": &"right",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_uy2a2"]
+radius = 70.028564
+
+[node name="ShadowBossMachine" type="Node2D" unique_id=1528051355]
+script = ExtResource("1_k5sxx")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=588240926]
+position = Vector2(7.5, 0)
+sprite_frames = SubResource("SpriteFrames_2kunb")
+animation = &"eyepop_IDLE"
+
+[node name="HealthComponent" parent="." unique_id=432494957 instance=ExtResource("4_vm3mu")]
+max_health = 100.0
+
+[node name="Healthbar" parent="." unique_id=1440510566 instance=ExtResource("6_h9svk")]
+offset_left = -120.0
+offset_top = 56.0
+offset_right = 120.0
+offset_bottom = 64.0
+
+[node name="HurtboxComponent" parent="." unique_id=1670072806 node_paths=PackedStringArray("health_component") instance=ExtResource("5_axghy")]
+monitoring = false
+monitorable = false
+health_component = NodePath("../HealthComponent")
+entity_name = "boss"
+knockback_strength = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=581293740]
+position = Vector2(0, 146)
+shape = SubResource("CircleShape2D_uy2a2")
+disabled = true
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

@@ -36,8 +36,8 @@ func update(delta: float) -> void:
 
 	_timer -= delta
 
-	if _phase == RangePhase.START and _animation_finished("range_start"):
-		_clear_animation_finished("range_start")
+	if _phase == RangePhase.START and _animation_finished("player_range_start"):
+		_clear_animation_finished("player_range_start")
 		_start_loop_phase()
 	elif _phase == RangePhase.LOOP and _timer <= 0.0:
 		_loops_remaining -= 1
@@ -46,28 +46,28 @@ func update(delta: float) -> void:
 		else:
 			_start_end_phase()
 	elif _phase == RangePhase.END and _timer <= 0.0:
-		_clear_animation_finished("range_end")
+		_clear_animation_finished("player_range_end")
 
 
 func check_transition(_delta: float) -> TransitionData:
-	if _phase == RangePhase.END and (_animation_finished("range_end") or _timer <= 0.0):
-		_clear_animation_finished("range_end")
+	if _phase == RangePhase.END and (_animation_finished("player_range_end") or _timer <= 0.0):
+		_clear_animation_finished("player_range_end")
 		return TransitionData.new(true, "Walk")
 	return TransitionData.new(false, "")
 
 
 func _start_phase() -> void:
 	_phase = RangePhase.START
-	_timer = _get_animation_length_or("range_start", 0.4)
+	_timer = _get_animation_length_or("player_range_start", 0.4)
 	if character and character.has_method("play_visual_animation"):
-		character.play_visual_animation("range_start")
+		character.play_visual_animation("player_range_start")
 
 
 func _start_loop_phase() -> void:
 	_phase = RangePhase.LOOP
-	_timer = _get_animation_length_or("range_loop", 0.9)
+	_timer = _get_animation_length_or("player_range_loop", 0.9)
 	if character and character.has_method("play_visual_animation"):
-		character.play_visual_animation("range_loop")
+		character.play_visual_animation("player_range_loop")
 	if character and character.has_method("spawn_shadow_skulls_near_player"):
 		character.spawn_shadow_skulls_near_player()
 
@@ -75,9 +75,9 @@ func _start_loop_phase() -> void:
 func _start_end_phase() -> void:
 	_phase = RangePhase.END
 	_loops_remaining = 0
-	_timer = _get_animation_length_or("range_end", 0.7)
+	_timer = _get_animation_length_or("player_range_end", 0.7)
 	if character and character.has_method("play_visual_animation"):
-		character.play_visual_animation("range_end")
+		character.play_visual_animation("player_range_end")
 
 
 func _get_range_loop_count() -> int:

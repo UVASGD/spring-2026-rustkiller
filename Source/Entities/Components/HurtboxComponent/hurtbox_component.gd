@@ -38,18 +38,23 @@ func _deal_damage_with_resistances(damage: float) -> float:
 	
 	return final_damage
 
-func _on_area_entered(other_area: Area2D) -> void:
-	if not (other_area is HitboxComponent):
-		return
-
-	var hitbox_component := other_area as HitboxComponent
+func apply_hitbox(hitbox_component: HitboxComponent) -> bool:
+	if hitbox_component == null:
+		return false
 	if entity_name != "" and hitbox_component.hit_owner == entity_name:
-		return
+		return false
 	if not hitbox_component.damage_enabled:
-		return
+		return false
 	if not can_receive_damage():
-		return
+		return false
 
 	if !detect_only:
 		_deal_damage_with_resistances(hitbox_component.damage)
 	hit_by_hitbox.emit(hitbox_component)
+	return true
+
+func _on_area_entered(other_area: Area2D) -> void:
+	if not (other_area is HitboxComponent):
+		return
+
+	apply_hitbox(other_area as HitboxComponent)
