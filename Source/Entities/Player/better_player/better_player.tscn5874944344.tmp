@@ -1076,9 +1076,8 @@ shape = SubResource("CapsuleShape2D_g17sf")
 [node name="PlayerAnimation" type="AnimationPlayer" parent="." unique_id=1742078471]
 libraries/ = SubResource("AnimationLibrary_g17sf")
 
-[node name="PlayerMovement" type="Node2D" parent="." unique_id=24102843 node_paths=PackedStringArray("_player")]
+[node name="PlayerMovement" type="Node2D" parent="." unique_id=24102843]
 script = ExtResource("2_ht1kh")
-_player = NodePath("..")
 
 [node name="HealthComponent" parent="." unique_id=528490001 instance=ExtResource("4_7n4jp")]
 max_health = 3.0
@@ -1107,7 +1106,6 @@ position = Vector2(-31, -19)
 [node name="HitboxComponent" parent="SpriteManager" unique_id=1353647101 instance=ExtResource("7_2jere")]
 visible = false
 knockback_strength = 40.0
-damage_enabled = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SpriteManager/HitboxComponent" unique_id=2048539670]
 shape = SubResource("CircleShape2D_2jere")
@@ -1141,7 +1139,6 @@ script = ExtResource("11_1ysy8")
 
 [node name="PlayerCombat" type="Node2D" parent="." unique_id=2006343104]
 script = ExtResource("16_oah5i")
-melee_damage = 100.0
 
 [node name="WalkSFXPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1122877933]
 stream = ExtResource("4_dtltu")

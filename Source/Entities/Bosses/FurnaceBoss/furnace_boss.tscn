@@ -3051,12 +3051,11 @@ position = Vector2(-11, 29)
 [node name="HealthComponent" parent="." unique_id=1970387855 instance=ExtResource("6_w2phj")]
 max_health = 10.0
 
-[node name="Healthbar" parent="." unique_id=1218839401 node_paths=PackedStringArray("health_component") instance=ExtResource("18_88xy5")]
+[node name="Healthbar" parent="." unique_id=1218839401 instance=ExtResource("18_88xy5")]
 offset_left = -120.0
 offset_top = -110.0
 offset_right = 120.0
 offset_bottom = -102.0
-health_component = NodePath("../HealthComponent")
 
 [node name="HurtboxComponent" parent="." unique_id=542877514 node_paths=PackedStringArray("health_component") instance=ExtResource("7_0xocv")]
 health_component = NodePath("../HealthComponent")

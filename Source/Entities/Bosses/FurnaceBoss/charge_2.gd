@@ -133,10 +133,11 @@ func _set_charge_hitbox_enabled(enabled: bool) -> void:
 func _update_charge_hitbox_transform(direction: Vector2) -> void:
 	if _charge_hitbox == null:
 		return
-
-	var facing := direction.normalized()
+	
+	var facing := direction
 	if facing == Vector2.ZERO:
 		facing = Vector2.RIGHT
+	facing = facing.normalized()	
 
 	_charge_hitbox.position = facing * charge_hitbox_distance
 	_charge_hitbox.rotation = facing.angle()
