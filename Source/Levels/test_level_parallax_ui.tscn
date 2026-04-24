@@ -1,14 +1,18 @@
-[gd_scene format=3 uid="uid://0uv3lonfgknl"]
+[gd_scene format=3 uid="uid://bvbnq45mr6vri"]
 
-[ext_resource type="Script" uid="uid://fb2dxk6ifnmk" path="res://Source/Levels/test_level_parallax.gd" id="1_r12yy"]
-[ext_resource type="Script" uid="uid://np8yjxnxxm8m" path="res://Source/Entities/Components/LockOnComponent/lockon_system.gd" id="2_jv2fq"]
-[ext_resource type="Texture2D" uid="uid://bktdkuma36eod" path="res://Source/Entities/Environment/StageOne/Art/Stage.png" id="5_r12yy"]
-[ext_resource type="Texture2D" uid="uid://cdkm5mxrhden3" path="res://Source/Entities/Environment/StageOne/Art/pillar.png" id="6_f8vh1"]
-[ext_resource type="PackedScene" uid="uid://crvepxby1imcj" path="res://Source/Entities/Player/better_player/better_player.tscn" id="6_jv2fq"]
-[ext_resource type="Texture2D" uid="uid://dhc3xltm4mims" path="res://Source/Entities/Environment/StageOne/Art/offwhitebg.png" id="6_r12yy"]
-[ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="6_yxuq4"]
-[ext_resource type="Texture2D" uid="uid://x8n2aq26kuv7" path="res://Source/Entities/Environment/StageOne/Art/stagebackground.png" id="7_yxuq4"]
-[ext_resource type="PackedScene" uid="uid://ckif5hgi5j0q7" path="res://Source/Entities/Bosses/FurnaceBoss/furnace_boss.tscn" id="11_bmmtr"]
+[ext_resource type="Script" uid="uid://fb2dxk6ifnmk" path="res://Source/Levels/test_level_parallax.gd" id="1_apfd6"]
+[ext_resource type="Script" uid="uid://np8yjxnxxm8m" path="res://Source/Entities/Components/LockOnComponent/lockon_system.gd" id="2_smhmp"]
+[ext_resource type="Texture2D" uid="uid://cdkm5mxrhden3" path="res://Source/Entities/Environment/StageOne/Art/pillar.png" id="3_cx33a"]
+[ext_resource type="Texture2D" uid="uid://x8n2aq26kuv7" path="res://Source/Entities/Environment/StageOne/Art/stagebackground.png" id="4_ln7mm"]
+[ext_resource type="Texture2D" uid="uid://bktdkuma36eod" path="res://Source/Entities/Environment/StageOne/Art/Stage.png" id="5_groen"]
+[ext_resource type="Texture2D" uid="uid://dhc3xltm4mims" path="res://Source/Entities/Environment/StageOne/Art/offwhitebg.png" id="6_keqbv"]
+[ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="7_rguk2"]
+[ext_resource type="PackedScene" uid="uid://c3afunl511glt" path="res://Source/Entities/Player/better_player/better_player_health.tscn" id="9_apfd6"]
+[ext_resource type="PackedScene" uid="uid://ckif5hgi5j0q7" path="res://Source/Entities/Bosses/FurnaceBoss/furnace_boss.tscn" id="9_n2c71"]
+[ext_resource type="Script" uid="uid://cm2pfmclfklg" path="res://Source/Entities/Components/HealthbarComponent/healthbar_component.gd" id="10_smhmp"]
+[ext_resource type="Texture2D" uid="uid://m2w0a7jib08m" path="res://Source/Entities/Player/better_player/Art/PlayerNeutral.png" id="11_cx33a"]
+[ext_resource type="Script" uid="uid://bb6u1u6trtx2t" path="res://Source/Entities/Components/UI/HealthFace.gd" id="11_groen"]
+[ext_resource type="Texture2D" uid="uid://btn2dbwnfqqhf" path="res://Source/Entities/Player/better_player/Art/PlayerHurt.png" id="12_ln7mm"]
 
 [sub_resource type="Environment" id="Environment_f8vh1"]
 background_mode = 3
@@ -19,14 +23,120 @@ adjustment_enabled = true
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_86f36"]
 size = Vector2(24.600004, 12.145748)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1jbp5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xy2cq"]
+bg_color = Color(0.30980393, 0.56078434, 0.7294118, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1jbp5"]
+bg_color = Color(0.009765549, 0.118382834, 0.16444382, 1)
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+shadow_color = Color(0.4045111, 0.40451115, 0.4045111, 0.6)
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tsx3p"]
+bg_color = Color(0.85025823, 0.924719, 0.98296875, 1)
+
+[sub_resource type="Animation" id="Animation_cx33a"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Face:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("11_cx33a")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Face:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(42.5, 57.5)]
+}
+
+[sub_resource type="Animation" id="Animation_ln7mm"]
+resource_name = "hurt"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Face:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("12_ln7mm")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Face:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(0.5, 0.5),
+"update": 0,
+"values": [Vector2(41.5, 51), Vector2(41.5, 52.5)]
+}
+
+[sub_resource type="Animation" id="Animation_groen"]
+resource_name = "normal"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Face:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("11_cx33a")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Face:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(40.5, 52.999992)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_keqbv"]
+_data = {
+&"RESET": SubResource("Animation_cx33a"),
+&"hurt": SubResource("Animation_ln7mm"),
+&"normal": SubResource("Animation_groen")
+}
+
 [node name="TestLevel" type="Node2D" unique_id=276251252]
-script = ExtResource("1_r12yy")
+script = ExtResource("1_apfd6")
 
 [node name="LockOnSystem" type="Node2D" parent="." unique_id=857070825 node_paths=PackedStringArray("camera", "player")]
 z_index = 1
-script = ExtResource("2_jv2fq")
+script = ExtResource("2_smhmp")
 camera = NodePath("../Camera2D")
-player = NodePath("../BetterPlayer")
+player = NodePath("../BetterPlayer2")
 lerp_speed = 10.0
 padding = 300.0
 shake_magnitude = 40.0
@@ -38,83 +148,51 @@ environment = SubResource("Environment_f8vh1")
 
 [node name="Environment" type="Node2D" parent="." unique_id=1417361352]
 
-[node name="ParallaxAshes" type="Parallax2D" parent="Environment" unique_id=561883605]
-scroll_scale = Vector2(0.5, 0.5)
-scroll_offset = Vector2(0, 600)
+[node name="Pillar3" type="Sprite2D" parent="Environment" unique_id=875237494]
+modulate = Color(0.79521304, 0.901673, 1, 1)
+position = Vector2(539.00006, -231)
+scale = Vector2(3.3981662, 9.544174)
+texture = ExtResource("3_cx33a")
 
-[node name="Ashes" type="Sprite2D" parent="Environment/ParallaxAshes" unique_id=658814904]
-z_index = -1
-position = Vector2(66.444565, -791.5)
-scale = Vector2(1.8736109, 1.8736111)
-texture = ExtResource("6_yxuq4")
+[node name="Pillar" type="Sprite2D" parent="Environment" unique_id=249386930]
+modulate = Color(0.79521304, 0.901673, 1, 1)
+position = Vector2(941, -177)
+rotation = -0.2617994
+scale = Vector2(9.398168, 26.395927)
+texture = ExtResource("3_cx33a")
 
-[node name="Offwhitebg" type="Sprite2D" parent="Environment/ParallaxAshes/Ashes" unique_id=209026157]
-z_index = -1
-position = Vector2(-70.867455, -89.13266)
-scale = Vector2(1.3395109, 1.3395107)
-texture = ExtResource("6_r12yy")
-
-[node name="ParallaxFrontGate" type="Parallax2D" parent="Environment" unique_id=1269976272]
-scroll_scale = Vector2(2, 2)
-ignore_camera_scroll = true
-
-[node name="Gate" type="Sprite2D" parent="Environment/ParallaxFrontGate" unique_id=260732666]
+[node name="Gate" type="Sprite2D" parent="Environment" unique_id=260732666]
 modulate = Color(0.79521304, 0.901673, 1, 1)
 position = Vector2(-188, 4260.9995)
 rotation = 0.5235988
 scale = Vector2(19.134907, 19.134907)
-texture = ExtResource("7_yxuq4")
+texture = ExtResource("4_ln7mm")
 
-[node name="Parallax2D" type="Parallax2D" parent="Environment" unique_id=803658054]
-scroll_scale = Vector2(1.5, 1.5)
-scroll_offset = Vector2(0, -600)
+[node name="Pillar2" type="Sprite2D" parent="Environment" unique_id=466119357]
+modulate = Color(0.79521304, 0.901673, 1, 1)
+position = Vector2(1254, -443.00003)
+rotation = -0.2617994
+scale = Vector2(9.398168, 26.395927)
+texture = ExtResource("3_cx33a")
 
-[node name="Pillar4" type="Sprite2D" parent="Environment/Parallax2D" unique_id=1707300526]
+[node name="Gate2" type="Sprite2D" parent="Environment" unique_id=1194214810]
+modulate = Color(0.79607844, 0.9019608, 1, 0.56078434)
+position = Vector2(1304.0001, 2062)
+rotation = -0.2617994
+scale = Vector2(10.6624155, 10.6624155)
+texture = ExtResource("4_ln7mm")
+
+[node name="Pillar4" type="Sprite2D" parent="Environment" unique_id=1707300526]
 modulate = Color(0.79607844, 0.9019608, 1, 0.50980395)
 z_index = 1
 position = Vector2(-632, 34.999985)
 rotation = 0.7853982
 scale = Vector2(9.398168, 26.395927)
-texture = ExtResource("6_f8vh1")
-
-[node name="ParallaxBackGate" type="Parallax2D" parent="Environment" unique_id=548681620]
-scroll_scale = Vector2(0.8, 0.8)
-
-[node name="Gate2" type="Sprite2D" parent="Environment/ParallaxBackGate" unique_id=1194214810]
-modulate = Color(0.79607844, 0.9019608, 1, 0.56078434)
-position = Vector2(1304.0001, 2062)
-rotation = -0.26179937
-scale = Vector2(10.6624155, 10.6624155)
-texture = ExtResource("7_yxuq4")
-
-[node name="Parallax2D2" type="Parallax2D" parent="Environment" unique_id=928282869]
-scroll_scale = Vector2(0.7, 0.7)
-scroll_offset = Vector2(0, 300)
-
-[node name="Pillar2" type="Sprite2D" parent="Environment/Parallax2D2" unique_id=466119357]
-modulate = Color(0.79521304, 0.901673, 1, 1)
-position = Vector2(1254, -443.00003)
-rotation = -0.26179937
-scale = Vector2(9.398166, 26.395924)
-texture = ExtResource("6_f8vh1")
-
-[node name="Pillar3" type="Sprite2D" parent="Environment/Parallax2D2" unique_id=875237494]
-modulate = Color(0.79521304, 0.901673, 1, 1)
-position = Vector2(539.00006, -231)
-scale = Vector2(3.3981662, 9.544174)
-texture = ExtResource("6_f8vh1")
-
-[node name="Pillar" type="Sprite2D" parent="Environment/Parallax2D2" unique_id=249386930]
-modulate = Color(0.79521304, 0.901673, 1, 1)
-position = Vector2(941, -177)
-rotation = -0.2617994
-scale = Vector2(9.398168, 26.395926)
-texture = ExtResource("6_f8vh1")
+texture = ExtResource("3_cx33a")
 
 [node name="Platform" type="Sprite2D" parent="Environment" unique_id=680183571]
-process_mode = 4
 scale = Vector2(5.6400003, 1.235)
-texture = ExtResource("5_r12yy")
+texture = ExtResource("5_groen")
 
 [node name="Wall3" type="StaticBody2D" parent="Environment/Platform" unique_id=535631182]
 position = Vector2(0, 77.73279)
@@ -516,28 +594,17 @@ position = Vector2(-75, -103.643715)
 shape = SubResource("RectangleShape2D_86f36")
 debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Environment" unique_id=671202499]
-position = Vector2(0, -200)
-scale = Vector2(91.36801, 20.007002)
+[node name="Offwhitebg" type="Sprite2D" parent="Environment" unique_id=209026157]
+z_index = -1
+position = Vector2(-66.33348, -958.49994)
+scale = Vector2(2.5097225, 2.5097222)
+texture = ExtResource("6_keqbv")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Environment/StaticBody2D" unique_id=1129278688]
-position = Vector2(0, 7)
-scale = Vector2(0.010944749, 0.049982503)
-polygon = PackedVector2Array(-11, -715.06476, 961, -264.049, 1019, -181.04901, 910, -193.04901, 871, -255.04901, 707, -317.049, 646.80066, -331.4366, 498, -367, 458, -372, 272, -391, 106, -398, -30, -399, -139, -398, -221, -395, -423, -378, -472, -371, -561, -355.049, -632, -345.049, -683, -333.049, -771, -300.049, -805, -285.049, -844, -266.049, -890, -230.04901, -911, -193.04901, -921, -167.04901, -1055, -170.04901)
-
-[node name="StaticBody2D2" type="StaticBody2D" parent="Environment" unique_id=1893552141]
-position = Vector2(0, -200)
-scale = Vector2(91.36801, 20.007002)
-
-[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Environment/StaticBody2D2" unique_id=835335022]
-position = Vector2(-0.52534795, -11.146098)
-rotation = 3.1415927
-scale = Vector2(0.010944749, 0.049982503)
-polygon = PackedVector2Array(-11, -715.06476, 996.99994, -193.00002, 873.9999, -196.00002, 849.9999, -230.00002, 785.9999, -281, 607.9999, -342, 266.99985, -388, 106, -398, -30, -399, -139, -398, -221, -395, -436.00012, -382, -515.0001, -370, -657.0002, -351, -830.0001, -301, -917.0001, -258, -944.0001, -231.99998, -952.00006, -191.99998, -958.00006, -168.99998, -1062, -177.99998, -1046.0001, -248.99998)
-
-[node name="Area2D" type="Area2D" parent="Environment" unique_id=496613333]
-position = Vector2(0, -506)
-scale = Vector2(91.36801, 20.007002)
+[node name="Ashes" type="Sprite2D" parent="Environment" unique_id=658814904]
+z_index = -1
+position = Vector2(66.444565, -791.5)
+scale = Vector2(1.8736109, 1.8736111)
+texture = ExtResource("7_rguk2")
 
 [node name="RainParticles" type="Node2D" parent="Environment" unique_id=1997374975]
 position = Vector2(0, -388)
@@ -552,10 +619,67 @@ gravity = Vector2(-200, 980)
 scale_amount_max = 2.5
 color = Color(0, 0, 0, 1)
 
-[node name="BetterPlayer" parent="." unique_id=1864309119 instance=ExtResource("6_jv2fq")]
-z_index = 1
-position = Vector2(-41, -186)
+[node name="TankBoss3" parent="." unique_id=1995595152 node_paths=PackedStringArray("player") instance=ExtResource("9_n2c71")]
+position = Vector2(499, -230)
+player = NodePath("../BetterPlayer2")
 
-[node name="TankBoss3" parent="." unique_id=1995595152 node_paths=PackedStringArray("player") instance=ExtResource("11_bmmtr")]
-position = Vector2(46, -305)
-player = NodePath("../BetterPlayer")
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1584866358]
+
+[node name="Healthbar" type="ProgressBar" parent="CanvasLayer" unique_id=1501119927 node_paths=PackedStringArray("parent_node", "timer", "damage_bar", "face")]
+z_index = 1
+custom_minimum_size = Vector2(48, 8)
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 255.99998
+offset_bottom = 24.0
+theme_override_styles/background = SubResource("StyleBoxEmpty_1jbp5")
+theme_override_styles/fill = SubResource("StyleBoxFlat_xy2cq")
+value = 60.0
+show_percentage = false
+script = ExtResource("10_smhmp")
+parent_node = NodePath("../../BetterPlayer2")
+timer = NodePath("Timer")
+damage_bar = NodePath("Damagebar")
+face = NodePath("Face")
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Healthbar" unique_id=315744018]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 9.0
+offset_right = 85.0
+offset_bottom = 97.0
+color = Color(0.09019608, 0.1254902, 0.21960784, 1)
+
+[node name="Face" type="Sprite2D" parent="CanvasLayer/Healthbar" unique_id=1180252610 node_paths=PackedStringArray("animator")]
+position = Vector2(42.5, 57.5)
+scale = Vector2(2.5312498, 2.5312498)
+texture = ExtResource("11_cx33a")
+script = ExtResource("11_groen")
+animator = NodePath("../AnimationPlayer")
+
+[node name="Damagebar" type="ProgressBar" parent="CanvasLayer/Healthbar" unique_id=852655480]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_1jbp5")
+theme_override_styles/fill = SubResource("StyleBoxFlat_tsx3p")
+value = 80.0
+show_percentage = false
+
+[node name="Timer" type="Timer" parent="CanvasLayer/Healthbar" unique_id=1032069638]
+wait_time = 0.3
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/Healthbar" unique_id=830782384]
+libraries/ = SubResource("AnimationLibrary_keqbv")
+
+[node name="BetterPlayer2" parent="." unique_id=462766173 instance=ExtResource("9_apfd6")]
+position = Vector2(85, -257)
+
+[connection signal="timeout" from="CanvasLayer/Healthbar/Timer" to="CanvasLayer/Healthbar" method="_on_timer_timeout"]

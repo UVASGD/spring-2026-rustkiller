@@ -1076,9 +1076,8 @@ shape = SubResource("CapsuleShape2D_g17sf")
 [node name="PlayerAnimation" type="AnimationPlayer" parent="." unique_id=1742078471]
 libraries/ = SubResource("AnimationLibrary_g17sf")
 
-[node name="PlayerMovement" type="Node2D" parent="." unique_id=24102843 node_paths=PackedStringArray("_player")]
+[node name="PlayerMovement" type="Node2D" parent="." unique_id=24102843]
 script = ExtResource("2_ht1kh")
-_player = NodePath("..")
 
 [node name="HealthComponent" parent="." unique_id=528490001 instance=ExtResource("4_7n4jp")]
 max_health = 3.0
