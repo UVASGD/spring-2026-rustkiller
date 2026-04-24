@@ -112,6 +112,7 @@ scale = Vector2(9.398168, 26.395926)
 texture = ExtResource("6_f8vh1")
 
 [node name="Platform" type="Sprite2D" parent="Environment" unique_id=680183571]
+process_mode = 4
 scale = Vector2(5.6400003, 1.235)
 texture = ExtResource("5_r12yy")
 
@@ -514,6 +515,29 @@ position = Vector2(111.17021, 102.83401)
 position = Vector2(-75, -103.643715)
 shape = SubResource("RectangleShape2D_86f36")
 debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Environment" unique_id=671202499]
+position = Vector2(0, -200)
+scale = Vector2(91.36801, 20.007002)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Environment/StaticBody2D" unique_id=1129278688]
+position = Vector2(0, 7)
+scale = Vector2(0.010944749, 0.049982503)
+polygon = PackedVector2Array(-11, -715.06476, 961, -264.049, 1019, -181.04901, 910, -193.04901, 871, -255.04901, 707, -317.049, 646.80066, -331.4366, 498, -367, 458, -372, 272, -391, 106, -398, -30, -399, -139, -398, -221, -395, -423, -378, -472, -371, -561, -355.049, -632, -345.049, -683, -333.049, -771, -300.049, -805, -285.049, -844, -266.049, -890, -230.04901, -911, -193.04901, -921, -167.04901, -1055, -170.04901)
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Environment" unique_id=1893552141]
+position = Vector2(0, -200)
+scale = Vector2(91.36801, 20.007002)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Environment/StaticBody2D2" unique_id=835335022]
+position = Vector2(-0.52534795, -11.146098)
+rotation = 3.1415927
+scale = Vector2(0.010944749, 0.049982503)
+polygon = PackedVector2Array(-11, -715.06476, 996.99994, -193.00002, 873.9999, -196.00002, 849.9999, -230.00002, 785.9999, -281, 607.9999, -342, 266.99985, -388, 106, -398, -30, -399, -139, -398, -221, -395, -436.00012, -382, -515.0001, -370, -657.0002, -351, -830.0001, -301, -917.0001, -258, -944.0001, -231.99998, -952.00006, -191.99998, -958.00006, -168.99998, -1062, -177.99998, -1046.0001, -248.99998)
+
+[node name="Area2D" type="Area2D" parent="Environment" unique_id=496613333]
+position = Vector2(0, -506)
+scale = Vector2(91.36801, 20.007002)
 
 [node name="RainParticles" type="Node2D" parent="Environment" unique_id=1997374975]
 position = Vector2(0, -388)
