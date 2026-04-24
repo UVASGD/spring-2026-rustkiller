@@ -4,6 +4,7 @@ extends Node2D
 
 
 func _ready() -> void:
+	enable_active()
 	$AnimationPlayer.play("skull")
 	
 

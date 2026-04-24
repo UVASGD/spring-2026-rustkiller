@@ -16,6 +16,7 @@ const DAMAGE_TICK_INTERVAL := 0.1
 var _damage_tick_timer := 0.0
 var _is_player_in_radius := false
 var _player_hurtbox_in_radius: HurtboxComponent
+var _was_parried := false
 
 func _ready() -> void:
 	if _attack_hitbox:
@@ -29,6 +30,7 @@ func on_enter() -> void:
 	_damage_tick_timer = 0.0
 	_is_player_in_radius = false
 	_player_hurtbox_in_radius = null
+	_was_parried = false
 	if character and character.has_method("stop_motion"):
 		character.stop_motion()
 	_start_transform_phase()
@@ -39,6 +41,7 @@ func on_exit() -> void:
 	_damage_tick_timer = 0.0
 	_is_player_in_radius = false
 	_player_hurtbox_in_radius = null
+	_was_parried = false
 
 func update(delta: float) -> void:
 	if character == null:
@@ -67,14 +70,25 @@ func update(delta: float) -> void:
 	elif _phase == AttackPhase.OUROBOROS:
 		if character.has_method("stop_motion"):
 			character.stop_motion()
-		if _animation_finished(_get_ouroboros_animation()):
-			_clear_animation_finished(_get_ouroboros_animation())
 
 func check_transition(_delta: float) -> TransitionData:
+	if _was_parried:
+		return TransitionData.new(true, "AnimalIdle")
 	if _phase == AttackPhase.OUROBOROS and _animation_finished(_get_ouroboros_animation()):
 		_clear_animation_finished(_get_ouroboros_animation())
 		return TransitionData.new(true, "AnimalIdle")
 	return TransitionData.new(false, "")
+
+func parry_charge_attack() -> bool:
+	if _phase != AttackPhase.OUROBOROS:
+		return false
+
+	_was_parried = true
+	if _attack_hitbox:
+		_attack_hitbox.damage_enabled = false
+	if character and character.has_method("stop_motion"):
+		character.stop_motion()
+	return true
 
 func _start_transform_phase() -> void:
 	_phase = AttackPhase.TRANSFORM

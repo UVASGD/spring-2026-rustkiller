@@ -4,11 +4,15 @@ extends Node2D
 
 
 func _ready() -> void:
+	enable_active()
 	$AnimationPlayer.play("bat")
 
 
 func disable_active() -> void:
 	hitbox.damage_enabled = false
+
+func enable_active() -> void:
+	hitbox.damage_enabled = true
 
 
 func _on_animation_player_animation_finished(_anim_name: StringName) -> void:

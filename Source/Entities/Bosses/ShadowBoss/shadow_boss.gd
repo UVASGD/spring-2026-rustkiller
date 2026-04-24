@@ -84,7 +84,10 @@ var _machine: ShadowBossMachine
 var _machine_intermission_active := false
 var _machine_waiting_for_defeat := false
 var _machine_waiting_for_restore := false
+var _machine_waiting_for_player_death := false
 var _machine_pending_phase := ""
+var _player_phase_appear_ready := false
+var _phase_hitbox_shape_defaults: Dictionary = {}
 
 func _ready() -> void:
 	if not is_instance_valid(player):
@@ -96,12 +99,16 @@ func _ready() -> void:
 	_reaper_phase_switch_ready = start_in_player_phase
 	_player_phase_active = start_in_player_phase
 	_player_phase_switch_ready = start_in_player_phase
+	_configure_ouroboros_hitbox()
 	_configure_slash_hitbox()
 	_configure_reaper_hitbox()
+	_cache_phase_hitbox_shape_defaults()
 	_sync_hurtbox_flip()
 
 	if animation_player:
 		animation_player.animation_finished.connect(_on_visual_animation_finished)
+	if animated_sprite and not animated_sprite.animation_finished.is_connected(_on_animated_sprite_animation_finished):
+		animated_sprite.animation_finished.connect(_on_animated_sprite_animation_finished)
 	if is_instance_valid(_machine):
 		_machine.phase_gate_destroyed.connect(_on_machine_phase_gate_destroyed)
 
@@ -119,9 +126,9 @@ func _physics_process(delta: float) -> void:
 	if _range_cooldown_remaining > 0.0:
 		_range_cooldown_remaining = maxf(_range_cooldown_remaining - delta, 0.0)
 	if health_component and not health_component.has_health_remaining:
-		if not _reaper_phase_active and not is_instance_valid(_machine):
+		if _is_currently_in_move(&"AnimalPhase") and not is_instance_valid(_machine):
 			_reaper_phase_switch_ready = true
-		elif not _player_phase_active and not is_instance_valid(_machine):
+		elif _is_currently_in_move(&"ReaperPhase") and not is_instance_valid(_machine):
 			_player_phase_switch_ready = true
 	if _should_begin_machine_intermission():
 		_begin_machine_intermission()
@@ -130,10 +137,13 @@ func _physics_process(delta: float) -> void:
 		stop_motion()
 		_knockback_velocity = Vector2.ZERO
 		_update_light_platform_mask()
-		if _machine_waiting_for_restore and was_visual_animation_finished("shadow_defeat"):
+		if _machine_waiting_for_player_death and was_visual_animation_finished("death"):
+			clear_visual_animation_finished("death")
+			_start_machine_shadow_defeat()
+		elif _machine_waiting_for_restore and was_visual_animation_finished("shadow_defeat"):
 			clear_visual_animation_finished("shadow_defeat")
 			_finish_machine_intermission()
-		elif not _machine_waiting_for_defeat and was_visual_animation_finished("shadow_defeat"):
+		elif not _machine_waiting_for_player_death and not _machine_waiting_for_defeat and was_visual_animation_finished("shadow_defeat"):
 			clear_visual_animation_finished("shadow_defeat")
 			_open_machine_phase_gate()
 		return
@@ -190,36 +200,37 @@ func should_start_in_player_phase() -> bool:
 	return start_in_player_phase
 
 func should_enter_reaper_phase() -> bool:
-	if _reaper_phase_active:
-		return true
 	return _reaper_phase_switch_ready
 
 func enter_reaper_phase() -> void:
 	if not _reaper_phase_active:
 		_refill_health_for_phase()
 	_reaper_phase_active = true
+	_player_phase_active = false
+	_player_phase_appear_ready = false
 	_reaper_phase_switch_ready = false
 	_player_phase_switch_ready = false
 	_reaper_phase_complete = false
 	_machine_pending_phase = ""
 	reset_reaper_slash_movement()
 	_restore_after_machine_intermission()
+	enable_phase_hitboxes()
 	stop_motion()
 
 func should_enter_player_phase() -> bool:
-	if _player_phase_active:
-		return true
 	return _player_phase_switch_ready
 
 func enter_player_phase() -> void:
 	if not _player_phase_active:
 		_refill_health_for_phase()
 	_player_phase_active = true
+	_reaper_phase_active = false
 	_player_phase_switch_ready = false
 	_reaper_phase_complete = false
 	_machine_pending_phase = ""
 	reset_reaper_slash_movement()
 	_restore_after_machine_intermission()
+	enable_phase_hitboxes()
 	stop_motion()
 
 func _refill_health_for_phase() -> void:
@@ -324,6 +335,8 @@ func play_visual_animation(animation_name: String, restart: bool = true) -> void
 		_last_finished_visual_animation = ""
 
 	if animation_player and animation_player.has_animation(animation_name):
+		if animation_player.is_playing() and animation_player.current_animation != animation_name:
+			animation_player.stop()
 		if restart or animation_player.current_animation != animation_name:
 			animation_player.play(animation_name)
 		return
@@ -339,6 +352,8 @@ func play_visual_animation_reverse(animation_name: String) -> void:
 	_last_finished_visual_animation = ""
 
 	if animation_player and animation_player.has_animation(animation_name):
+		if animation_player.is_playing() and animation_player.current_animation != animation_name:
+			animation_player.stop()
 		animation_player.play_backwards(animation_name)
 		return
 
@@ -368,6 +383,14 @@ func clear_visual_animation_finished(animation_name: String = "") -> void:
 	if animation_name == "" or _last_finished_visual_animation == animation_name:
 		_last_finished_visual_animation = ""
 
+func _configure_ouroboros_hitbox() -> void:
+	if ouroboros_hitbox == null:
+		return
+
+	ouroboros_hitbox.hit_owner = "boss"
+	ouroboros_hitbox.damage = animal_attack_damage
+	ouroboros_hitbox.damage_enabled = true
+
 func _configure_slash_hitbox() -> void:
 	if slash_hitbox == null:
 		return
@@ -384,8 +407,88 @@ func _configure_reaper_hitbox() -> void:
 	reaper_hitbox.damage = reaper_slash_damage
 	reaper_hitbox.damage_enabled = true
 
+func disable_phase_hitboxes() -> void:
+	_disable_hitbox_collision_shapes(ouroboros_hitbox)
+	_disable_hitbox_collision_shapes(slash_hitbox)
+	_disable_hitbox_collision_shapes(reaper_hitbox)
+
+func enable_phase_hitboxes() -> void:
+	_enable_hitbox(ouroboros_hitbox)
+	_enable_hitbox(slash_hitbox)
+	_enable_hitbox(reaper_hitbox)
+	_restore_phase_hitbox_shape_defaults()
+
+func _disable_hitbox_collision_shapes(hitbox: HitboxComponent) -> void:
+	if hitbox == null:
+		return
+
+	hitbox.monitoring = false
+	hitbox.monitorable = false
+	hitbox.damage_enabled = false
+
+	for child in hitbox.get_children():
+		_disable_collision_shapes_recursive(child)
+
+func _cache_phase_hitbox_shape_defaults() -> void:
+	_phase_hitbox_shape_defaults.clear()
+	_cache_hitbox_shape_defaults(ouroboros_hitbox)
+	_cache_hitbox_shape_defaults(slash_hitbox)
+	_cache_hitbox_shape_defaults(reaper_hitbox)
+
+func _cache_hitbox_shape_defaults(hitbox: HitboxComponent) -> void:
+	if hitbox == null:
+		return
+
+	var shape_defaults: Dictionary = {}
+	_collect_collision_shape_defaults(hitbox, shape_defaults)
+	_phase_hitbox_shape_defaults[hitbox] = shape_defaults
+
+func _collect_collision_shape_defaults(node: Node, shape_defaults: Dictionary) -> void:
+	var collision_shape := node as CollisionShape2D
+	if collision_shape:
+		shape_defaults[collision_shape] = collision_shape.disabled
+
+	for child in node.get_children():
+		_collect_collision_shape_defaults(child, shape_defaults)
+
+func _restore_phase_hitbox_shape_defaults() -> void:
+	_restore_hitbox_shape_defaults(ouroboros_hitbox)
+	_restore_hitbox_shape_defaults(slash_hitbox)
+	_restore_hitbox_shape_defaults(reaper_hitbox)
+
+func _restore_hitbox_shape_defaults(hitbox: HitboxComponent) -> void:
+	if hitbox == null or not _phase_hitbox_shape_defaults.has(hitbox):
+		return
+
+	var shape_defaults: Dictionary = _phase_hitbox_shape_defaults[hitbox]
+	for collision_shape in shape_defaults.keys():
+		if is_instance_valid(collision_shape):
+			collision_shape.disabled = shape_defaults[collision_shape]
+
+func _disable_collision_shapes_recursive(node: Node) -> void:
+	var collision_shape := node as CollisionShape2D
+	if collision_shape:
+		collision_shape.disabled = true
+
+	for child in node.get_children():
+		_disable_collision_shapes_recursive(child)
+
+func _enable_hitbox(hitbox: HitboxComponent) -> void:
+	if hitbox == null:
+		return
+
+	hitbox.monitoring = true
+	hitbox.monitorable = true
+	hitbox.damage_enabled = true
+
 func _on_visual_animation_finished(animation_name: StringName) -> void:
 	_last_finished_visual_animation = String(animation_name)
+
+func _on_animated_sprite_animation_finished() -> void:
+	if animated_sprite == null:
+		return
+
+	_last_finished_visual_animation = String(animated_sprite.animation)
 
 func _face_direction(direction: Vector2) -> void:
 	if direction.x == 0.0:
@@ -526,7 +629,7 @@ func _find_machine() -> ShadowBossMachine:
 	return current_scene.find_child("ShadowBossMachine", true, false) as ShadowBossMachine
 
 func _should_begin_machine_intermission() -> bool:
-	if _player_phase_active or _machine_intermission_active:
+	if _machine_intermission_active:
 		return false
 	if _reaper_phase_switch_ready or _player_phase_switch_ready:
 		return false
@@ -534,22 +637,31 @@ func _should_begin_machine_intermission() -> bool:
 		return false
 	if health_component == null or health_component.has_health_remaining:
 		return false
+	if not _is_currently_in_move(&"PlayerPhase") \
+	and not _is_currently_in_move(&"AnimalPhase") \
+	and not _is_currently_in_move(&"ReaperPhase"):
+		return false
 	return is_instance_valid(_machine)
 
 func _begin_machine_intermission() -> void:
 	_machine_intermission_active = true
 	_machine_waiting_for_defeat = false
 	_machine_waiting_for_restore = false
+	_machine_waiting_for_player_death = false
 	_reaper_phase_switch_ready = false
 	_player_phase_switch_ready = false
 	_machine_pending_phase = _get_next_phase_after_current_form()
 	set_invulnerable(true)
 	_set_boss_hittable(false)
+	disable_phase_hitboxes()
 	if healthbar:
 		healthbar.visible = false
 	stop_motion()
-	clear_visual_animation_finished("shadow_defeat")
-	play_visual_animation("shadow_defeat")
+	clear_visual_animation_finished()
+	if _should_play_player_phase_death_animation():
+		_start_player_phase_death_animation()
+	else:
+		_start_machine_shadow_defeat()
 
 func _open_machine_phase_gate() -> void:
 	_machine_waiting_for_defeat = true
@@ -560,6 +672,9 @@ func _open_machine_phase_gate() -> void:
 
 func _on_machine_phase_gate_destroyed() -> void:
 	_machine_waiting_for_defeat = false
+	if _machine_pending_phase == "":
+		_finish_final_boss_sequence()
+		return
 	_machine_waiting_for_restore = true
 	clear_visual_animation_finished("shadow_defeat")
 	play_visual_animation_reverse("shadow_defeat")
@@ -567,28 +682,80 @@ func _on_machine_phase_gate_destroyed() -> void:
 func _finish_machine_intermission() -> void:
 	_machine_intermission_active = false
 	_machine_waiting_for_restore = false
+	_machine_waiting_for_player_death = false
 	if _machine_pending_phase == "Reaper":
 		_reaper_phase_switch_ready = true
 	elif _machine_pending_phase == "Player":
+		_player_phase_appear_ready = true
 		_player_phase_switch_ready = true
 	_machine_pending_phase = ""
+
+func _finish_final_boss_sequence() -> void:
+	_machine_intermission_active = false
+	_machine_waiting_for_restore = false
+	_machine_waiting_for_player_death = false
+	_machine_pending_phase = ""
+	_player_phase_appear_ready = false
+	if is_instance_valid(_machine):
+		_machine.queue_free()
+		_machine = null
+	queue_free()
 
 func _restore_after_machine_intermission() -> void:
 	set_invulnerable(false)
 	_set_boss_hittable(true)
 	if healthbar:
 		healthbar.visible = true
+	if animation_player:
+		animation_player.playback_active = true
 	if light_circle:
 		light_circle.modulate = Color(1, 1, 1, 1)
 	if animated_sprite:
 		animated_sprite.modulate = Color(1, 1, 1, 1)
 
 func _get_next_phase_after_current_form() -> String:
-	if not _reaper_phase_active:
+	if _is_currently_in_move(&"AnimalPhase"):
 		return "Reaper"
-	if not _player_phase_active:
+	if _is_currently_in_move(&"ReaperPhase"):
 		return "Player"
+	if _is_currently_in_move(&"PlayerPhase"):
+		return ""
 	return ""
+
+func _should_play_player_phase_death_animation() -> bool:
+	if animated_sprite == null or animated_sprite.sprite_frames == null:
+		return false
+	if not animated_sprite.sprite_frames.has_animation(&"death"):
+		return false
+	return _is_currently_in_move(&"PlayerPhase")
+
+func _start_player_phase_death_animation() -> void:
+	_machine_waiting_for_player_death = true
+	if animation_player:
+		animation_player.pause()
+	clear_visual_animation_finished("death")
+	animated_sprite.play(&"death")
+
+func _start_machine_shadow_defeat() -> void:
+	_machine_waiting_for_player_death = false
+	clear_visual_animation_finished("shadow_defeat")
+	play_visual_animation("shadow_defeat")
+
+func consume_player_phase_appear_ready() -> bool:
+	var should_appear := _player_phase_appear_ready
+	_player_phase_appear_ready = false
+	return should_appear
+
+func _is_currently_in_move(target_move_name: StringName, move: HFSM = state_machine) -> bool:
+	if move == null:
+		return false
+	if StringName(move.move_name) == target_move_name:
+		return true
+	if not move.is_container:
+		return false
+	if move.current_move == null or move.current_move == move:
+		return false
+	return _is_currently_in_move(target_move_name, move.current_move)
 
 func _set_boss_hittable(enabled: bool) -> void:
 	if hurtbox_component:
