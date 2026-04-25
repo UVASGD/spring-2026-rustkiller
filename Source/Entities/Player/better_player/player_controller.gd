@@ -57,6 +57,7 @@ func _input(_event: InputEvent) -> void:
 
 	if Input.is_action_just_pressed("blitz"):
 		_movement.try_blitz()
+		
 
 func _physics_process(delta: float) -> void:
 	_handle_weapon_switch()
