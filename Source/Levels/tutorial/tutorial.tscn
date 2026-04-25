@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="6_3jsnm"]
 [ext_resource type="PackedScene" uid="uid://crvepxby1imcj" path="res://Source/Entities/Player/better_player/better_player.tscn" id="7_b8u4h"]
 [ext_resource type="PackedScene" uid="uid://3vu6ojxhdq2j" path="res://Source/Entities/Bosses/TutorialBoss/tutorial_boss.tscn" id="10_qhvqs"]
-[ext_resource type="Script" uid="uid://cu3uv3luomysc" path="res://Source/Levels/move_zone.gd" id="10_qlr5y"]
+[ext_resource type="Script" uid="uid://cu3uv3luomysc" path="res://Source/Levels/tutorial/move_zone.gd" id="10_qlr5y"]
 [ext_resource type="Script" uid="uid://cllob85dpu7s7" path="res://Source/Levels/tutorial/tutorial_manager.gd" id="10_r5c6j"]
 [ext_resource type="PackedScene" uid="uid://cdvbfv2n8bbaf" path="res://Source/Entities/Projectiles/Bullets/bullet.tscn" id="11_3jsnm"]
 
