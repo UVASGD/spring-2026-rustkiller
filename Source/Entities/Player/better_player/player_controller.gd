@@ -212,3 +212,6 @@ func _trigger_damage_camera_shake(hitbox: HitboxComponent) -> void:
 	if hitbox != null and health_component != null:
 		damage_ratio = clampf(hitbox.damage / maxf(health_component.max_health, 1.0), 0.0, 1.0)
 	lock_on_system.trigger_damage_shake(damage_ratio)
+
+func apply_knockback(force: Vector2) -> void:
+	_movement.knockback = force * 5.0

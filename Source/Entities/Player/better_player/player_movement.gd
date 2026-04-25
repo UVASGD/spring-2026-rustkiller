@@ -22,9 +22,6 @@ func compute_velocity(direction: Vector2, delta: float) -> Vector2:
 
 	var speed_multiplier = _player.speed * blitz_multiplier
 	return direction * speed_multiplier + knockback
-
-func apply_knockback(force: Vector2) -> void:
-	knockback = force * 5.0
 	
 func try_blitz() -> void:
 	if not can_dash:
