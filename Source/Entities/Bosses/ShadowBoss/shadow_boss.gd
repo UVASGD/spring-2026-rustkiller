@@ -5,6 +5,7 @@ const PLAYER_GROUP: StringName = "PLAYER"
 const SHADOW_SKULL_SCENE := preload("res://Source/Entities/Projectiles/ShadowSkull/shadow_skull.tscn")
 const SHADOW_BAT_SCENE := preload("res://Source/Entities/Projectiles/ShadowBat/shadow_bat.tscn")
 const REAPER_PROJECTILE_SCENE := preload("res://Source/Entities/Projectiles/Reaper/reaper_projectile.tscn")
+const SHADOW_PORCUPINE_SCENE := preload("res://Source/Entities/Projectiles/ShadowPorcupine/shadow_porcupine.tscn")
 
 @export var player: CharacterBody2D
 @export var light_platform_path: NodePath
@@ -39,6 +40,15 @@ const REAPER_PROJECTILE_SCENE := preload("res://Source/Entities/Projectiles/Reap
 @export var animal_move_speed := 90.0
 @export var animal_attack_stop_distance := 72.0
 @export var animal_attack_damage := 20.0
+@export var animal_wolf_intro_animation: StringName = &"wolf_init"
+@export var animal_wolf_approach_animations: Array[StringName] = [&"wolf_app_1", &"wolf_app_2", &"wolf_app_3"]
+@export var animal_wolf_attack_animations: Array[StringName] = [&"wolf_attack_1", &"wolf_attack_2", &"wolf_attack_3"]
+@export var animal_wolf_circle_radius := 100.0
+@export var animal_porcupine_wave_count := 3
+@export var animal_porcupine_wave_size := 5
+@export var animal_porcupine_wave_interval := 0.35
+@export var animal_porcupine_attack_duration := 1.4
+@export var animal_porcupine_spawn_height := 140.0
 
 @export_group("Movement")
 @export var move_speed := 120.0
@@ -74,6 +84,7 @@ const REAPER_PROJECTILE_SCENE := preload("res://Source/Entities/Projectiles/Reap
 @onready var ouroboros_hitbox: HitboxComponent = $OuroborosHitbox
 @onready var slash_hitbox: HitboxComponent = $PlayerHitbox
 @onready var reaper_hitbox: HitboxComponent = $ReaperHitbox
+@onready var wolf_hitbox: HitboxComponent = $WolfHitbox
 @onready var healthbar: CanvasItem = $Healthbar
 
 var _is_invulnerable := false
@@ -99,6 +110,9 @@ var _machine_waiting_for_player_death := false
 var _machine_pending_phase := ""
 var _player_phase_appear_ready := false
 var _phase_hitbox_shape_defaults: Dictionary = {}
+var _animal_wolf_circle_start_angle := 0.0
+var _animal_attack_index := 0
+var _visual_animation_speed_scale := 1.0
 
 func _ready() -> void:
 	if not is_instance_valid(player):
@@ -113,6 +127,7 @@ func _ready() -> void:
 	_configure_ouroboros_hitbox()
 	_configure_slash_hitbox()
 	_configure_reaper_hitbox()
+	_configure_wolf_hitbox()
 	_cache_phase_hitbox_shape_defaults()
 	_sync_hurtbox_flip()
 
@@ -229,6 +244,7 @@ func enter_reaper_phase() -> void:
 	_player_phase_switch_ready = false
 	_reaper_phase_complete = false
 	_machine_pending_phase = ""
+	_animal_attack_index = 0
 	reset_reaper_slash_movement()
 	_reaper_attack_index = 0
 	_restore_after_machine_intermission()
@@ -274,6 +290,100 @@ func get_animal_ouroboros_animation() -> String:
 func get_animal_idle_duration() -> float:
 	return maxf(animal_idle_duration, 0.0)
 
+func get_animal_wolf_intro_animation() -> String:
+	return String(animal_wolf_intro_animation)
+
+func get_animal_wolf_approach_animations() -> Array[String]:
+	var animations: Array[String] = []
+	for animation_name in animal_wolf_approach_animations:
+		animations.append(String(animation_name))
+	return animations
+
+func get_animal_wolf_attack_animations() -> Array[String]:
+	var animations: Array[String] = []
+	for animation_name in animal_wolf_attack_animations:
+		animations.append(String(animation_name))
+	return animations
+
+func get_animal_wolf_circle_radius() -> float:
+	return maxf(animal_wolf_circle_radius, 1.0)
+
+func choose_animal_attack_type() -> String:
+	var attack_types := ["snake", "wolf", "porcupine"]
+	var attack_type: String = attack_types[_animal_attack_index % attack_types.size()]
+	_animal_attack_index = (_animal_attack_index + 1) % attack_types.size()
+	return attack_type
+
+func get_animal_porcupine_wave_count() -> int:
+	return maxi(animal_porcupine_wave_count, 1)
+
+func get_animal_porcupine_wave_size() -> int:
+	return maxi(animal_porcupine_wave_size, 1)
+
+func get_animal_porcupine_wave_interval() -> float:
+	return maxf(animal_porcupine_wave_interval, 0.05)
+
+func get_animal_porcupine_attack_duration() -> float:
+	var minimum_duration := get_animal_porcupine_wave_interval() * float(maxi(get_animal_porcupine_wave_count() - 1, 0)) + 0.4
+	return maxf(animal_porcupine_attack_duration, minimum_duration)
+
+func spawn_porcupine_wave_on_map() -> void:
+	var spawn_positions := _get_animal_porcupine_spawn_positions()
+	for spawn_position in spawn_positions:
+		var porcupine := SHADOW_PORCUPINE_SCENE.instantiate()
+		if porcupine is Node2D:
+			(porcupine as Node2D).global_position = spawn_position
+
+		var projectile_hitbox := HitboxComponent.get_child_component(porcupine)
+		if projectile_hitbox:
+			projectile_hitbox.init(animal_attack_damage, "boss")
+
+		porcupine.add_to_group("shadow_projectile")
+
+		var current_scene := get_tree().current_scene
+		if current_scene:
+			current_scene.add_child(porcupine)
+		else:
+			add_child(porcupine)
+
+func _get_animal_porcupine_spawn_positions() -> Array[Vector2]:
+	var spawn_positions: Array[Vector2] = []
+	var porcupine_count := get_animal_porcupine_wave_size()
+	if porcupine_count <= 0:
+		return spawn_positions
+
+	var center_x := _light_platform.global_position.x if _light_platform != null else global_position.x
+	var center_y := _light_platform.global_position.y if _light_platform != null else global_position.y
+	var half_width := 240.0
+
+	if _light_platform != null and _light_platform.texture != null:
+		var platform_scale := _light_platform.global_transform.get_scale()
+		half_width = _light_platform.texture.get_size().x * absf(platform_scale.x) * 0.5
+
+	var usable_half_width := maxf(half_width - 24.0, 24.0)
+	var min_spacing := minf(usable_half_width * 0.35, 42.0)
+	var max_attempts := porcupine_count * 12
+	var attempts := 0
+	while spawn_positions.size() < porcupine_count and attempts < max_attempts:
+		attempts += 1
+		var spawn_x := randf_range(center_x - usable_half_width, center_x + usable_half_width)
+		var jitter_y := randf_range(-12.0, 12.0)
+		var candidate := Vector2(spawn_x, center_y - animal_porcupine_spawn_height + jitter_y)
+		var is_clear := true
+		for existing_position in spawn_positions:
+			if absf(candidate.x - existing_position.x) < min_spacing:
+				is_clear = false
+				break
+		if is_clear:
+			spawn_positions.append(candidate)
+
+	while spawn_positions.size() < porcupine_count:
+		var spawn_x := randf_range(center_x - usable_half_width, center_x + usable_half_width)
+		var jitter_y := randf_range(-12.0, 12.0)
+		spawn_positions.append(Vector2(spawn_x, center_y - animal_porcupine_spawn_height + jitter_y))
+
+	return spawn_positions
+
 func get_reaper_appear_animation() -> String:
 	return String(reaper_appear_animation)
 
@@ -310,6 +420,33 @@ func animal_move_toward_target(delta: float) -> void:
 
 func is_near_animal_attack_target() -> bool:
 	return has_target() and distance_to_target() <= animal_attack_stop_distance
+
+func begin_animal_wolf_circle() -> void:
+	if not has_target():
+		return
+
+	var offset := global_position - player.global_position
+	if is_zero_approx(offset.length_squared()):
+		offset = Vector2.RIGHT * get_animal_wolf_circle_radius()
+
+	_animal_wolf_circle_start_angle = offset.angle()
+	set_animal_wolf_circle_progress(0.0)
+
+func set_animal_wolf_circle_progress(progress: float) -> void:
+	if not has_target():
+		stop_motion()
+		return
+
+	var orbit_progress := clampf(progress, 0.0, 1.0)
+	var orbit_sign := 1.0 if orbit_direction >= 0.0 else -1.0
+	var radius := get_animal_wolf_circle_radius()
+	var angle := _animal_wolf_circle_start_angle + orbit_sign * TAU * orbit_progress
+	var offset := Vector2.RIGHT.rotated(angle) * radius
+	global_position = player.global_position + offset
+	stop_motion()
+
+	var tangent_direction := Vector2(-sin(angle), cos(angle)) * orbit_sign
+	_face_direction(tangent_direction)
 
 func triple_attack() -> void:
 	_reaper_triple_should_follow_target = false
@@ -372,6 +509,7 @@ func play_visual_animation(animation_name: String, restart: bool = true) -> void
 		_last_finished_visual_animation = ""
 
 	if animation_player and animation_player.has_animation(animation_name):
+		animation_player.speed_scale = _visual_animation_speed_scale
 		if animation_player.is_playing() and animation_player.current_animation != animation_name:
 			animation_player.stop()
 		if restart or animation_player.current_animation != animation_name:
@@ -379,6 +517,7 @@ func play_visual_animation(animation_name: String, restart: bool = true) -> void
 		return
 
 	if animated_sprite and animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation(animation_name):
+		animated_sprite.speed_scale = _visual_animation_speed_scale
 		if restart or animated_sprite.animation != animation_name:
 			animated_sprite.play(animation_name)
 		elif not animated_sprite.is_playing():
@@ -389,13 +528,25 @@ func play_visual_animation_reverse(animation_name: String) -> void:
 	_last_finished_visual_animation = ""
 
 	if animation_player and animation_player.has_animation(animation_name):
+		animation_player.speed_scale = _visual_animation_speed_scale
 		if animation_player.is_playing() and animation_player.current_animation != animation_name:
 			animation_player.stop()
 		animation_player.play_backwards(animation_name)
 		return
 
 	if animated_sprite and animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation(animation_name):
+		animated_sprite.speed_scale = _visual_animation_speed_scale
 		animated_sprite.play(animation_name, -1.0, true)
+
+func set_visual_animation_speed_scale(speed_scale: float) -> void:
+	_visual_animation_speed_scale = maxf(speed_scale, 0.01)
+	if animation_player:
+		animation_player.speed_scale = _visual_animation_speed_scale
+	if animated_sprite:
+		animated_sprite.speed_scale = _visual_animation_speed_scale
+
+func reset_visual_animation_speed_scale() -> void:
+	set_visual_animation_speed_scale(1.0)
 
 func get_visual_animation_length(animation_name: String, fallback: float = 0.0) -> float:
 	if animation_player and animation_player.has_animation(animation_name):
@@ -444,15 +595,25 @@ func _configure_reaper_hitbox() -> void:
 	reaper_hitbox.damage = reaper_slash_damage
 	reaper_hitbox.damage_enabled = true
 
+func _configure_wolf_hitbox() -> void:
+	if wolf_hitbox == null:
+		return
+
+	wolf_hitbox.hit_owner = "boss"
+	wolf_hitbox.damage = animal_attack_damage
+	wolf_hitbox.damage_enabled = true
+
 func disable_phase_hitboxes() -> void:
 	_disable_hitbox_collision_shapes(ouroboros_hitbox)
 	_disable_hitbox_collision_shapes(slash_hitbox)
 	_disable_hitbox_collision_shapes(reaper_hitbox)
+	_disable_hitbox_collision_shapes(wolf_hitbox)
 
 func enable_phase_hitboxes() -> void:
 	_enable_hitbox(ouroboros_hitbox)
 	_enable_hitbox(slash_hitbox)
 	_enable_hitbox(reaper_hitbox)
+	_enable_hitbox(wolf_hitbox)
 	_restore_phase_hitbox_shape_defaults()
 
 func _disable_hitbox_collision_shapes(hitbox: HitboxComponent) -> void:
@@ -471,6 +632,7 @@ func _cache_phase_hitbox_shape_defaults() -> void:
 	_cache_hitbox_shape_defaults(ouroboros_hitbox)
 	_cache_hitbox_shape_defaults(slash_hitbox)
 	_cache_hitbox_shape_defaults(reaper_hitbox)
+	_cache_hitbox_shape_defaults(wolf_hitbox)
 
 func _cache_hitbox_shape_defaults(hitbox: HitboxComponent) -> void:
 	if hitbox == null:
@@ -492,6 +654,7 @@ func _restore_phase_hitbox_shape_defaults() -> void:
 	_restore_hitbox_shape_defaults(ouroboros_hitbox)
 	_restore_hitbox_shape_defaults(slash_hitbox)
 	_restore_hitbox_shape_defaults(reaper_hitbox)
+	_restore_hitbox_shape_defaults(wolf_hitbox)
 
 func _restore_hitbox_shape_defaults(hitbox: HitboxComponent) -> void:
 	if hitbox == null or not _phase_hitbox_shape_defaults.has(hitbox):
@@ -539,6 +702,7 @@ func _sync_hurtbox_flip() -> void:
 	_sync_area_flip(ouroboros_hitbox)
 	_sync_area_flip(slash_hitbox)
 	_sync_area_flip(reaper_hitbox)
+	_sync_area_flip(wolf_hitbox)
 
 func _sync_area_flip(area: Area2D) -> void:
 	if area == null:
