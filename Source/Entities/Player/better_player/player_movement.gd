@@ -6,13 +6,11 @@ extends Node
 @export var knockback_decay: float = 800.0
 @export var _player: CharacterBody2D
 
-
 var knockback: Vector2 = Vector2.ZERO
 var can_dash: bool = true
 
 var blitz_multiplier: float = 1.0
 var is_blitzing: bool = false
-
 
 func setup(player: CharacterBody2D) -> void:
 	_player = player
@@ -60,10 +58,9 @@ func _perform_blitz() -> void:
 	can_dash = false
 	is_blitzing = true
 
-	blitz_multiplier = 6.0  # adjust feel (4–10 typical)
-	_player.sprite_manager.modulate = Color(1, 0, 1)
-
-	await _player.get_tree().create_timer(0.12).timeout
+	blitz_multiplier = 9.0  # adjust feel (4–10 typical)
+	_player.get_node("SpriteManager/PlayerSprites").modulate = Color(1, 0, 1)
+	await _player.get_tree().create_timer(0.06).timeout
 
 	blitz_multiplier = 1.0
 	is_blitzing = false
