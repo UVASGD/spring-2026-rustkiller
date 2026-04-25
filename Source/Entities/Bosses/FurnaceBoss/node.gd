@@ -7,10 +7,10 @@ func on_enter():
 		animator.play("RESET")
 		animator.advance(0.0)
 
-	var active_animation := _get_active_animation_name()
+	var active_animation := get_active_animation_name()
 	animation = active_animation
 	animator.play(active_animation)
-	timer = animator.get_animation(active_animation).length
+	timer = 0.1
 
 func update(delta):
 	timer -= delta
@@ -21,11 +21,10 @@ func check_transition(_delta) -> TransitionData:
 		if alive_state and alive_state.has_method("get_next_attack"):
 			return TransitionData.new(true, alive_state.get_next_attack())
 		return TransitionData.new(true, "Charge")
-		
 
 	return TransitionData.new(false, "")
 
-func _get_active_animation_name() -> String:
+func get_active_animation_name() -> String:
 	if animation == "idle_1" and character and character.has_method("is_phase_2") and character.is_phase_2():
 		return "idle_2"
 	return animation
