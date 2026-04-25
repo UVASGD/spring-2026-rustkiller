@@ -19,7 +19,10 @@ func check_transition(_delta: float) -> TransitionData:
 	if character and character.has_method("should_enter_player_phase") and character.should_enter_player_phase():
 		return TransitionData.new(true, "ReaperExit")
 	if works_longer_than(_get_idle_duration()) and character and character.has_method("can_start_reaper_slash") and character.can_start_reaper_slash():
-		return TransitionData.new(true, "ReaperSlash")
+		var next_attack_state := "ReaperSlash"
+		if character.has_method("choose_reaper_attack_state"):
+			next_attack_state = character.choose_reaper_attack_state()
+		return TransitionData.new(true, next_attack_state)
 	return TransitionData.new(false, "")
 
 func _get_reaper_idle_animation() -> String:

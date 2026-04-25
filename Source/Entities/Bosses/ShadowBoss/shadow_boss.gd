@@ -4,6 +4,7 @@ class_name ShadowBoss
 const PLAYER_GROUP: StringName = "PLAYER"
 const SHADOW_SKULL_SCENE := preload("res://Source/Entities/Projectiles/ShadowSkull/shadow_skull.tscn")
 const SHADOW_BAT_SCENE := preload("res://Source/Entities/Projectiles/ShadowBat/shadow_bat.tscn")
+const REAPER_PROJECTILE_SCENE := preload("res://Source/Entities/Projectiles/Reaper/reaper_projectile.tscn")
 
 @export var player: CharacterBody2D
 @export var light_platform_path: NodePath
@@ -21,10 +22,17 @@ const SHADOW_BAT_SCENE := preload("res://Source/Entities/Projectiles/ShadowBat/s
 @export var reaper_disintegrate_animation: StringName = &"r_disintegrate"
 @export var reaper_idle_animation: StringName = &"r_idle"
 @export var reaper_slash_animation: StringName = &"r_slash"
+@export var reaper_triple_animation: StringName = &"r_triple"
+@export var reaper_projectile_slash_animation: StringName = &"r_proj_slash"
 @export var reaper_idle_duration := 0.8
 @export var reaper_move_speed := 180.0
 @export var reaper_slash_damage := 25.0
 @export var reaper_slash_cooldown := 1.2
+@export var reaper_projectile_damage := 18.0
+@export var reaper_projectile_speed := 450.0
+@export var reaper_projectile_lifetime := 4.0
+@export var reaper_projectile_attack_side_padding := 84.0
+@export var reaper_projectile_volley_count := 3
 
 @export_group("Animal")
 @export var animal_idle_duration := 1.25
@@ -59,6 +67,7 @@ const SHADOW_BAT_SCENE := preload("res://Source/Entities/Projectiles/ShadowBat/s
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var animated_sprite: AnimatedSprite2D = get_node_or_null("Visuals/AnimatedSprite2D")
 @onready var visuals: Node2D = $Visuals
+@onready var projectile_origin: Marker2D = $Visuals/projectile_origin
 @onready var light_circle: Sprite2D = $LightCircle
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var hurtbox_component: HurtboxComponent = $HurtboxComponent
@@ -80,6 +89,8 @@ var _reaper_phase_complete := false
 var _player_phase_active := false
 var _player_phase_switch_ready := false
 var _reaper_slash_should_stop := false
+var _reaper_triple_should_follow_target := false
+var _reaper_attack_index := 0
 var _machine: ShadowBossMachine
 var _machine_intermission_active := false
 var _machine_waiting_for_defeat := false
@@ -193,6 +204,12 @@ func can_start_reaper_slash() -> bool:
 func begin_reaper_slash_cooldown() -> void:
 	_reaper_slash_cooldown_remaining = reaper_slash_cooldown
 
+func choose_reaper_attack_state() -> String:
+	var attack_states := ["ReaperSlash", "ReaperProjectileSlash", "ReaperTriple"]
+	var next_state: String = attack_states[_reaper_attack_index % attack_states.size()]
+	_reaper_attack_index = (_reaper_attack_index + 1) % attack_states.size()
+	return next_state
+
 func can_start_range() -> bool:
 	return has_target() and _range_cooldown_remaining <= 0.0
 
@@ -213,6 +230,7 @@ func enter_reaper_phase() -> void:
 	_reaper_phase_complete = false
 	_machine_pending_phase = ""
 	reset_reaper_slash_movement()
+	_reaper_attack_index = 0
 	_restore_after_machine_intermission()
 	enable_phase_hitboxes()
 	stop_motion()
@@ -229,6 +247,7 @@ func enter_player_phase() -> void:
 	_reaper_phase_complete = false
 	_machine_pending_phase = ""
 	reset_reaper_slash_movement()
+	_reaper_attack_index = 0
 	_restore_after_machine_intermission()
 	enable_phase_hitboxes()
 	stop_motion()
@@ -267,8 +286,17 @@ func get_reaper_idle_animation() -> String:
 func get_reaper_slash_animation() -> String:
 	return String(reaper_slash_animation)
 
+func get_reaper_triple_animation() -> String:
+	return String(reaper_triple_animation)
+
+func get_reaper_projectile_slash_animation() -> String:
+	return String(reaper_projectile_slash_animation)
+
 func get_reaper_idle_duration() -> float:
 	return maxf(reaper_idle_duration, 0.0)
+
+func get_reaper_projectile_volley_count() -> int:
+	return maxi(reaper_projectile_volley_count, 1)
 
 func animal_move_toward_target(delta: float) -> void:
 	if not has_target():
@@ -282,6 +310,15 @@ func animal_move_toward_target(delta: float) -> void:
 
 func is_near_animal_attack_target() -> bool:
 	return has_target() and distance_to_target() <= animal_attack_stop_distance
+
+func triple_attack() -> void:
+	_reaper_triple_should_follow_target = false
+
+func begin_reaper_triple_follow() -> void:
+	_reaper_triple_should_follow_target = true
+
+func should_follow_during_reaper_triple() -> bool:
+	return _reaper_triple_should_follow_target
 
 func reaper_move_toward_target(delta: float) -> void:
 	if not has_target():
@@ -539,6 +576,48 @@ func should_stop_reaper_slash_movement() -> bool:
 func reset_reaper_slash_movement() -> void:
 	_reaper_slash_should_stop = false
 
+func move_to_reaper_projectile_attack_side() -> void:
+	global_position = _get_reaper_projectile_attack_position()
+	stop_motion()
+	face_target()
+
+func spawn_reaper_projectile() -> void:
+	if not has_target():
+		return
+
+	var projectile := REAPER_PROJECTILE_SCENE.instantiate()
+	if projectile is Node2D:
+		var projectile_node := projectile as Node2D
+		var projectile_scale := projectile_node.scale
+		projectile_scale.x = visuals.scale.x
+		projectile_node.scale = projectile_scale
+
+	var projectile_hitbox := HitboxComponent.get_child_component(projectile)
+	if projectile_hitbox:
+		projectile_hitbox.init(reaper_projectile_damage, "boss")
+
+	var motion_component := ProjectileMotionComponent.get_child_component(projectile)
+	var spawn_position := projectile_origin.global_position if projectile_origin != null else global_position
+	var direction_to_target := (player.global_position - spawn_position).normalized()
+	if direction_to_target == Vector2.ZERO:
+		direction_to_target = Vector2.LEFT if visuals.scale.x > 0.0 else Vector2.RIGHT
+
+	if motion_component:
+		motion_component.shoot(
+			spawn_position,
+			direction_to_target,
+			reaper_projectile_speed,
+			reaper_projectile_lifetime
+		)
+
+	projectile.add_to_group("shadow_projectile")
+
+	var current_scene := get_tree().current_scene
+	if current_scene:
+		current_scene.add_child(projectile)
+	else:
+		add_child(projectile)
+
 func mark_reaper_phase_complete() -> void:
 	_reaper_phase_complete = true
 
@@ -627,6 +706,30 @@ func _find_machine() -> ShadowBossMachine:
 		return null
 
 	return current_scene.find_child("ShadowBossMachine", true, false) as ShadowBossMachine
+
+func _get_reaper_projectile_attack_position() -> Vector2:
+	var side_sign := _get_reaper_projectile_attack_side_sign()
+	var attack_position := global_position
+
+	if _light_platform != null and _light_platform.texture != null:
+		var platform_scale := _light_platform.global_transform.get_scale()
+		var half_width := _light_platform.texture.get_size().x * absf(platform_scale.x) * 0.5
+		var horizontal_extent := maxf(half_width - reaper_projectile_attack_side_padding, 0.0)
+		attack_position.x = _light_platform.global_position.x + side_sign * horizontal_extent
+	else:
+		attack_position.x += side_sign * 260.0
+
+	if has_target():
+		attack_position.y = player.global_position.y
+
+	return attack_position
+
+func _get_reaper_projectile_attack_side_sign() -> float:
+	if not has_target():
+		return -1.0 if randf() < 0.5 else 1.0
+
+	var arena_center_x := _light_platform.global_position.x if _light_platform != null else player.global_position.x
+	return -1.0 if player.global_position.x >= arena_center_x else 1.0
 
 func _should_begin_machine_intermission() -> bool:
 	if _machine_intermission_active:
