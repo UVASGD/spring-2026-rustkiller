@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://3vu6ojxhdq2j"]
+
+[ext_resource type="Texture2D" uid="uid://bvtbe7xv6am45" path="res://Source/Resources/Images/Screenshot 2025-12-20 181127.png" id="1_gav6f"]
+[ext_resource type="Script" uid="uid://crvq5t6umsm1v" path="res://Source/Entities/Bosses/TutorialBoss/tutorial_boss.gd" id="1_tbd2v"]
+[ext_resource type="PackedScene" uid="uid://cccn2edq2kj7x" path="res://Source/Entities/Components/HealthComponent/health_component.tscn" id="2_gd3fc"]
+[ext_resource type="PackedScene" uid="uid://ccu0np30bscvr" path="res://Source/Entities/Components/HurtboxComponent/hurtbox_component.tscn" id="3_a5380"]
+[ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="4_tbd2v"]
+[ext_resource type="Script" uid="uid://b3yu3iberjsid" path="res://Source/Entities/Bosses/TutorialBoss/tutorial_boss_hfsm.gd" id="5_gd3fc"]
+[ext_resource type="Script" uid="uid://fn0266dvon3j" path="res://Source/Entities/Bosses/TutorialBoss/idle.gd" id="6_a5380"]
+[ext_resource type="PackedScene" uid="uid://csvmkjqtav4p3" path="res://Source/Entities/Components/HurtFlashComponent/hurt_flash_component.tscn" id="8_vn218"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nic1j"]
+size = Vector2(55, 68)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vn218"]
+size = Vector2(54, 68)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iqf1j"]
+size = Vector2(55, 68)
+
+[node name="TutorialBoss" type="CharacterBody2D" unique_id=416644281 groups=["boss"]]
+script = ExtResource("1_tbd2v")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=201478837]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_gav6f")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1056622060]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_nic1j")
+
+[node name="HealthComponent" parent="." unique_id=1949926722 instance=ExtResource("2_gd3fc")]
+max_health = 999999999.0
+
+[node name="HurtboxComponent" parent="." unique_id=1472444395 node_paths=PackedStringArray("health_component") instance=ExtResource("3_a5380")]
+health_component = NodePath("../HealthComponent")
+entity_name = "boss"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=1807704220]
+shape = SubResource("RectangleShape2D_vn218")
+
+[node name="HitboxComponent" parent="." unique_id=663311557 instance=ExtResource("4_tbd2v")]
+hit_owner = "boss"
+knockback_strength = 0.0
+damage_enabled = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=1698510240]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_iqf1j")
+
+[node name="TutorialBossHFSM" type="Node" parent="." unique_id=1091599970 node_paths=PackedStringArray("animator", "character")]
+script = ExtResource("5_gd3fc")
+animator = NodePath("../AnimationPlayer")
+character = NodePath("..")
+
+[node name="Idle" type="Node" parent="TutorialBossHFSM" unique_id=406891399]
+script = ExtResource("6_a5380")
+move_name = "Idle"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1638710198]
+
+[node name="HurtFlashComponent" parent="." unique_id=36999039 node_paths=PackedStringArray("hurtbox_component", "sprite") instance=ExtResource("8_vn218")]
+hurtbox_component = NodePath("../HurtboxComponent")
+sprite = NodePath("../Sprite2D")
