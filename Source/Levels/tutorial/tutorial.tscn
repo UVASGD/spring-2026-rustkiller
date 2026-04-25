@@ -1,0 +1,575 @@
+[gd_scene format=3 uid="uid://b8xomdfnkawdc"]
+
+[ext_resource type="Script" uid="uid://fb2dxk6ifnmk" path="res://Source/Levels/test_level_parallax.gd" id="1_6nads"]
+[ext_resource type="Script" uid="uid://np8yjxnxxm8m" path="res://Source/Entities/Components/LockOnComponent/lockon_system.gd" id="1_gqqxm"]
+[ext_resource type="Texture2D" uid="uid://cdkm5mxrhden3" path="res://Source/Entities/Environment/StageOne/Art/pillar.png" id="2_6nads"]
+[ext_resource type="Texture2D" uid="uid://x8n2aq26kuv7" path="res://Source/Entities/Environment/StageOne/Art/stagebackground.png" id="3_r5c6j"]
+[ext_resource type="Texture2D" uid="uid://bktdkuma36eod" path="res://Source/Entities/Environment/StageOne/Art/Stage.png" id="4_qlr5y"]
+[ext_resource type="Texture2D" uid="uid://dhc3xltm4mims" path="res://Source/Entities/Environment/StageOne/Art/offwhitebg.png" id="5_qhvqs"]
+[ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="6_3jsnm"]
+[ext_resource type="PackedScene" uid="uid://crvepxby1imcj" path="res://Source/Entities/Player/better_player/better_player.tscn" id="7_b8u4h"]
+[ext_resource type="PackedScene" uid="uid://3vu6ojxhdq2j" path="res://Source/Entities/Bosses/TutorialBoss/tutorial_boss.tscn" id="10_qhvqs"]
+[ext_resource type="Script" uid="uid://cu3uv3luomysc" path="res://Source/Levels/move_zone.gd" id="10_qlr5y"]
+[ext_resource type="Script" uid="uid://cllob85dpu7s7" path="res://Source/Levels/tutorial/tutorial_manager.gd" id="10_r5c6j"]
+[ext_resource type="PackedScene" uid="uid://cdvbfv2n8bbaf" path="res://Source/Entities/Projectiles/Bullets/bullet.tscn" id="11_3jsnm"]
+
+[sub_resource type="Environment" id="Environment_k3slf"]
+background_mode = 3
+glow_enabled = true
+glow_hdr_threshold = 0.1
+adjustment_enabled = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s5kf1"]
+size = Vector2(24.600004, 12.145748)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_r5c6j"]
+radius = 28.301943
+
+[sub_resource type="Gradient" id="Gradient_r5c6j"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qlr5y"]
+gradient = SubResource("Gradient_r5c6j")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="Tutorial" type="Node2D" unique_id=1580577089]
+script = ExtResource("1_6nads")
+
+[node name="LockOnSystem" type="Node2D" parent="." unique_id=2026474943 node_paths=PackedStringArray("camera", "player")]
+z_index = 1
+script = ExtResource("1_gqqxm")
+camera = NodePath("../Camera2D")
+player = NodePath("../BetterPlayer")
+lerp_speed = 10.0
+padding = 300.0
+shake_magnitude = 40.0
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1373312596]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1789390112]
+environment = SubResource("Environment_k3slf")
+
+[node name="Environment" type="Node2D" parent="." unique_id=1300038839]
+
+[node name="Pillar3" type="Sprite2D" parent="Environment" unique_id=427578839]
+modulate = Color(0.79521304, 0.901673, 1, 1)
+position = Vector2(539.00006, -231)
+scale = Vector2(3.3981662, 9.544174)
+texture = ExtResource("2_6nads")
+
+[node name="Pillar" type="Sprite2D" parent="Environment" unique_id=1268386373]
+modulate = Color(0.79521304, 0.901673, 1, 1)
+position = Vector2(941, -177)
+rotation = -0.2617994
+scale = Vector2(9.398168, 26.395927)
+texture = ExtResource("2_6nads")
+
+[node name="Gate" type="Sprite2D" parent="Environment" unique_id=1910634374]
+modulate = Color(0.79521304, 0.901673, 1, 1)
+position = Vector2(-188, 4260.9995)
+rotation = 0.5235988
+scale = Vector2(19.134907, 19.134907)
+texture = ExtResource("3_r5c6j")
+
+[node name="Pillar2" type="Sprite2D" parent="Environment" unique_id=55961884]
+modulate = Color(0.79521304, 0.901673, 1, 1)
+position = Vector2(1254, -443.00003)
+rotation = -0.2617994
+scale = Vector2(9.398168, 26.395927)
+texture = ExtResource("2_6nads")
+
+[node name="Gate2" type="Sprite2D" parent="Environment" unique_id=286196760]
+modulate = Color(0.79607844, 0.9019608, 1, 0.56078434)
+position = Vector2(1304.0001, 2062)
+rotation = -0.2617994
+scale = Vector2(10.6624155, 10.6624155)
+texture = ExtResource("3_r5c6j")
+
+[node name="Pillar4" type="Sprite2D" parent="Environment" unique_id=1955495983]
+modulate = Color(0.79607844, 0.9019608, 1, 0.50980395)
+z_index = 1
+position = Vector2(-632, 34.999985)
+rotation = 0.7853982
+scale = Vector2(9.398168, 26.395927)
+texture = ExtResource("2_6nads")
+
+[node name="Platform" type="Sprite2D" parent="Environment" unique_id=364582673]
+scale = Vector2(5.6400003, 1.235)
+texture = ExtResource("4_qlr5y")
+
+[node name="Wall3" type="StaticBody2D" parent="Environment/Platform" unique_id=1748229114]
+position = Vector2(0, 77.73279)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall3" unique_id=1765891583]
+position = Vector2(-49.4, -97.165985)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall" type="StaticBody2D" parent="Environment/Platform" unique_id=2049661888]
+position = Vector2(0, -46.963562)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall" unique_id=609212035]
+position = Vector2(0.09999924, 41.70041)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall2" type="StaticBody2D" parent="Environment/Platform" unique_id=494144119]
+position = Vector2(0, -46.963562)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall2" unique_id=81001393]
+position = Vector2(-24.400002, 35.627533)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall4" type="StaticBody2D" parent="Environment/Platform" unique_id=1610094695]
+position = Vector2(0, 77.73279)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall4" unique_id=76048617]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall5" type="StaticBody2D" parent="Environment/Platform" unique_id=1142507196]
+position = Vector2(0, 77.73279)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall5" unique_id=846403712]
+position = Vector2(-49.4, -97.165985)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall6" type="StaticBody2D" parent="Environment/Platform" unique_id=923386912]
+position = Vector2(0, -46.963562)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall6" unique_id=1057356205]
+position = Vector2(0.09999924, 41.70041)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall7" type="StaticBody2D" parent="Environment/Platform" unique_id=82471582]
+position = Vector2(0, -46.963562)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall7" unique_id=88565042]
+position = Vector2(-24.400002, 35.627533)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall8" type="StaticBody2D" parent="Environment/Platform" unique_id=15418826]
+position = Vector2(0, 77.73279)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall8" unique_id=627149375]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall9" type="StaticBody2D" parent="Environment/Platform" unique_id=1938804338]
+position = Vector2(-21.631205, 65.58704)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall9" unique_id=1041391664]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall10" type="StaticBody2D" parent="Environment/Platform" unique_id=1756100173]
+position = Vector2(-38.829784, 49.39271)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall10" unique_id=1284059729]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall11" type="StaticBody2D" parent="Environment/Platform" unique_id=1911922672]
+position = Vector2(-50.1773, 29.959515)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall11" unique_id=2140700167]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall12" type="StaticBody2D" parent="Environment/Platform" unique_id=1019223291]
+position = Vector2(-63.652477, 19.433199)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall12" unique_id=40243744]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall13" type="StaticBody2D" parent="Environment/Platform" unique_id=773272731]
+position = Vector2(-70.92198, 3.238865)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall13" unique_id=663193494]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall14" type="StaticBody2D" parent="Environment/Platform" unique_id=568245432]
+position = Vector2(-77.48226, -17.004047)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall14" unique_id=1508813884]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall15" type="StaticBody2D" parent="Environment/Platform" unique_id=1376041098]
+position = Vector2(-89.184395, -33.19838)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall15" unique_id=84184069]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall16" type="StaticBody2D" parent="Environment/Platform" unique_id=103045679]
+position = Vector2(-92.19857, -52.631577)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall16" unique_id=1067591286]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall17" type="StaticBody2D" parent="Environment/Platform" unique_id=690088542]
+position = Vector2(-94.68085, -73.684204)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall17" unique_id=2082856960]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall18" type="StaticBody2D" parent="Environment/Platform" unique_id=887483504]
+position = Vector2(-94.50354, -106.88259)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall18" unique_id=1570468735]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall19" type="StaticBody2D" parent="Environment/Platform" unique_id=1715145852]
+position = Vector2(-88.82978, -131.17409)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall19" unique_id=163798041]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall20" type="StaticBody2D" parent="Environment/Platform" unique_id=109583526]
+position = Vector2(-78.7234, -153.84615)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall20" unique_id=1629591691]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall21" type="StaticBody2D" parent="Environment/Platform" unique_id=836137607]
+position = Vector2(-64.893616, -177.32794)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall21" unique_id=1466615211]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall22" type="StaticBody2D" parent="Environment/Platform" unique_id=144030182]
+position = Vector2(-45.744682, -200)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall22" unique_id=367969276]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall23" type="StaticBody2D" parent="Environment/Platform" unique_id=1562642804]
+position = Vector2(-23.936167, -220.24292)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall23" unique_id=509580472]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall24" type="StaticBody2D" parent="Environment/Platform" unique_id=735893889]
+position = Vector2(2.1276588, -232.38867)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall24" unique_id=731478528]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall25" type="StaticBody2D" parent="Environment/Platform" unique_id=1485523073]
+position = Vector2(26.241133, -241.29555)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall25" unique_id=353471407]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall26" type="StaticBody2D" parent="Environment/Platform" unique_id=378554731]
+position = Vector2(50.88652, -248.583)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall26" unique_id=17999609]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall27" type="StaticBody2D" parent="Environment/Platform" unique_id=1028619769]
+position = Vector2(75.88652, -248.583)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall27" unique_id=294017348]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall28" type="StaticBody2D" parent="Environment/Platform" unique_id=1155368140]
+position = Vector2(99.82269, -246.15384)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall28" unique_id=1818501109]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall29" type="StaticBody2D" parent="Environment/Platform" unique_id=1284301151]
+position = Vector2(124.29078, -241.29553)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall29" unique_id=43977540]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall30" type="StaticBody2D" parent="Environment/Platform" unique_id=1878598407]
+position = Vector2(146.8085, -233.19836)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall30" unique_id=313312659]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall31" type="StaticBody2D" parent="Environment/Platform" unique_id=1556556992]
+position = Vector2(164.539, -226.72066)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall31" unique_id=1503829348]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall32" type="StaticBody2D" parent="Environment/Platform" unique_id=1045692593]
+position = Vector2(179.25531, -221.05264)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall32" unique_id=267108834]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall33" type="StaticBody2D" parent="Environment/Platform" unique_id=36913364]
+position = Vector2(188.65247, -208.90688)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall33" unique_id=525841866]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall34" type="StaticBody2D" parent="Environment/Platform" unique_id=1722326763]
+position = Vector2(203.01416, -195.95142)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall34" unique_id=1883390576]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall35" type="StaticBody2D" parent="Environment/Platform" unique_id=79230530]
+position = Vector2(216.31206, -180.5668)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall35" unique_id=1625177970]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall36" type="StaticBody2D" parent="Environment/Platform" unique_id=251521535]
+position = Vector2(228.90068, -170.04048)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall36" unique_id=563419713]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall37" type="StaticBody2D" parent="Environment/Platform" unique_id=403623805]
+position = Vector2(243.0851, -144.93927)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall37" unique_id=325540904]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall38" type="StaticBody2D" parent="Environment/Platform" unique_id=1439695317]
+position = Vector2(250.17729, -110.12146)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall38" unique_id=2087898517]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall39" type="StaticBody2D" parent="Environment/Platform" unique_id=1264998428]
+position = Vector2(250.17729, -65.58705)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall39" unique_id=1743424502]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall40" type="StaticBody2D" parent="Environment/Platform" unique_id=180270995]
+position = Vector2(242.55318, -24.2915)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall40" unique_id=424044884]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall41" type="StaticBody2D" parent="Environment/Platform" unique_id=1193926992]
+position = Vector2(234.92906, -4.8582993)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall41" unique_id=8786913]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall42" type="StaticBody2D" parent="Environment/Platform" unique_id=1242702577]
+position = Vector2(225.7092, 13.7651825)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall42" unique_id=184064067]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall43" type="StaticBody2D" parent="Environment/Platform" unique_id=1034531660]
+position = Vector2(215.78012, 34.008095)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall43" unique_id=1282297895]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall44" type="StaticBody2D" parent="Environment/Platform" unique_id=245992345]
+position = Vector2(202.48225, 46.153847)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall44" unique_id=1538798143]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall45" type="StaticBody2D" parent="Environment/Platform" unique_id=1181480102]
+position = Vector2(186.87943, 62.34818)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall45" unique_id=474656682]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall46" type="StaticBody2D" parent="Environment/Platform" unique_id=244773284]
+position = Vector2(170.74467, 75.30364)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall46" unique_id=1258076685]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall47" type="StaticBody2D" parent="Environment/Platform" unique_id=1718329724]
+position = Vector2(153.01418, 87.449394)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall47" unique_id=747796570]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall48" type="StaticBody2D" parent="Environment/Platform" unique_id=1699679769]
+position = Vector2(132.0922, 93.11741)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall48" unique_id=1850252726]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall49" type="StaticBody2D" parent="Environment/Platform" unique_id=2144599721]
+position = Vector2(99.11347, 102.02429)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall49" unique_id=446026016]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Wall50" type="StaticBody2D" parent="Environment/Platform" unique_id=1137770885]
+position = Vector2(111.17021, 102.83401)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform/Wall50" unique_id=1154197787]
+position = Vector2(-75, -103.643715)
+shape = SubResource("RectangleShape2D_s5kf1")
+debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
+
+[node name="Offwhitebg" type="Sprite2D" parent="Environment" unique_id=1494647168]
+z_index = -1
+position = Vector2(-66.33348, -958.49994)
+scale = Vector2(2.5097225, 2.5097222)
+texture = ExtResource("5_qhvqs")
+
+[node name="Ashes" type="Sprite2D" parent="Environment" unique_id=676473920]
+z_index = -1
+position = Vector2(66.444565, -791.5)
+scale = Vector2(1.8736109, 1.8736111)
+texture = ExtResource("6_3jsnm")
+
+[node name="RainParticles" type="Node2D" parent="Environment" unique_id=449870035]
+position = Vector2(0, -388)
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Environment/RainParticles" unique_id=19854130]
+position = Vector2(7, -300)
+amount = 600
+lifetime = 2.0
+emission_shape = 3
+emission_rect_extents = Vector2(1000, 1)
+gravity = Vector2(-200, 980)
+scale_amount_max = 2.5
+color = Color(0, 0, 0, 1)
+
+[node name="BetterPlayer" parent="." unique_id=462766173 instance=ExtResource("7_b8u4h")]
+z_index = 1
+position = Vector2(-492, -143)
+
+[node name="TutorialManager" type="CanvasLayer" parent="." unique_id=1807565938 node_paths=PackedStringArray("player")]
+script = ExtResource("10_r5c6j")
+dummy_scene = ExtResource("10_qhvqs")
+projectile_scene = ExtResource("11_3jsnm")
+player = NodePath("../BetterPlayer")
+
+[node name="TutorialLabel" type="Label" parent="TutorialManager" unique_id=611528338]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -23.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HintLabel" type="Label" parent="TutorialManager" unique_id=1192633218]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -49.0
+offset_right = 20.0
+offset_bottom = -26.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MoveZone" type="Area2D" parent="." unique_id=1599732090]
+position = Vector2(0, -153)
+script = ExtResource("10_qlr5y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MoveZone" unique_id=1123668463]
+shape = SubResource("CircleShape2D_r5c6j")
+
+[node name="PointLight2D" type="PointLight2D" parent="MoveZone" unique_id=2071218665]
+texture = SubResource("GradientTexture2D_qlr5y")
+height = 50.0
+
+[node name="DummySpawnPoint" type="Marker2D" parent="." unique_id=2101615523]
+position = Vector2(348, -307)
+
+[node name="ProjectileSpawner" type="Node2D" parent="." unique_id=1283832444]
+position = Vector2(353, -139)
