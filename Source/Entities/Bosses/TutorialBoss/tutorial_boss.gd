@@ -5,8 +5,8 @@ class_name Dummy
 @onready var animation_player = $AnimationPlayer
 @onready var health_component = $HealthComponent as HealthComponent
 
-@onready var attack_hitbox: HitboxComponent = $attack_hitbox
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var attack_hitbox: HitboxComponent = $HitboxComponent
 
 func _ready() -> void:
 	state_machine.character = self
