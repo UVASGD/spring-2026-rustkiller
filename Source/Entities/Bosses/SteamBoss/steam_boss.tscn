@@ -1,0 +1,117 @@
+[gd_scene format=3 uid="uid://cqubqt0w5eg8m"]
+
+[ext_resource type="PackedScene" uid="uid://cccn2edq2kj7x" path="res://Source/Entities/Components/HealthComponent/health_component.tscn" id="1_38s4a"]
+[ext_resource type="Script" uid="uid://bmmrsyahlde4e" path="res://Source/Entities/Bosses/SteamBoss/hfsm_steam_boss.gd" id="1_udhqj"]
+[ext_resource type="PackedScene" uid="uid://ccu0np30bscvr" path="res://Source/Entities/Components/HurtboxComponent/hurtbox_component.tscn" id="2_tcsit"]
+[ext_resource type="PackedScene" uid="uid://cmy1ds7wda1qa" path="res://Source/Entities/Components/LockOnComponent/lockon_component.tscn" id="3_djx6a"]
+[ext_resource type="PackedScene" uid="uid://csvmkjqtav4p3" path="res://Source/Entities/Components/HurtFlashComponent/hurt_flash_component.tscn" id="4_j1j5t"]
+[ext_resource type="PackedScene" uid="uid://co3gr1quly52h" path="res://Source/Entities/Components/HFSM/HFSMDebugLabelComponent/HFSMDebugLabelComponent.tscn" id="5_fflm6"]
+[ext_resource type="Script" uid="uid://d4h1cauqkrwoa" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/alive.gd" id="6_j1j5t"]
+[ext_resource type="Script" uid="uid://cf1f40lffva3c" path="res://Source/Entities/Bosses/SteamBoss/steam_hfsm.gd" id="6_udhqj"]
+[ext_resource type="Script" uid="uid://dqodyx6rupre2" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/chase.gd" id="7_agvqu"]
+[ext_resource type="Script" uid="uid://cme2k8xev8rm8" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/idle.gd" id="7_fflm6"]
+[ext_resource type="Script" uid="uid://ddxst2x56mddt" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/dormant.gd" id="8_fflm6"]
+[ext_resource type="Script" uid="uid://ctftg7a4ocw57" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/steam_blast.gd" id="9_k6d11"]
+[ext_resource type="Script" uid="uid://cov6uwa3x5w6o" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/explosive_blast.gd" id="10_k6d11"]
+[ext_resource type="Script" uid="uid://ijtklukgkcb6" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/slash.gd" id="11_qs1b0"]
+[ext_resource type="Script" uid="uid://n173oyr2d0sh" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/lunge.gd" id="12_hbabe"]
+[ext_resource type="Script" uid="uid://cgkmmqeswbdax" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/warp_blast.gd" id="14_dhv1y"]
+[ext_resource type="Texture2D" uid="uid://dpopxngjqj4sd" path="res://Source/Entities/Projectiles/SineProjectile/extremedemon.png" id="16_hbabe"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_agvqu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_iwm71"]
+
+[sub_resource type="Animation" id="Animation_dhv1y"]
+resource_name = "Awaken"
+
+[sub_resource type="Animation" id="Animation_hbabe"]
+resource_name = "idle"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dhv1y"]
+_data = {
+&"Awaken": SubResource("Animation_dhv1y"),
+&"idle": SubResource("Animation_hbabe")
+}
+
+[node name="SteamBoss" type="CharacterBody2D" unique_id=2117672993]
+script = ExtResource("1_udhqj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=619345553]
+shape = SubResource("CircleShape2D_agvqu")
+
+[node name="Visuals" type="Node2D" parent="." unique_id=2115523409]
+
+[node name="HealthComponent" parent="." unique_id=813342211 instance=ExtResource("1_38s4a")]
+
+[node name="HurtboxComponent" parent="." unique_id=1715746792 node_paths=PackedStringArray("health_component") instance=ExtResource("2_tcsit")]
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=1274812075]
+shape = SubResource("CircleShape2D_iwm71")
+
+[node name="LockonComponent" parent="." unique_id=1310222347 instance=ExtResource("3_djx6a")]
+
+[node name="HurtFlashComponent" parent="." unique_id=1236687298 node_paths=PackedStringArray("hurtbox_component", "sprite") instance=ExtResource("4_j1j5t")]
+hurtbox_component = NodePath("../HurtboxComponent")
+sprite = NodePath("../Sprite2D")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1623423611]
+libraries/ = SubResource("AnimationLibrary_dhv1y")
+
+[node name="SteamBossHFSM" type="Node" parent="." unique_id=67305199 node_paths=PackedStringArray("animator", "character")]
+script = ExtResource("6_udhqj")
+animator = NodePath("../AnimationPlayer")
+character = NodePath("..")
+
+[node name="Alive" type="Node" parent="SteamBossHFSM" unique_id=2140677997]
+script = ExtResource("6_j1j5t")
+move_name = "Alive"
+
+[node name="Idle" type="Node" parent="SteamBossHFSM/Alive" unique_id=634059191]
+script = ExtResource("7_fflm6")
+move_name = "Idle"
+animation = "idle"
+
+[node name="Chase" type="Node" parent="SteamBossHFSM/Alive" unique_id=749522464]
+script = ExtResource("7_agvqu")
+move_name = "Chase"
+animation = "idle"
+
+[node name="SteamBlast" type="Node" parent="SteamBossHFSM/Alive" unique_id=853641976]
+script = ExtResource("9_k6d11")
+move_name = "SteamBlast"
+animation = "idle"
+
+[node name="ExplosiveBlast" type="Node" parent="SteamBossHFSM/Alive" unique_id=1855048189]
+script = ExtResource("10_k6d11")
+move_name = "ExplosiveBlast"
+animation = "idle"
+
+[node name="Slash" type="Node" parent="SteamBossHFSM/Alive" unique_id=1634164472]
+script = ExtResource("11_qs1b0")
+move_name = "Slash"
+animation = "idle"
+
+[node name="Lunge" type="Node" parent="SteamBossHFSM/Alive" unique_id=272444599]
+script = ExtResource("12_hbabe")
+move_name = "Lunge"
+animation = "idle"
+
+[node name="WarpBlast" type="Node" parent="SteamBossHFSM/Alive" unique_id=675608776]
+script = ExtResource("14_dhv1y")
+move_name = "WarpBlast"
+animation = "idle"
+
+[node name="Dormant" type="Node" parent="SteamBossHFSM" unique_id=1305096278]
+script = ExtResource("8_fflm6")
+move_name = "Dormant"
+animation = "idle"
+
+[node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 node_paths=PackedStringArray("hfsm") instance=ExtResource("5_fflm6")]
+hfsm = NodePath("../SteamBossHFSM")
+
+[node name="Awaken" type="AnimationPlayer" parent="." unique_id=39504174]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=398278689]
+texture = ExtResource("16_hbabe")
