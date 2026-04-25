@@ -2344,7 +2344,7 @@ size = Vector2(207, 136.63947)
 size = Vector2(146, 171.61734)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_combo_hitbox"]
-size = Vector2(150, 170)
+size = Vector2(150, 91.86534)
 
 [sub_resource type="Animation" id="Animation_cnbgx"]
 resource_name = "Pause"
@@ -3085,6 +3085,7 @@ hit_owner = "boss"
 knockback_strength = 550.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ComboHitboxComponent" unique_id=277989492]
+position = Vector2(0, -39.06733)
 shape = SubResource("RectangleShape2D_combo_hitbox")
 disabled = true
 
@@ -3171,7 +3172,6 @@ animation = "combo_2"
 libraries/ = SubResource("AnimationLibrary_1guws")
 
 [node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 node_paths=PackedStringArray("hfsm") instance=ExtResource("17_8xws3")]
-visible = false
 offset_left = 31.0
 offset_top = -52.0
 offset_right = 134.0

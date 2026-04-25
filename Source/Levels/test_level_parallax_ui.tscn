@@ -681,5 +681,6 @@ libraries/ = SubResource("AnimationLibrary_keqbv")
 
 [node name="BetterPlayer2" parent="." unique_id=462766173 instance=ExtResource("9_apfd6")]
 position = Vector2(85, -257)
+hp = 1000
 
 [connection signal="timeout" from="CanvasLayer/Healthbar/Timer" to="CanvasLayer/Healthbar" method="_on_timer_timeout"]
