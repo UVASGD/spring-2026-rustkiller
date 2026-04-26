@@ -323,12 +323,14 @@ _data = {
 }
 
 [node name="LavaBoulder" type="Node2D" unique_id=892398662]
+scale = Vector2(2, 2)
 script = ExtResource("1_7ik3p")
 
 [node name="HitboxComponent" parent="." unique_id=174191540 instance=ExtResource("2_5tfk0")]
 monitoring = false
 monitorable = false
 damage = 10.0
+hit_owner = "boss"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=863044118]
 z_index = 1
@@ -352,7 +354,7 @@ texture = ExtResource("4_5tfk0")
 remote_path = NodePath("../../CPUParticles2D")
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1014754607]
-rotation = 1.5707964
+position = Vector2(0, -140)
 emitting = false
 amount = 30
 texture = ExtResource("5_0xgop")

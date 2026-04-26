@@ -520,12 +520,14 @@ scale_amount_max = 2.5
 color = Color(0, 0, 0, 1)
 
 [node name="TankBoss3" parent="." unique_id=1995595152 node_paths=PackedStringArray("player") instance=ExtResource("8_cf83t")]
+z_index = 1
 position = Vector2(499, -230)
 player = NodePath("../BetterPlayer2")
 
 [node name="CanvasLayer" parent="." unique_id=732973211 instance=ExtResource("9_lj8hg")]
 
 [node name="BetterPlayer2" parent="." unique_id=462766173 instance=ExtResource("13_24ma2")]
+z_index = 1
 position = Vector2(85, -257)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=423528841]

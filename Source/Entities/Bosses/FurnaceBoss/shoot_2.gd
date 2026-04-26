@@ -2,6 +2,8 @@ extends HFSM
 
 @export var volley_count := 5
 @export var volley_interval := 0.18
+@export var boulder_duration := 1.4
+@export var boulder_interval := 0.2
 @export var startup_delay := 0.12
 @export var recovery_delay := 0.25
 @export var projectile_rows := 7
@@ -9,11 +11,15 @@ extends HFSM
 
 var volleys_fired := 0
 var timer := 0.0
+var boulder_timer := 0.0
+var total_boulder_time := 0.0
 var in_recovery := false
 
 func on_enter():
 	character.velocity = Vector2.ZERO
-	volleys_fired = 0
+	volleys_fired = 0 
+	boulder_timer = startup_delay
+	total_boulder_time = 0
 	timer = startup_delay
 	in_recovery = false
 	face_player()
@@ -25,15 +31,24 @@ func update(delta):
 
 	if in_recovery:
 		return
+		
+	if total_boulder_time < boulder_duration:
+		total_boulder_time += delta
+		boulder_timer -= delta
+		if boulder_timer <= 0.0:
+			if character.has_method("fire_lava_boulder"):
+				character.fire_lava_boulder()
+			boulder_timer = boulder_interval
 
 	if timer <= 0.0 and volleys_fired < volley_count:
 		if character.has_method("fire_sine_projectile"):
 			character.fire_sine_projectile(projectile_rows, row_spacing)
 		volleys_fired += 1
 		timer = volley_interval
-		if volleys_fired >= volley_count:
-			in_recovery = true
-			timer = recovery_delay
+		
+	if volleys_fired >= volley_count and total_boulder_time >= boulder_duration:
+		in_recovery = true
+		timer = recovery_delay
 
 func check_transition(_delta) -> TransitionData:
 	if in_recovery and timer <= 0.0:
