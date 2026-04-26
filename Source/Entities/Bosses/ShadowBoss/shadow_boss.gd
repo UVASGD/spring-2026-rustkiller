@@ -4,6 +4,9 @@ class_name ShadowBoss
 const PLAYER_GROUP: StringName = "PLAYER"
 const SHADOW_SKULL_SCENE := preload("res://Source/Entities/Projectiles/ShadowSkull/shadow_skull.tscn")
 const SHADOW_BAT_SCENE := preload("res://Source/Entities/Projectiles/ShadowBat/shadow_bat.tscn")
+const REAPER_PROJECTILE_SCENE := preload("res://Source/Entities/Projectiles/Reaper/reaper_projectile.tscn")
+const SHADOW_PORCUPINE_SCENE := preload("res://Source/Entities/Projectiles/ShadowPorcupine/shadow_porcupine.tscn")
+
 
 @export var player: CharacterBody2D
 @export var light_platform_path: NodePath
@@ -11,6 +14,9 @@ const SHADOW_BAT_SCENE := preload("res://Source/Entities/Projectiles/ShadowBat/s
 
 @export_group("Phase")
 @export var start_in_player_phase := false
+@export var player_phase_health := 100.0
+@export var animal_phase_health := 100.0
+@export var reaper_phase_health := 100.0
 @export var animal_idle_animation: StringName = &"animal_idle"
 @export var animal_transform_animation: StringName = &"animal_snake_transform"
 @export var animal_slither_animation: StringName = &"animal_snake_slither"
@@ -21,22 +27,42 @@ const SHADOW_BAT_SCENE := preload("res://Source/Entities/Projectiles/ShadowBat/s
 @export var reaper_disintegrate_animation: StringName = &"r_disintegrate"
 @export var reaper_idle_animation: StringName = &"r_idle"
 @export var reaper_slash_animation: StringName = &"r_slash"
+@export var reaper_triple_animation: StringName = &"r_triple"
+@export var reaper_projectile_slash_animation: StringName = &"r_proj_slash"
 @export var reaper_idle_duration := 0.8
+@export var reaper_post_melee_idle_duration := 1.0
 @export var reaper_move_speed := 180.0
+@export var reaper_post_melee_walk_speed := 90.0
 @export var reaper_slash_damage := 25.0
 @export var reaper_slash_cooldown := 1.2
+@export var reaper_melee_charge_count := 3
+@export var reaper_projectile_damage := 18.0
+@export var reaper_projectile_speed := 450.0
+@export var reaper_projectile_lifetime := 4.0
+@export var reaper_projectile_attack_side_padding := 84.0
+@export var reaper_projectile_volley_count := 3
 
 @export_group("Animal")
 @export var animal_idle_duration := 1.25
 @export var animal_move_speed := 90.0
 @export var animal_attack_stop_distance := 72.0
 @export var animal_attack_damage := 20.0
+@export var animal_wolf_intro_animation: StringName = &"wolf_init"
+@export var animal_wolf_approach_animations: Array[StringName] = [&"wolf_app_1", &"wolf_app_2", &"wolf_app_3"]
+@export var animal_wolf_attack_animations: Array[StringName] = [&"wolf_attack_1", &"wolf_attack_2", &"wolf_attack_3"]
+@export var animal_wolf_circle_radius := 100.0
+@export var animal_porcupine_wave_count := 3
+@export var animal_porcupine_wave_size := 5
+@export var animal_porcupine_wave_interval := 0.35
+@export var animal_porcupine_attack_duration := 1.4
+@export var animal_porcupine_spawn_height := 140.0
 
 @export_group("Movement")
 @export var move_speed := 120.0
 @export var acceleration := 8.0
 @export var orbit_radius := 140.0
 @export var orbit_reengage_radius := 180.0
+@export var phase_transition_teleport_offset := 96.0
 @export var orbit_direction := 1.0
 @export var walk_before_slash_time := 2.0
 @export var slash_damage := 20.0
@@ -59,13 +85,16 @@ const SHADOW_BAT_SCENE := preload("res://Source/Entities/Projectiles/ShadowBat/s
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var animated_sprite: AnimatedSprite2D = get_node_or_null("Visuals/AnimatedSprite2D")
 @onready var visuals: Node2D = $Visuals
+@onready var projectile_origin: Marker2D = $Visuals/projectile_origin
 @onready var light_circle: Sprite2D = $LightCircle
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var hurtbox_component: HurtboxComponent = $HurtboxComponent
 @onready var ouroboros_hitbox: HitboxComponent = $OuroborosHitbox
 @onready var slash_hitbox: HitboxComponent = $PlayerHitbox
 @onready var reaper_hitbox: HitboxComponent = $ReaperHitbox
+@onready var wolf_hitbox: HitboxComponent = $WolfHitbox
 @onready var healthbar: CanvasItem = $Healthbar
+@onready var sfx_manager: SfxManager = $sfx_manager
 
 var _is_invulnerable := false
 var _knockback_velocity := Vector2.ZERO
@@ -80,6 +109,9 @@ var _reaper_phase_complete := false
 var _player_phase_active := false
 var _player_phase_switch_ready := false
 var _reaper_slash_should_stop := false
+var _reaper_triple_should_follow_target := false
+var _reaper_attack_bag: Array[String] = []
+var _last_reaper_attack_state := ""
 var _machine: ShadowBossMachine
 var _machine_intermission_active := false
 var _machine_waiting_for_defeat := false
@@ -88,6 +120,9 @@ var _machine_waiting_for_player_death := false
 var _machine_pending_phase := ""
 var _player_phase_appear_ready := false
 var _phase_hitbox_shape_defaults: Dictionary = {}
+var _animal_wolf_circle_start_angle := 0.0
+var _animal_attack_index := 0
+var _visual_animation_speed_scale := 1.0
 
 func _ready() -> void:
 	if not is_instance_valid(player):
@@ -102,8 +137,10 @@ func _ready() -> void:
 	_configure_ouroboros_hitbox()
 	_configure_slash_hitbox()
 	_configure_reaper_hitbox()
+	_configure_wolf_hitbox()
 	_cache_phase_hitbox_shape_defaults()
 	_sync_hurtbox_flip()
+	_apply_phase_health(_get_active_phase_health())
 
 	if animation_player:
 		animation_player.animation_finished.connect(_on_visual_animation_finished)
@@ -193,6 +230,17 @@ func can_start_reaper_slash() -> bool:
 func begin_reaper_slash_cooldown() -> void:
 	_reaper_slash_cooldown_remaining = reaper_slash_cooldown
 
+func choose_reaper_attack_state() -> String:
+	if _reaper_attack_bag.is_empty():
+		_refill_reaper_attack_bag()
+
+	if _reaper_attack_bag.is_empty():
+		return "ReaperSlash"
+
+	var next_state: String = _reaper_attack_bag.pop_back()
+	_last_reaper_attack_state = next_state
+	return next_state
+
 func can_start_range() -> bool:
 	return has_target() and _range_cooldown_remaining <= 0.0
 
@@ -204,7 +252,7 @@ func should_enter_reaper_phase() -> bool:
 
 func enter_reaper_phase() -> void:
 	if not _reaper_phase_active:
-		_refill_health_for_phase()
+		_refill_health_for_phase(reaper_phase_health)
 	_reaper_phase_active = true
 	_player_phase_active = false
 	_player_phase_appear_ready = false
@@ -212,33 +260,57 @@ func enter_reaper_phase() -> void:
 	_player_phase_switch_ready = false
 	_reaper_phase_complete = false
 	_machine_pending_phase = ""
+	_animal_attack_index = 0
 	reset_reaper_slash_movement()
+	_reaper_attack_bag.clear()
+	_last_reaper_attack_state = ""
 	_restore_after_machine_intermission()
 	enable_phase_hitboxes()
 	stop_motion()
+	if sfx_manager:
+		sfx_manager.play_reaper_arrival_audio()
 
 func should_enter_player_phase() -> bool:
 	return _player_phase_switch_ready
 
 func enter_player_phase() -> void:
 	if not _player_phase_active:
-		_refill_health_for_phase()
+		_refill_health_for_phase(player_phase_health)
 	_player_phase_active = true
 	_reaper_phase_active = false
 	_player_phase_switch_ready = false
 	_reaper_phase_complete = false
 	_machine_pending_phase = ""
 	reset_reaper_slash_movement()
+	_reaper_attack_bag.clear()
+	_last_reaper_attack_state = ""
 	_restore_after_machine_intermission()
 	enable_phase_hitboxes()
 	stop_motion()
+	if sfx_manager:
+		sfx_manager.play_player_arrival_audio()
 
-func _refill_health_for_phase() -> void:
+func _refill_health_for_phase(phase_health: float) -> void:
 	if health_component == null:
 		return
 
 	health_component.has_died = false
-	health_component.health = health_component.max_health
+	_apply_phase_health(phase_health)
+
+func _apply_phase_health(phase_health: float) -> void:
+	if health_component == null:
+		return
+
+	var resolved_phase_health := maxf(phase_health, 1.0)
+	health_component.max_health = resolved_phase_health
+	health_component.health = resolved_phase_health
+
+func _get_active_phase_health() -> float:
+	if _reaper_phase_active:
+		return reaper_phase_health
+	if _player_phase_active:
+		return player_phase_health
+	return animal_phase_health
 
 func get_animal_idle_animation() -> String:
 	return String(animal_idle_animation)
@@ -255,6 +327,100 @@ func get_animal_ouroboros_animation() -> String:
 func get_animal_idle_duration() -> float:
 	return maxf(animal_idle_duration, 0.0)
 
+func get_animal_wolf_intro_animation() -> String:
+	return String(animal_wolf_intro_animation)
+
+func get_animal_wolf_approach_animations() -> Array[String]:
+	var animations: Array[String] = []
+	for animation_name in animal_wolf_approach_animations:
+		animations.append(String(animation_name))
+	return animations
+
+func get_animal_wolf_attack_animations() -> Array[String]:
+	var animations: Array[String] = []
+	for animation_name in animal_wolf_attack_animations:
+		animations.append(String(animation_name))
+	return animations
+
+func get_animal_wolf_circle_radius() -> float:
+	return maxf(animal_wolf_circle_radius, 1.0)
+
+func choose_animal_attack_type() -> String:
+	var attack_types := ["snake", "wolf", "porcupine"]
+	var attack_type: String = attack_types[_animal_attack_index % attack_types.size()]
+	_animal_attack_index = (_animal_attack_index + 1) % attack_types.size()
+	return attack_type
+
+func get_animal_porcupine_wave_count() -> int:
+	return maxi(animal_porcupine_wave_count, 1)
+
+func get_animal_porcupine_wave_size() -> int:
+	return maxi(animal_porcupine_wave_size, 1)
+
+func get_animal_porcupine_wave_interval() -> float:
+	return maxf(animal_porcupine_wave_interval, 0.05)
+
+func get_animal_porcupine_attack_duration() -> float:
+	var minimum_duration := get_animal_porcupine_wave_interval() * float(maxi(get_animal_porcupine_wave_count() - 1, 0)) + 0.4
+	return maxf(animal_porcupine_attack_duration, minimum_duration)
+
+func spawn_porcupine_wave_on_map() -> void:
+	var spawn_positions := _get_animal_porcupine_spawn_positions()
+	for spawn_position in spawn_positions:
+		var porcupine := SHADOW_PORCUPINE_SCENE.instantiate()
+		if porcupine is Node2D:
+			(porcupine as Node2D).global_position = spawn_position
+
+		var projectile_hitbox := HitboxComponent.get_child_component(porcupine)
+		if projectile_hitbox:
+			projectile_hitbox.init(animal_attack_damage, "boss")
+
+		porcupine.add_to_group("shadow_projectile")
+
+		var current_scene := get_tree().current_scene
+		if current_scene:
+			current_scene.add_child(porcupine)
+		else:
+			add_child(porcupine)
+
+func _get_animal_porcupine_spawn_positions() -> Array[Vector2]:
+	var spawn_positions: Array[Vector2] = []
+	var porcupine_count := get_animal_porcupine_wave_size()
+	if porcupine_count <= 0:
+		return spawn_positions
+
+	var center_x := _light_platform.global_position.x if _light_platform != null else global_position.x
+	var center_y := _light_platform.global_position.y if _light_platform != null else global_position.y
+	var half_width := 240.0
+
+	if _light_platform != null and _light_platform.texture != null:
+		var platform_scale := _light_platform.global_transform.get_scale()
+		half_width = _light_platform.texture.get_size().x * absf(platform_scale.x) * 0.5
+
+	var usable_half_width := maxf(half_width - 24.0, 24.0)
+	var min_spacing := minf(usable_half_width * 0.35, 42.0)
+	var max_attempts := porcupine_count * 12
+	var attempts := 0
+	while spawn_positions.size() < porcupine_count and attempts < max_attempts:
+		attempts += 1
+		var spawn_x := randf_range(center_x - usable_half_width, center_x + usable_half_width)
+		var jitter_y := randf_range(-12.0, 12.0)
+		var candidate := Vector2(spawn_x, center_y - animal_porcupine_spawn_height + jitter_y)
+		var is_clear := true
+		for existing_position in spawn_positions:
+			if absf(candidate.x - existing_position.x) < min_spacing:
+				is_clear = false
+				break
+		if is_clear:
+			spawn_positions.append(candidate)
+
+	while spawn_positions.size() < porcupine_count:
+		var spawn_x := randf_range(center_x - usable_half_width, center_x + usable_half_width)
+		var jitter_y := randf_range(-12.0, 12.0)
+		spawn_positions.append(Vector2(spawn_x, center_y - animal_porcupine_spawn_height + jitter_y))
+
+	return spawn_positions
+
 func get_reaper_appear_animation() -> String:
 	return String(reaper_appear_animation)
 
@@ -267,8 +433,26 @@ func get_reaper_idle_animation() -> String:
 func get_reaper_slash_animation() -> String:
 	return String(reaper_slash_animation)
 
+func get_reaper_triple_animation() -> String:
+	return String(reaper_triple_animation)
+
+func get_reaper_projectile_slash_animation() -> String:
+	return String(reaper_projectile_slash_animation)
+
 func get_reaper_idle_duration() -> float:
 	return maxf(reaper_idle_duration, 0.0)
+
+func get_reaper_post_melee_idle_duration() -> float:
+	return maxf(reaper_post_melee_idle_duration, 0.0)
+
+func get_reaper_post_melee_walk_speed() -> float:
+	return maxf(reaper_post_melee_walk_speed, 0.0)
+
+func get_reaper_melee_charge_count() -> int:
+	return maxi(reaper_melee_charge_count, 1)
+
+func get_reaper_projectile_volley_count() -> int:
+	return maxi(reaper_projectile_volley_count, 1)
 
 func animal_move_toward_target(delta: float) -> void:
 	if not has_target():
@@ -283,15 +467,84 @@ func animal_move_toward_target(delta: float) -> void:
 func is_near_animal_attack_target() -> bool:
 	return has_target() and distance_to_target() <= animal_attack_stop_distance
 
+func begin_animal_wolf_circle() -> void:
+	if not has_target():
+		return
+
+	var offset := global_position - player.global_position
+	if is_zero_approx(offset.length_squared()):
+		offset = Vector2.RIGHT * get_animal_wolf_circle_radius()
+
+	_animal_wolf_circle_start_angle = offset.angle()
+	set_animal_wolf_circle_progress(0.0)
+
+func set_animal_wolf_circle_progress(progress: float) -> void:
+	if not has_target():
+		stop_motion()
+		return
+
+	var orbit_progress := clampf(progress, 0.0, 1.0)
+	var orbit_sign := 1.0 if orbit_direction >= 0.0 else -1.0
+	var radius := get_animal_wolf_circle_radius()
+	var angle := _animal_wolf_circle_start_angle + orbit_sign * TAU * orbit_progress
+	var offset := Vector2.RIGHT.rotated(angle) * radius
+	global_position = player.global_position + offset
+	stop_motion()
+
+	var tangent_direction := Vector2(-sin(angle), cos(angle)) * orbit_sign
+	_face_direction(tangent_direction)
+
+func triple_attack() -> void:
+	_reaper_triple_should_follow_target = false
+
+func begin_reaper_triple_follow() -> void:
+	_reaper_triple_should_follow_target = true
+
+func should_follow_during_reaper_triple() -> bool:
+	return _reaper_triple_should_follow_target
+
 func reaper_move_toward_target(delta: float) -> void:
+	_reaper_move_toward_target_with_speed(delta, reaper_move_speed)
+
+func reaper_move_toward_target_post_melee(delta: float) -> void:
+	_reaper_move_toward_target_with_speed(delta, reaper_post_melee_walk_speed)
+
+func _reaper_move_toward_target_with_speed(delta: float, movement_speed: float) -> void:
 	if not has_target():
 		stop_motion()
 		return
 
 	var direction := global_position.direction_to(player.global_position)
-	var desired_velocity := direction * reaper_move_speed
+	var desired_velocity := direction * movement_speed
 	velocity = velocity.move_toward(desired_velocity, acceleration * delta * 100.0)
 	_face_direction(direction)
+
+func reaper_orbit_target(delta: float) -> void:
+	_reaper_orbit_target_with_speed(delta, reaper_move_speed)
+
+func reaper_orbit_target_post_melee(delta: float) -> void:
+	_reaper_orbit_target_with_speed(delta, reaper_post_melee_walk_speed)
+
+func _reaper_orbit_target_with_speed(delta: float, movement_speed: float) -> void:
+	if not has_target():
+		velocity = velocity.move_toward(Vector2.ZERO, acceleration * delta * 100.0)
+		return
+
+	var to_player := player.global_position - global_position
+	var distance := to_player.length()
+	if is_zero_approx(distance):
+		velocity = velocity.move_toward(Vector2.ZERO, acceleration * delta * 100.0)
+		return
+
+	var radial_direction := to_player / distance
+	var tangent_direction := Vector2(-radial_direction.y, radial_direction.x) * signf(orbit_direction)
+	var radius_error := distance - orbit_radius
+	var correction_strength := clampf(radius_error / maxf(orbit_radius, 1.0), -0.65, 0.65)
+	var desired_direction := (tangent_direction + radial_direction * correction_strength).normalized()
+	var desired_velocity := desired_direction * movement_speed
+
+	velocity = velocity.move_toward(desired_velocity, acceleration * delta * 100.0)
+	_face_direction(desired_direction)
 
 func should_use_range_attack() -> bool:
 	return can_start_range() and randf() <= range_attack_chance
@@ -335,6 +588,7 @@ func play_visual_animation(animation_name: String, restart: bool = true) -> void
 		_last_finished_visual_animation = ""
 
 	if animation_player and animation_player.has_animation(animation_name):
+		animation_player.speed_scale = _visual_animation_speed_scale
 		if animation_player.is_playing() and animation_player.current_animation != animation_name:
 			animation_player.stop()
 		if restart or animation_player.current_animation != animation_name:
@@ -342,6 +596,7 @@ func play_visual_animation(animation_name: String, restart: bool = true) -> void
 		return
 
 	if animated_sprite and animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation(animation_name):
+		animated_sprite.speed_scale = _visual_animation_speed_scale
 		if restart or animated_sprite.animation != animation_name:
 			animated_sprite.play(animation_name)
 		elif not animated_sprite.is_playing():
@@ -352,13 +607,25 @@ func play_visual_animation_reverse(animation_name: String) -> void:
 	_last_finished_visual_animation = ""
 
 	if animation_player and animation_player.has_animation(animation_name):
+		animation_player.speed_scale = _visual_animation_speed_scale
 		if animation_player.is_playing() and animation_player.current_animation != animation_name:
 			animation_player.stop()
 		animation_player.play_backwards(animation_name)
 		return
 
 	if animated_sprite and animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation(animation_name):
+		animated_sprite.speed_scale = _visual_animation_speed_scale
 		animated_sprite.play(animation_name, -1.0, true)
+
+func set_visual_animation_speed_scale(speed_scale: float) -> void:
+	_visual_animation_speed_scale = maxf(speed_scale, 0.01)
+	if animation_player:
+		animation_player.speed_scale = _visual_animation_speed_scale
+	if animated_sprite:
+		animated_sprite.speed_scale = _visual_animation_speed_scale
+
+func reset_visual_animation_speed_scale() -> void:
+	set_visual_animation_speed_scale(1.0)
 
 func get_visual_animation_length(animation_name: String, fallback: float = 0.0) -> float:
 	if animation_player and animation_player.has_animation(animation_name):
@@ -407,15 +674,25 @@ func _configure_reaper_hitbox() -> void:
 	reaper_hitbox.damage = reaper_slash_damage
 	reaper_hitbox.damage_enabled = true
 
+func _configure_wolf_hitbox() -> void:
+	if wolf_hitbox == null:
+		return
+
+	wolf_hitbox.hit_owner = "boss"
+	wolf_hitbox.damage = animal_attack_damage
+	wolf_hitbox.damage_enabled = true
+
 func disable_phase_hitboxes() -> void:
 	_disable_hitbox_collision_shapes(ouroboros_hitbox)
 	_disable_hitbox_collision_shapes(slash_hitbox)
 	_disable_hitbox_collision_shapes(reaper_hitbox)
+	_disable_hitbox_collision_shapes(wolf_hitbox)
 
 func enable_phase_hitboxes() -> void:
 	_enable_hitbox(ouroboros_hitbox)
 	_enable_hitbox(slash_hitbox)
 	_enable_hitbox(reaper_hitbox)
+	_enable_hitbox(wolf_hitbox)
 	_restore_phase_hitbox_shape_defaults()
 
 func _disable_hitbox_collision_shapes(hitbox: HitboxComponent) -> void:
@@ -434,6 +711,7 @@ func _cache_phase_hitbox_shape_defaults() -> void:
 	_cache_hitbox_shape_defaults(ouroboros_hitbox)
 	_cache_hitbox_shape_defaults(slash_hitbox)
 	_cache_hitbox_shape_defaults(reaper_hitbox)
+	_cache_hitbox_shape_defaults(wolf_hitbox)
 
 func _cache_hitbox_shape_defaults(hitbox: HitboxComponent) -> void:
 	if hitbox == null:
@@ -455,6 +733,7 @@ func _restore_phase_hitbox_shape_defaults() -> void:
 	_restore_hitbox_shape_defaults(ouroboros_hitbox)
 	_restore_hitbox_shape_defaults(slash_hitbox)
 	_restore_hitbox_shape_defaults(reaper_hitbox)
+	_restore_hitbox_shape_defaults(wolf_hitbox)
 
 func _restore_hitbox_shape_defaults(hitbox: HitboxComponent) -> void:
 	if hitbox == null or not _phase_hitbox_shape_defaults.has(hitbox):
@@ -502,6 +781,7 @@ func _sync_hurtbox_flip() -> void:
 	_sync_area_flip(ouroboros_hitbox)
 	_sync_area_flip(slash_hitbox)
 	_sync_area_flip(reaper_hitbox)
+	_sync_area_flip(wolf_hitbox)
 
 func _sync_area_flip(area: Area2D) -> void:
 	if area == null:
@@ -529,6 +809,18 @@ func teleport_next_to_target() -> void:
 	stop_motion()
 	face_target()
 
+func teleport_close_to_target_for_phase_transition() -> void:
+	if not has_target():
+		return
+
+	var side := signf(global_position.x - player.global_position.x)
+	if is_zero_approx(side):
+		side = -1.0 if randf() < 0.5 else 1.0
+
+	global_position = player.global_position + Vector2(side * phase_transition_teleport_offset, 0.0)
+	stop_motion()
+	face_target()
+
 func stop_reaper_slash_movement() -> void:
 	_reaper_slash_should_stop = true
 	stop_motion()
@@ -538,6 +830,48 @@ func should_stop_reaper_slash_movement() -> bool:
 
 func reset_reaper_slash_movement() -> void:
 	_reaper_slash_should_stop = false
+
+func move_to_reaper_projectile_attack_side() -> void:
+	global_position = _get_reaper_projectile_attack_position()
+	stop_motion()
+	face_target()
+
+func spawn_reaper_projectile() -> void:
+	if not has_target():
+		return
+
+	var projectile := REAPER_PROJECTILE_SCENE.instantiate()
+	if projectile is Node2D:
+		var projectile_node := projectile as Node2D
+		var projectile_scale := projectile_node.scale
+		projectile_scale.x = visuals.scale.x
+		projectile_node.scale = projectile_scale
+
+	var projectile_hitbox := HitboxComponent.get_child_component(projectile)
+	if projectile_hitbox:
+		projectile_hitbox.init(reaper_projectile_damage, "boss")
+
+	var motion_component := ProjectileMotionComponent.get_child_component(projectile)
+	var spawn_position := projectile_origin.global_position if projectile_origin != null else global_position
+	var direction_to_target := (player.global_position - spawn_position).normalized()
+	if direction_to_target == Vector2.ZERO:
+		direction_to_target = Vector2.LEFT if visuals.scale.x > 0.0 else Vector2.RIGHT
+
+	if motion_component:
+		motion_component.shoot(
+			spawn_position,
+			direction_to_target,
+			reaper_projectile_speed,
+			reaper_projectile_lifetime
+		)
+
+	projectile.add_to_group("shadow_projectile")
+
+	var current_scene := get_tree().current_scene
+	if current_scene:
+		current_scene.add_child(projectile)
+	else:
+		add_child(projectile)
 
 func mark_reaper_phase_complete() -> void:
 	_reaper_phase_complete = true
@@ -628,6 +962,30 @@ func _find_machine() -> ShadowBossMachine:
 
 	return current_scene.find_child("ShadowBossMachine", true, false) as ShadowBossMachine
 
+func _get_reaper_projectile_attack_position() -> Vector2:
+	var side_sign := _get_reaper_projectile_attack_side_sign()
+	var attack_position := global_position
+
+	if _light_platform != null and _light_platform.texture != null:
+		var platform_scale := _light_platform.global_transform.get_scale()
+		var half_width := _light_platform.texture.get_size().x * absf(platform_scale.x) * 0.5
+		var horizontal_extent := maxf(half_width - reaper_projectile_attack_side_padding, 0.0)
+		attack_position.x = _light_platform.global_position.x + side_sign * horizontal_extent
+	else:
+		attack_position.x += side_sign * 260.0
+
+	if has_target():
+		attack_position.y = player.global_position.y
+
+	return attack_position
+
+func _get_reaper_projectile_attack_side_sign() -> float:
+	if not has_target():
+		return -1.0 if randf() < 0.5 else 1.0
+
+	var arena_center_x := _light_platform.global_position.x if _light_platform != null else player.global_position.x
+	return -1.0 if player.global_position.x >= arena_center_x else 1.0
+
 func _should_begin_machine_intermission() -> bool:
 	if _machine_intermission_active:
 		return false
@@ -677,6 +1035,7 @@ func _on_machine_phase_gate_destroyed() -> void:
 		return
 	_machine_waiting_for_restore = true
 	clear_visual_animation_finished("shadow_defeat")
+	teleport_close_to_target_for_phase_transition()
 	play_visual_animation_reverse("shadow_defeat")
 
 func _finish_machine_intermission() -> void:
@@ -777,3 +1136,13 @@ func _update_light_platform_mask() -> void:
 	shader_material.set_shader_parameter("platform_scale", _light_platform.global_transform.get_scale())
 	shader_material.set_shader_parameter("platform_rotation", _light_platform.global_transform.get_rotation())
 	shader_material.set_shader_parameter("platform_texture_size", _light_platform.texture.get_size())
+
+func _refill_reaper_attack_bag() -> void:
+	_reaper_attack_bag = ["ReaperSlash", "ReaperProjectileSlash", "ReaperTriple"]
+	_reaper_attack_bag.shuffle()
+
+	if _reaper_attack_bag.size() > 1 and _last_reaper_attack_state != "" and _reaper_attack_bag.back() == _last_reaper_attack_state:
+		var swap_index := randi_range(0, _reaper_attack_bag.size() - 2)
+		var swapped_attack_state := _reaper_attack_bag[swap_index]
+		_reaper_attack_bag[swap_index] = _reaper_attack_bag.back()
+		_reaper_attack_bag[_reaper_attack_bag.size() - 1] = swapped_attack_state

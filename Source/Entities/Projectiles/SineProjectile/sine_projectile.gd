@@ -3,10 +3,14 @@ extends Node2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 var _animation_time := 0.0
+var timer_node: Timer = Timer.new()
 
 func _ready():
 	animated_sprite.animation = &"default"
 	animated_sprite.frame = 0
+	timer_node.wait_time = 10
+	timer_node.start()
+	timer_node.timeout.connect(on_timer_timeout)
 
 func _physics_process(delta):
 	if animated_sprite.sprite_frames == null:
@@ -23,3 +27,6 @@ func _physics_process(delta):
 
 	_animation_time += delta * animation_speed
 	animated_sprite.frame = int(floor(_animation_time)) % frame_count
+
+func on_timer_timeout():
+	queue_free()

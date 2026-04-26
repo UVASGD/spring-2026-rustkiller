@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bbvlqtg73x53t"
+path="res://.godot/imported/Snake encircle.mp3-d1f17df4b3b95aaadb271db6384ceb84.mp3str"
+
+[deps]
+
+source_file="res://Source/Resources/Audio/SFX/ShadowBoss/animal/Snake encircle.mp3"
+dest_files=["res://.godot/imported/Snake encircle.mp3-d1f17df4b3b95aaadb271db6384ceb84.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

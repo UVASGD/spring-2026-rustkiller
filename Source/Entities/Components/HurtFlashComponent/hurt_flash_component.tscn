@@ -1,7 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://csvmkjqtav4p3"]
+[gd_scene format=3 uid="uid://csvmkjqtav4p3"]
 
 [ext_resource type="Script" uid="uid://opm2ylvbsjri" path="res://Source/Entities/Components/HurtFlashComponent/hurt_flash_component.gd" id="1_yamdp"]
 
-[node name="HurtFlashComponent" type="Node2D"]
+[node name="HurtFlashComponent" type="Node2D" unique_id=466403630]
 script = ExtResource("1_yamdp")
 flash_duration = 0.1
+use_solid_flash = null
+flash_strength = null

@@ -11,6 +11,7 @@ signal phase_gate_destroyed
 @onready var hurtbox_component: HurtboxComponent = $HurtboxComponent
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var healthbar: CanvasItem = $Healthbar
+@onready var machine_sfx: Node = $machine_sfx
 var _player: Node2D
 var _platform: Sprite2D
 
@@ -108,6 +109,8 @@ func open_phase_gate() -> void:
 	if healthbar:
 		healthbar.visible = true
 	anim_sprite.play(&"eyepop_TEMP")
+	if machine_sfx and machine_sfx.has_method("play_falling_eye"):
+		machine_sfx.play_falling_eye()
 
 func close_phase_gate() -> void:
 	if anim_sprite == null or _state != MachineState.VULNERABLE:
@@ -115,6 +118,8 @@ func close_phase_gate() -> void:
 
 	_state = MachineState.CLOSING
 	_set_phase_gate_active(false)
+	if machine_sfx and machine_sfx.has_method("stop_machine_eye_audio"):
+		machine_sfx.stop_machine_eye_audio()
 	anim_sprite.play(&"eyepop_TEMP", -1.0, true)
 
 func is_invulnerable() -> bool:
@@ -147,6 +152,8 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 		MachineState.OPENING:
 			_state = MachineState.VULNERABLE
 			anim_sprite.play(&"eyepop_IDLE")
+			if machine_sfx and machine_sfx.has_method("play_idle_eye"):
+				machine_sfx.play_idle_eye()
 			_set_phase_gate_active(true)
 		MachineState.CLOSING:
 			_state = MachineState.TRACKING

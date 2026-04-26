@@ -1,12 +1,12 @@
 extends HFSM
 
+var _charges_remaining := 0
+
 func on_enter() -> void:
-	if character and character.has_method("reset_reaper_slash_movement"):
-		character.reset_reaper_slash_movement()
+	_charges_remaining = _get_reaper_melee_charge_count()
 	if character and character.has_method("begin_reaper_slash_cooldown"):
 		character.begin_reaper_slash_cooldown()
-	if character and character.has_method("play_visual_animation"):
-		character.play_visual_animation(_get_reaper_slash_animation())
+	_begin_charge()
 
 func on_exit() -> void:
 	if character and character.has_method("reset_reaper_slash_movement"):
@@ -31,15 +31,30 @@ func update(delta: float) -> void:
 func check_transition(_delta: float) -> TransitionData:
 	if _animation_finished(_get_reaper_slash_animation()):
 		_clear_animation_finished(_get_reaper_slash_animation())
+		_charges_remaining -= 1
+		if _charges_remaining > 0:
+			_begin_charge()
+			return TransitionData.new(false, "")
 		if character and character.has_method("should_enter_player_phase") and character.should_enter_player_phase():
 			return TransitionData.new(true, "ReaperExit")
-		return TransitionData.new(true, "ReaperIdle")
+		return TransitionData.new(true, "ReaperPostMeleeIdle")
 	return TransitionData.new(false, "")
+
+func _begin_charge() -> void:
+	if character and character.has_method("reset_reaper_slash_movement"):
+		character.reset_reaper_slash_movement()
+	if character and character.has_method("play_visual_animation"):
+		character.play_visual_animation(_get_reaper_slash_animation())
 
 func _get_reaper_slash_animation() -> String:
 	if character and character.has_method("get_reaper_slash_animation"):
 		return character.get_reaper_slash_animation()
 	return "r_slash"
+
+func _get_reaper_melee_charge_count() -> int:
+	if character and character.has_method("get_reaper_melee_charge_count"):
+		return character.get_reaper_melee_charge_count()
+	return 3
 
 func _animation_finished(animation_name: String) -> bool:
 	if character and character.has_method("was_visual_animation_finished"):

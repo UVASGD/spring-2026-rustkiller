@@ -3,7 +3,7 @@ class_name GameContainer
 #
 @onready var main_menu_scene = preload("res://Source/Menus/main_menu.tscn")
 #@onready var map_select_menu_scene = preload("res://Source/Menus/map_select_menu.tscn")
-#@onready var tutorial_scene = preload("res://Source/Menus/tutorial.tscn")
+@onready var tutorial_scene = preload("res://Source/Levels/tutorial/tutorial.tscn")
 #@onready var credits = preload("res://Source/Menus/Credits.tscn")
 #
 

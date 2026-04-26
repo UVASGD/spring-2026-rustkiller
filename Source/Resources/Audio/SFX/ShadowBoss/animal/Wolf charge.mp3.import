@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bgnx6ddf1ch83"
+path="res://.godot/imported/Wolf charge.mp3-41f4c3e981b4bb63d98b2e181af99978.mp3str"
+
+[deps]
+
+source_file="res://Source/Resources/Audio/SFX/ShadowBoss/animal/Wolf charge.mp3"
+dest_files=["res://.godot/imported/Wolf charge.mp3-41f4c3e981b4bb63d98b2e181af99978.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

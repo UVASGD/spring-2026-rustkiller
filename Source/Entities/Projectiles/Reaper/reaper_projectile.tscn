@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://djbble6jnfd65"]
+
+[ext_resource type="Script" uid="uid://dfkc7kr8bnn7i" path="res://Source/Entities/Projectiles/SineProjectile/sine_projectile.gd" id="1_teuyb"]
+[ext_resource type="Texture2D" uid="uid://dew2jm65yfcjx" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_reaper/Projectile_Move.png" id="2_2gum8"]
+[ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="3_ont5i"]
+[ext_resource type="PackedScene" uid="uid://bu00fuexphyj0" path="res://Source/Entities/Components/ProjectileMotionComponent/projectile_motion_component.tscn" id="4_motion"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ont5i"]
+atlas = ExtResource("2_2gum8")
+region = Rect2(0, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2j253"]
+atlas = ExtResource("2_2gum8")
+region = Rect2(200, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dbnxv"]
+atlas = ExtResource("2_2gum8")
+region = Rect2(400, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x1lb4"]
+atlas = ExtResource("2_2gum8")
+region = Rect2(600, 0, 200, 200)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fral6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ont5i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2j253")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dbnxv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x1lb4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2j253"]
+size = Vector2(34, 53)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dbnxv"]
+size = Vector2(28.356407, 88.677704)
+
+[node name="ReaperProjectile" type="Node2D" unique_id=19105523]
+script = ExtResource("1_teuyb")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1435827704]
+scale = Vector2(-2, 2)
+sprite_frames = SubResource("SpriteFrames_fral6")
+frame_progress = 0.3178714
+
+[node name="HitboxComponent" parent="." unique_id=119122293 instance=ExtResource("3_ont5i")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=1863769954]
+position = Vector2(-23, 16.5)
+shape = SubResource("RectangleShape2D_2j253")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="HitboxComponent" unique_id=1532428973]
+position = Vector2(-4.2636294, -44.775433)
+rotation = 0.5235988
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("RectangleShape2D_dbnxv")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="HitboxComponent" unique_id=1639328037]
+position = Vector2(-4.9999933, 80.00001)
+rotation = -0.4533416
+scale = Vector2(0.9999998, 0.9999998)
+shape = SubResource("RectangleShape2D_dbnxv")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="HitboxComponent" unique_id=712502910]
+position = Vector2(38.520836, 120.77262)
+rotation = -1.127718
+scale = Vector2(0.9999997, 0.9999997)
+shape = SubResource("RectangleShape2D_dbnxv")
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="HitboxComponent" unique_id=1766140713]
+position = Vector2(47.000008, -98.00001)
+rotation = -2.0492368
+scale = Vector2(0.9999997, 0.9999997)
+shape = SubResource("RectangleShape2D_dbnxv")
+
+[node name="ProjectileMotionComponent" parent="." unique_id=594980224 instance=ExtResource("4_motion")]
