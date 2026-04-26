@@ -20,6 +20,7 @@ func update(_delta: float) -> void:
 	var t := (boss.now_ms() - _start_ms) / 1000.0
 	if not _fired and t >= fire_time:
 		_fired = true
+		_flip_visuals()
 		boss.do_steam_blast_cone() # boss method sets phase-based cooldown
 
 func check_transition(_delta: float) -> TransitionData:

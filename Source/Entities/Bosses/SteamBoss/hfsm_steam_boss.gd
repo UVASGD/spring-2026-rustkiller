@@ -21,6 +21,9 @@ class_name HFSMSteamBoss
 @export var steam_push_multiplier_p2 := 1.15
 @export var steam_push_multiplier_p3 := 1.3
 
+@export_group("SteamBursts")
+@export var steamBurstHazard: PackedScene
+
 @export_group("Lunge")
 @export var lunge_speed := 650.0
 @export var lunge_time := 0.35
@@ -45,7 +48,7 @@ var _cooldowns := {} # String -> next-ready ms timestamp
 var health := 100
 var phase := 1
 var _steam_burst_cd := 8.0
-var _steam_burst_charges := 1
+var _steam_burst_charges := 3
 
 func _ready():
 	health = max_health
@@ -70,14 +73,14 @@ func _check_phase_transition() -> void:
 
 func _enter_phase_2() -> void:
 	phase = 2
-	_steam_burst_charges = 2
+	_steam_burst_charges = 5
 	_steam_burst_cd = 5.0
 	# Optional phase transition anim if it exists
 	if animator and animator.has_animation("phase_1_to_2"):
 		animator.play("phase_1_to_2")
 func _enter_phase_3() -> void:
 	phase = 3
-	_steam_burst_charges = 3
+	_steam_burst_charges = 5
 	_steam_burst_cd = 3.0
 	
 	# Optional phase transition anim if it exists
@@ -315,15 +318,22 @@ func _disable_lunge_hitbox() -> void:
 
 #TODO: implement grate bursts as a separate node that calls back to the boss, instead of boss directly controlling them. This is more modular and allows for more complex patterns (e.g. staggered bursts instead of all at once).
 func spawn_grate_steam_bursts() -> void:
-	# Phase 1: once, default cd
-	# Phase 2: twice, 5s cd
+	# Phase 1: three times, default cd
+	# Phase 2: five times, 5s cd
 	var bursts_to_fire := _steam_burst_charges
-
-	var grates := get_tree().get_nodes_in_group("steam_grates")
+	
 	for _i in range(bursts_to_fire):
-		for grate in grates:
-			if grate.has_method("burst"):
-				grate.burst()
+		var burst_instance = steamBurstHazard.instantiate() as Node2D
+		
+		if _i == 0:
+		# First burst is directly on the player
+			burst_instance.global_position = player.global_position
+		else:
+			var random_dir = Vector2.UP.rotated(randf() * TAU)
+			var distance = 200.0
+			burst_instance.global_position = player.global_position + (random_dir * distance)
+		
+		get_parent().add_child(burst_instance)
 
 	set_cd("steam_bursts", _steam_burst_cd)
 

@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://bvqf4yyl75pd3"]
+[gd_scene format=3 uid="uid://dpu5xnf6o21r0"]
 
 [ext_resource type="Script" uid="uid://fb2dxk6ifnmk" path="res://Source/Levels/test_level_parallax.gd" id="1_3oeeg"]
 [ext_resource type="Script" uid="uid://np8yjxnxxm8m" path="res://Source/Entities/Components/LockOnComponent/lockon_system.gd" id="2_tthy6"]
@@ -515,5 +515,5 @@ z_index = 1
 position = Vector2(-41, -186)
 
 [node name="SteamBoss" parent="." unique_id=2117672993 node_paths=PackedStringArray("player") instance=ExtResource("9_3oeeg")]
-position = Vector2(128, -128)
+position = Vector2(233, -151)
 player = NodePath("../BetterPlayer")

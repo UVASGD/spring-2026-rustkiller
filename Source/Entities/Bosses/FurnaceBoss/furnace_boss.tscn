@@ -3089,6 +3089,7 @@ knockback_strength = 550.0
 position = Vector2(0, -39.06733)
 shape = SubResource("RectangleShape2D_combo_hitbox")
 disabled = true
+debug_color = Color(0.8826867, 0.22263193, 0.63145745, 0.41960785)
 
 [node name="LockonComponent" parent="." unique_id=1678096961 instance=ExtResource("8_cbjyb")]
 position = Vector2(8, -21)
