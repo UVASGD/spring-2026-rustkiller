@@ -1141,6 +1141,7 @@ script = ExtResource("11_1ysy8")
 
 [node name="PlayerCombat" type="Node2D" parent="." unique_id=2006343104]
 script = ExtResource("16_oah5i")
+wrench_projectile_damage = 0.5
 melee_damage = 10.0
 
 [node name="WalkSFXPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1122877933]

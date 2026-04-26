@@ -5,8 +5,9 @@ extends Node
 @export var player: Node2D
 @export var lerp_speed: float = 5.0
 @export var default_zoom: float = 1.0
+@export var max_lock_on_zoom: float = 10.0
 @export var lock_on_range: float = 500.0
-@export var padding: float = 100.0
+@export var padding: float = 50.0
 
 @export var shake_timer: float = 0.0
 @export var shake_duration: float = 0.1
@@ -116,7 +117,7 @@ func _update_camera_for_lock_on(delta: float) -> void:
 	
 	var distance = player.global_position.distance_to(current_target.global_position)
 	var required_zoom = (distance + padding) / get_viewport().get_visible_rect().size.x
-	var target_zoom = max(default_zoom / (required_zoom * 2.0), 0.3)
+	var target_zoom = minf(max(default_zoom / (required_zoom * 2.0), 0.3), max_lock_on_zoom)
 	
 	camera.zoom = camera.zoom.lerp(Vector2(target_zoom, target_zoom), lerp_speed * delta)
 

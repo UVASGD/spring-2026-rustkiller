@@ -5,12 +5,17 @@
 [ext_resource type="Texture2D" uid="uid://cdkm5mxrhden3" path="res://Source/Entities/Environment/StageOne/Art/pillar.png" id="3_0kpjy"]
 [ext_resource type="Texture2D" uid="uid://x8n2aq26kuv7" path="res://Source/Entities/Environment/StageOne/Art/stagebackground.png" id="4_7vhmf"]
 [ext_resource type="Texture2D" uid="uid://bktdkuma36eod" path="res://Source/Entities/Environment/StageOne/Art/Stage.png" id="5_4bo1q"]
+[ext_resource type="Texture2D" uid="uid://crqau6b6gebpq" path="res://Source/Levels/shadow_level/stage3_curtain_back.png" id="5_i24mp"]
 [ext_resource type="Texture2D" uid="uid://dhc3xltm4mims" path="res://Source/Entities/Environment/StageOne/Art/offwhitebg.png" id="6_inx5i"]
 [ext_resource type="Texture2D" uid="uid://d1t4cckuncenq" path="res://Source/Entities/Environment/StageOne/Art/StagePillar.png" id="6_o0rlx"]
 [ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="7_x4wbb"]
 [ext_resource type="PackedScene" uid="uid://crvepxby1imcj" path="res://Source/Entities/Player/better_player/better_player.tscn" id="8_rwrje"]
 [ext_resource type="PackedScene" uid="uid://b0u27366q5in1" path="res://Source/Entities/Bosses/ShadowBoss/shadow_boss.tscn" id="9_l30bm"]
 [ext_resource type="PackedScene" uid="uid://cn1ddvofhbwom" path="res://Source/Entities/Bosses/ShadowBoss/shadow_boss_machine.tscn" id="11_w0hja"]
+[ext_resource type="Texture2D" uid="uid://birlbd6ass7kl" path="res://Source/Levels/shadow_level/stage.png" id="12_wwydi"]
+[ext_resource type="Texture2D" uid="uid://dkwqy6pu45w06" path="res://Source/Levels/shadow_level/stage3_curtain_left.png" id="14_ragnm"]
+[ext_resource type="Texture2D" uid="uid://dc23ujqytghrj" path="res://Source/Levels/shadow_level/stage3_curtain_right.png" id="15_0240w"]
+[ext_resource type="AudioStream" uid="uid://dno5l1tjxtu6i" path="res://Source/Resources/Audio/Music/Shadow/rust-boss-f.mp3" id="16_h8i7r"]
 
 [sub_resource type="Environment" id="Environment_f8vh1"]
 background_mode = 3
@@ -23,6 +28,32 @@ size = Vector2(24.600004, 12.145748)
 
 [node name="TestLevel" type="Node2D" unique_id=276251252]
 script = ExtResource("1_l30bm")
+
+[node name="Node2D" type="Node2D" parent="." unique_id=1631854621]
+position = Vector2(0, -664)
+scale = Vector2(1.4, 1.4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D" unique_id=980926697]
+texture = ExtResource("12_wwydi")
+
+[node name="bg2" type="Sprite2D" parent="Node2D" unique_id=118523124]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("5_i24mp")
+
+[node name="curtain" type="Sprite2D" parent="Node2D" unique_id=1016330508]
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("15_0240w")
+
+[node name="curtain2" type="Sprite2D" parent="Node2D" unique_id=917050316]
+texture = ExtResource("14_ragnm")
+
+[node name="ColorRect" type="ColorRect" parent="Node2D" unique_id=1918776168]
+offset_left = -1539.2308
+offset_top = 710.7693
+offset_right = -1496.7559
+offset_bottom = 750.7693
+scale = Vector2(72.846, 40)
+color = Color(0.14117648, 0.08235294, 0.15294118, 1)
 
 [node name="LockOnSystem" type="Node2D" parent="." unique_id=857070825 node_paths=PackedStringArray("camera", "player")]
 z_index = 1
@@ -41,12 +72,14 @@ environment = SubResource("Environment_f8vh1")
 [node name="Environment" type="Node2D" parent="." unique_id=1417361352]
 
 [node name="Pillar3" type="Sprite2D" parent="Environment" unique_id=875237494]
+visible = false
 modulate = Color(0.79521304, 0.901673, 1, 1)
 position = Vector2(539.00006, -231)
 scale = Vector2(3.3981662, 9.544174)
 texture = ExtResource("3_0kpjy")
 
 [node name="Pillar" type="Sprite2D" parent="Environment" unique_id=249386930]
+visible = false
 modulate = Color(0.79521304, 0.901673, 1, 1)
 position = Vector2(941, -177)
 rotation = -0.2617994
@@ -54,6 +87,7 @@ scale = Vector2(9.398168, 26.395927)
 texture = ExtResource("3_0kpjy")
 
 [node name="Gate" type="Sprite2D" parent="Environment" unique_id=260732666]
+visible = false
 modulate = Color(0.79521304, 0.901673, 1, 1)
 position = Vector2(-188, 4260.9995)
 rotation = 0.5235988
@@ -61,6 +95,7 @@ scale = Vector2(19.134907, 19.134907)
 texture = ExtResource("4_7vhmf")
 
 [node name="Pillar2" type="Sprite2D" parent="Environment" unique_id=466119357]
+visible = false
 modulate = Color(0.79521304, 0.901673, 1, 1)
 position = Vector2(1254, -443.00003)
 rotation = -0.2617994
@@ -68,6 +103,7 @@ scale = Vector2(9.398168, 26.395927)
 texture = ExtResource("3_0kpjy")
 
 [node name="Gate2" type="Sprite2D" parent="Environment" unique_id=1194214810]
+visible = false
 modulate = Color(0.79607844, 0.9019608, 1, 0.56078434)
 position = Vector2(1304.0001, 2062)
 rotation = -0.2617994
@@ -75,6 +111,7 @@ scale = Vector2(10.6624155, 10.6624155)
 texture = ExtResource("4_7vhmf")
 
 [node name="Pillar4" type="Sprite2D" parent="Environment" unique_id=1707300526]
+visible = false
 modulate = Color(0.79607844, 0.9019608, 1, 0.50980395)
 z_index = 1
 position = Vector2(-632, 34.999985)
@@ -83,6 +120,7 @@ scale = Vector2(9.398168, 26.395927)
 texture = ExtResource("3_0kpjy")
 
 [node name="Platform" type="Sprite2D" parent="Environment" unique_id=680183571]
+modulate = Color(0.3111991, 0.311199, 1.92523e-07, 0.3254902)
 scale = Vector2(5.6400003, 1.235)
 texture = ExtResource("5_4bo1q")
 
@@ -487,16 +525,19 @@ shape = SubResource("RectangleShape2D_86f36")
 debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
 
 [node name="StagePillar" type="Sprite2D" parent="Environment" unique_id=291899250]
+visible = false
 scale = Vector2(5.6400003, 1.235)
 texture = ExtResource("6_o0rlx")
 
 [node name="Offwhitebg" type="Sprite2D" parent="Environment" unique_id=209026157]
+visible = false
 z_index = -1
 position = Vector2(-66.33348, -958.49994)
 scale = Vector2(2.5097225, 2.5097222)
 texture = ExtResource("6_inx5i")
 
 [node name="Ashes" type="Sprite2D" parent="Environment" unique_id=658814904]
+visible = false
 z_index = -1
 position = Vector2(66.444565, -791.5)
 scale = Vector2(1.8736109, 1.8736111)
@@ -526,6 +567,12 @@ player = NodePath("../BetterPlayer")
 animal_move_speed = 400.0
 
 [node name="ShadowBossMachine" parent="." unique_id=1528051355 instance=ExtResource("11_w0hja")]
-position = Vector2(0, -576)
+position = Vector2(0, -369)
 player_path = NodePath("../BetterPlayer")
 platform_path = NodePath("../Environment/Platform")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=862287898]
+stream = ExtResource("16_h8i7r")
+volume_db = -12.0
+
+[connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]

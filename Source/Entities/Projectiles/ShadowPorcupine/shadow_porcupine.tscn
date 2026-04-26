@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://c8w6vs4loip2f" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_animal/porcupine_2.png" id="2_xeg2m"]
 [ext_resource type="Texture2D" uid="uid://kdo0vq4ujp5i" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_animal/porcupine_3.png" id="3_ntn0u"]
 [ext_resource type="Script" uid="uid://bu1uyjydk7je4" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.gd" id="5_roboh"]
+[ext_resource type="AudioStream" uid="uid://7xjo7bn125h7" path="res://Source/Resources/Audio/SFX/ShadowBoss/animal/Porcupine strike.mp3" id="6_uwxjw"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b421o"]
 atlas = ExtResource("1_hif26")
@@ -347,6 +348,20 @@ tracks/4/keys = {
 "update": 1,
 "values": [true, false, true]
 }
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("AudioStreamPlayer2D")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mx2uk"]
 _data = {
@@ -371,3 +386,6 @@ shape = SubResource("CircleShape2D_uwxjw")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1961944204]
 libraries/ = SubResource("AnimationLibrary_mx2uk")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1350290057]
+stream = ExtResource("6_uwxjw")

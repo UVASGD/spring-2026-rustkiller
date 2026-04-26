@@ -1,19 +1,30 @@
 extends HFSM
 
+enum MoveMode {
+	CHASE,
+	ORBIT,
+}
+
+var _mode := MoveMode.CHASE
+
 func on_enter() -> void:
+	_sync_mode()
 	if character and character.has_method("play_visual_animation"):
 		character.play_visual_animation(_get_reaper_idle_animation())
 
-func update(_delta: float) -> void:
+func update(delta: float) -> void:
 	if character == null:
 		return
 
 	if character.has_method("play_visual_animation"):
 		character.play_visual_animation(_get_reaper_idle_animation(), false)
-	if character.has_method("stop_motion"):
-		character.stop_motion()
-	if character.has_method("face_target"):
-		character.face_target()
+	_sync_mode()
+	if _mode == MoveMode.ORBIT:
+		if character.has_method("reaper_orbit_target"):
+			character.reaper_orbit_target(delta)
+	else:
+		if character.has_method("reaper_move_toward_target"):
+			character.reaper_move_toward_target(delta)
 
 func check_transition(_delta: float) -> TransitionData:
 	if character and character.has_method("should_enter_player_phase") and character.should_enter_player_phase():
@@ -34,3 +45,13 @@ func _get_idle_duration() -> float:
 	if character and character.has_method("get_reaper_idle_duration"):
 		return character.get_reaper_idle_duration()
 	return 0.8
+
+func _sync_mode() -> void:
+	if character == null or not character.has_method("has_target") or not character.has_target():
+		_mode = MoveMode.CHASE
+		return
+
+	if _mode == MoveMode.CHASE and character.should_orbit_target():
+		_mode = MoveMode.ORBIT
+	elif _mode == MoveMode.ORBIT and character.should_chase_target():
+		_mode = MoveMode.CHASE

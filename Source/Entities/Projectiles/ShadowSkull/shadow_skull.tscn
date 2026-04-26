@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://vus5ffrn1yy3" path="res://Source/Entities/Projectiles/ShadowSkull/shadow_skull.gd" id="1_a4twt"]
 [ext_resource type="Texture2D" uid="uid://capjnqwo4d4i" path="res://Source/Entities/Projectiles/ShadowSkull/ShadowBossRangeSkull.png" id="1_asct7"]
 [ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="3_0k0pi"]
+[ext_resource type="AudioStream" uid="uid://c38q75e2ndpk1" path="res://Source/Resources/Audio/SFX/ShadowBoss/Player/Skullscream.mp3" id="4_fix7k"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a4twt"]
 atlas = ExtResource("1_asct7")
@@ -201,6 +202,7 @@ _data = {
 
 [node name="ShadowSkull" type="Node2D" unique_id=1059470260]
 script = ExtResource("1_a4twt")
+min_pitch_scale = 0.7
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=744726577]
 position = Vector2(0, -66)
@@ -219,5 +221,9 @@ shape = SubResource("RectangleShape2D_jhb6i")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1863847345]
 libraries/ = SubResource("AnimationLibrary_fffiu")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=564609231]
+stream = ExtResource("4_fix7k")
+volume_db = -5.0
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

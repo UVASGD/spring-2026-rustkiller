@@ -61,6 +61,7 @@
 [ext_resource type="Script" uid="uid://mkv5ywrcswis" path="res://Source/Entities/Bosses/ShadowBoss/shadow_player_appear.gd" id="27"]
 [ext_resource type="Script" uid="uid://y7p6oh2gm6rs" path="res://Source/Entities/Bosses/ShadowBoss/shadow_reaper_projectile_slash.gd" id="28"]
 [ext_resource type="Script" uid="uid://c10q8xnula70f" path="res://Source/Entities/Bosses/ShadowBoss/shadow_reaper_triple.gd" id="29"]
+[ext_resource type="Script" uid="uid://cywf0hamgry3s" path="res://Source/Entities/Bosses/ShadowBoss/shadow_reaper_post_melee_idle.gd" id="30_qn58o"]
 [ext_resource type="Texture2D" uid="uid://des4tpjahn3m1" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_animal/wolf_init_1.png" id="37_6jsni"]
 [ext_resource type="Texture2D" uid="uid://qawkmdvnhd6u" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_animal/wolf_app_1_1.png" id="37_vl2t7"]
 [ext_resource type="Texture2D" uid="uid://cf7t0lom8bf10" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_animal/wolf_app_1_2.png" id="38_fqd3d"]
@@ -75,6 +76,7 @@
 [ext_resource type="Texture2D" uid="uid://dxio412acyfgs" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_animal/wolf_attack_2.png" id="44_qlviy"]
 [ext_resource type="Texture2D" uid="uid://bcvgvnamt4vfe" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_animal/wolf_attack_3_1.png" id="45_udltp"]
 [ext_resource type="Texture2D" uid="uid://i2pongm2jcie" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_animal/wolf_attack_3_2.png" id="46_46pew"]
+[ext_resource type="Script" uid="uid://8s5sjj263df" path="res://Source/Entities/Player/better_player/sfx_manager.gd" id="76_il8yn"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_light_circle_mask"]
 shader = ExtResource("15")
@@ -3667,6 +3669,20 @@ tracks/17/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/18/type = "method"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("sfx_manager")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_snake_encircle"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_34cpq"]
 resource_name = "animal_snake_slither"
@@ -4702,6 +4718,20 @@ tracks/18/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/19/type = "method"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("sfx_manager")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_player_attack"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_x8g07"]
 resource_name = "player_walk"
@@ -5222,6 +5252,20 @@ tracks/12/keys = {
 "update": 1,
 "values": [false, true]
 }
+tracks/13/type = "method"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("sfx_manager")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_reaper_out"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_ya816"]
 resource_name = "r_idle"
@@ -5474,6 +5518,20 @@ tracks/7/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("sfx_manager")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"reaper_proj_audio"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_mbrw6"]
 resource_name = "r_slash"
@@ -5670,6 +5728,20 @@ tracks/15/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/16/type = "method"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("sfx_manager")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"reaper_slash_audio"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_gvdnr"]
@@ -5918,6 +5990,20 @@ tracks/19/keys = {
 "update": 1,
 "values": [true, false]
 }
+tracks/20/type = "method"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("sfx_manager")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_reaper_triple"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_v4b4b"]
 resource_name = "shadow_defeat"
@@ -6071,6 +6157,20 @@ tracks/9/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("sfx_manager")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_wolf_encircle"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_il8yn"]
 resource_name = "wolf_app_2"
@@ -6195,6 +6295,20 @@ tracks/9/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("sfx_manager")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_wolf_encircle"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_ijtxf"]
@@ -6321,6 +6435,20 @@ tracks/9/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("sfx_manager")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_wolf_encircle"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_qb1kp"]
 resource_name = "wolf_attack_1"
@@ -6445,6 +6573,20 @@ tracks/9/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("sfx_manager")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_wolf_attack"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_k6r1p"]
@@ -6571,6 +6713,20 @@ tracks/9/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("sfx_manager")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_wolf_attack"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_qlviy"]
 resource_name = "wolf_attack_3"
@@ -6696,6 +6852,20 @@ tracks/9/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("sfx_manager")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_wolf_attack"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_ym0j0"]
 resource_name = "animal_wolf_intro"
@@ -6820,6 +6990,20 @@ tracks/9/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(2.4, 1.12), Vector2(2.4, 1.12), Vector2(12, 5.6)]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("sfx_manager")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(1.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_wolf_init"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="3"]
@@ -7012,6 +7196,10 @@ move_name = "ReaperProjectileSlash"
 script = ExtResource("29")
 move_name = "ReaperTriple"
 
+[node name="ReaperPostMeleeIdle" type="Node" parent="ShadowHFSM/Alive/ReaperPhase" unique_id=470153612]
+script = ExtResource("30_qn58o")
+move_name = "ReaperPostMeleeIdle"
+
 [node name="ReaperExit" type="Node" parent="ShadowHFSM/Alive/ReaperPhase" unique_id=1267905125]
 script = ExtResource("26")
 move_name = "ReaperExit"
@@ -7104,3 +7292,9 @@ rotation = 0.14598155
 scale = Vector2(0.99999976, 0.99999976)
 shape = SubResource("RectangleShape2D_4wn4w")
 disabled = true
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=108256964]
+volume_db = 4.0
+
+[node name="sfx_manager" type="Node" parent="." unique_id=437957411]
+script = ExtResource("76_il8yn")

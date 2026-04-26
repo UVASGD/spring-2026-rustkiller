@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://17u4gsgnbdp5"
+path="res://.godot/imported/Wolf Run.mp3-be444a6ea24a3f67b0dcc1e3b4997616.mp3str"
+
+[deps]
+
+source_file="res://Source/Resources/Audio/SFX/ShadowBoss/animal/Wolf Run.mp3"
+dest_files=["res://.godot/imported/Wolf Run.mp3-be444a6ea24a3f67b0dcc1e3b4997616.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
