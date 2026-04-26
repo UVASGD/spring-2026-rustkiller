@@ -2,6 +2,7 @@ extends CharacterBody2D
 class_name FurnaceBoss
 
 const SINE_PROJECTILE_SCENE := preload("res://Source/Entities/Projectiles/SineProjectile/SineProjectile.tscn")
+const LAVA_BOULDER_SCENE := preload("res://Source/Entities/Hazards/LavaBall/lavaboulder.tscn")
 const DEFEAT_FADE_DURATION := 0.75
 const RETURN_TO_BOSS_SELECT_DELAY := 5.0
 
@@ -138,6 +139,16 @@ func fire_sine_projectile(projectile_rows: int = 1, row_spacing: float = 28.0) -
 			motion_component.configure_pattern(phase_offset, amplitude_scale, frequency_scale, speed_scale)
 
 		get_tree().current_scene.add_child(projectile)
+	
+var lastLavaBoulderSpot: Vector2 = Vector2.ZERO		
+func fire_lava_boulder():
+	if lastLavaBoulderSpot != Vector2.ZERO and player.global_position.distance_to(lastLavaBoulderSpot) <= 50:
+		return
+	var instance: Node2D = LAVA_BOULDER_SCENE.instantiate() as Node2D
+	lastLavaBoulderSpot = player.global_position
+
+	instance.global_position = player.global_position
+	get_parent().add_child(instance)
 
 func parry_charge_attack() -> bool:
 	var active_state := state_machine.get_lowest_active_state()

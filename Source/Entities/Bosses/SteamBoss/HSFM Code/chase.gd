@@ -3,6 +3,7 @@ extends HFSM
 func update(delta: float) -> void:
 	var boss := character as HFSMSteamBoss
 	if boss:
+		_flip_visuals()
 		boss.chase_step(delta)
 
 func check_transition(_delta: float) -> TransitionData:
@@ -12,14 +13,17 @@ func check_transition(_delta: float) -> TransitionData:
 
 	var d := boss.dist_to_player()
 	
-	if boss.cd_ready("warp_burst"):
-		return TransitionData.new(true, "WarpBlast")
+#	if boss.cd_ready("warp_burst"):
+#		return TransitionData.new(true, "WarpBlast")
+
+	if boss.cd_ready("steam_bursts"):
+		return TransitionData.new(true, "SteamBursts")
 
 	# Close: Explosive (if ready) else Slash
 	if d <= boss.close_range:
-		if boss.cd_ready("explosive_blast"):
-			return TransitionData.new(true, "ExplosiveBlast")
 		return TransitionData.new(true, "Slash")
+#		if boss.cd_ready("explosive_blast"):
+#			return TransitionData.new(true, "ExplosiveBlast")
 
 	# In range: SteamBlast (15s CD)
 	if d <= boss.steam_blast_range and boss.cd_ready("steam_blast"):

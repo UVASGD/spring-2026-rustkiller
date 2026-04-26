@@ -190,7 +190,18 @@ func close_to_the_end_of_animation() -> bool:
 func animation_ended() -> bool:
 	return works_longer_than(get_animation_length())
 
-# backend animations getters
+func _flip_visuals() -> void:
+	var visuals := character.get_node_or_null("Visuals") as Node2D
+	if visuals == null:
+		return
+
+	var direction_x := player.global_position.x - character.global_position.x
+	if is_zero_approx(direction_x):
+		return
+
+	visuals.scale.x = 1.0 if direction_x < 0.0 else -1.0
+
+	# backend animations getters
 #func get_root_position_delta(delta : float):
 	#return moves_data_repo.get_root_delta_pos(backend_animation, get_progress(), delta)
 #
@@ -221,7 +232,6 @@ func animation_ended() -> bool:
 # This is the most correct pipeline in my opinion, because the most important thing 
 # for any state machine is its transtion logic, 
 # and you can test those prior to having any actual updates, if you wrote other methods.
- 
 # General code guidelines are: use a shit ton of proxies.
 # Ideally, your transition logic needs to consist of several if statements that check
 # some single function calls with human readable names, almost like a sentence in english.

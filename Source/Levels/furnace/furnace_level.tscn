@@ -136,12 +136,14 @@ scale = Vector2(0.010944749, 0.049982503)
 polygon = PackedVector2Array(-11, -715.06476, 996.99994, -193.00002, 873.9999, -196.00002, 849.9999, -230.00002, 785.9999, -281, 607.9999, -342, 266.99985, -388, 106, -398, -30, -399, -139, -398, -221, -395, -436.00012, -382, -515.0001, -370, -657.0002, -351, -830.0001, -301, -917.0001, -258, -944.0001, -231.99998, -952.00006, -191.99998, -958.00006, -168.99998, -1062, -177.99998, -1046.0001, -248.99998)
 
 [node name="TankBoss3" parent="." unique_id=1995595152 node_paths=PackedStringArray("player") instance=ExtResource("8_cf83t")]
+z_index = 1
 position = Vector2(499, -230)
 player = NodePath("../BetterPlayer2")
 
 [node name="CanvasLayer" parent="." unique_id=732973211 instance=ExtResource("9_lj8hg")]
 
 [node name="BetterPlayer2" parent="." unique_id=462766173 instance=ExtResource("13_24ma2")]
+z_index = 1
 position = Vector2(85, -257)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=423528841]

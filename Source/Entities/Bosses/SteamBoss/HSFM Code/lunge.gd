@@ -28,6 +28,7 @@ func update(delta: float) -> void:
 	# thrust moment
 	if not _thrusted and t >= thrust_time:
 		_thrusted = true
+		_flip_visuals()
 		boss.do_lunge_thrust()
 
 func check_transition(_delta: float) -> TransitionData:
