@@ -6,6 +6,7 @@ class_name Credits
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 	Engine.time_scale = 1
 

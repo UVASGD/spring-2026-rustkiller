@@ -9,7 +9,7 @@ class_name MainMenu
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
-
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	Engine.time_scale = 1
 
 func _physics_process(delta:float) -> void:
