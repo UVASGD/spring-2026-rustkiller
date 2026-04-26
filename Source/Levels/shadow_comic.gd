@@ -1,5 +1,5 @@
 extends Node2D
-class_name furnace_comic
+class_name shadow_comic
 @export var panel_sounds: Array[AudioStream] = []
 
 @onready var panels = [
@@ -7,8 +7,7 @@ class_name furnace_comic
 	$PanelsContainer/Panel2,
 	$PanelsContainer/Panel3,
 	$PanelsContainer/Panel4,
-	$PanelsContainer/Panel5,
-	$PanelsContainer/Panel6
+	$PanelsContainer/Panel5
 ]
 
 @onready var sfx_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
@@ -16,8 +15,6 @@ class_name furnace_comic
 @onready var game_container: GameContainer = get_parent() as GameContainer
 
 var current_panel := -1
-var waiting_for_panel_6 := false
-var panel_6_shown := false
 
 signal cutscene_finished
 
@@ -32,8 +29,6 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton \
 	and event.pressed \
 	and event.button_index == MOUSE_BUTTON_LEFT:
-		if waiting_for_panel_6:
-			return
 		advance_panel()
 
 func advance_panel() -> void:
@@ -42,19 +37,19 @@ func advance_panel() -> void:
 	if current_panel >= panels.size():
 		cutscene_finished.emit()
 		if game_container:
-			game_container.call_deferred("spawn_level", "furnace_level")
+			game_container.call_deferred("spawn_level", "shadow_level")
 		queue_free()
 		return
 
-	if current_panel == 4:
+	if current_panel == 3:
+		sfx_constant.stop()
+
+	if current_panel == panels.size() - 1:
 		show_final_panel()
-		play_panel_sfx(current_panel)
-		start_panel_6_delay()
-	elif current_panel == 5:
-		return
 	else:
 		phase_in_panel(panels[current_panel])
-		play_panel_sfx(current_panel)
+
+	play_panel_sfx(current_panel)
 
 func phase_in_panel(panel) -> void:
 	panel.modulate.a = 0.0
@@ -64,27 +59,7 @@ func phase_in_panel(panel) -> void:
 		.set_ease(Tween.EASE_OUT)
 
 func show_final_panel() -> void:
-	sfx_constant.stop()
-
-	for i in range(panels.size() - 1):
-		panels[i].modulate.a = 0.0
-
-	phase_in_panel(panels[4])
-
-func start_panel_6_delay() -> void:
-	waiting_for_panel_6 = true
-	await get_tree().create_timer(5.6).timeout
-	show_panel_6()
-
-func show_panel_6() -> void:
-	if panel_6_shown:
-		return
-
-	panel_6_shown = true
-	waiting_for_panel_6 = false
-	current_panel = 5
-
-	phase_in_panel(panels[5])
+	phase_in_panel(panels[panels.size() - 1])
 
 func play_panel_sfx(index: int) -> void:
 	if index < panel_sounds.size() and panel_sounds[index] != null:
@@ -92,6 +67,6 @@ func play_panel_sfx(index: int) -> void:
 		sfx_player.play()
 
 func _on_constant_finished() -> void:
-	if current_panel >= 4:
+	if current_panel >= panels.size() - 1:
 		return
 	sfx_constant.play()

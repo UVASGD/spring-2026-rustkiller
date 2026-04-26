@@ -35,12 +35,12 @@ func _ready() -> void:
 	if health_component:
 		health_component.died.connect(_on_health_component_died)
 	_set_phase_gate_active(false)
-	if healthbar:
-		healthbar.visible = false
+	_update_healthbar_visibility()
 	_update_animation_for_player_position()
 
 func _process(_delta: float) -> void:
 	_update_animation_for_player_position()
+	_update_healthbar_visibility()
 
 func _find_player() -> Node2D:
 	if not player_path.is_empty():
@@ -113,8 +113,7 @@ func open_phase_gate() -> void:
 
 	_state = MachineState.OPENING
 	_set_phase_gate_active(false)
-	if healthbar:
-		healthbar.visible = true
+	_update_healthbar_visibility()
 	anim_sprite.play(&"eyepop_TEMP")
 	if machine_sfx and machine_sfx.has_method("play_falling_eye"):
 		machine_sfx.play_falling_eye()
@@ -149,8 +148,7 @@ func _on_health_component_died() -> void:
 		_set_phase_gate_active(false)
 		if machine_sfx and machine_sfx.has_method("stop_machine_eye_audio"):
 			machine_sfx.stop_machine_eye_audio()
-		if healthbar:
-			healthbar.visible = false
+		_update_healthbar_visibility()
 		phase_gate_destroyed.emit()
 		return
 	close_phase_gate()
@@ -167,8 +165,7 @@ func start_final_defeat_sequence() -> void:
 		anim_sprite.stop()
 	if machine_sfx and machine_sfx.has_method("stop_machine_eye_audio"):
 		machine_sfx.stop_machine_eye_audio()
-	if healthbar:
-		healthbar.visible = false
+	_update_healthbar_visibility()
 
 	var fade_tween := create_tween()
 	fade_tween.tween_property(self, "modulate", Color(1.0, 1.0, 1.0, 0.0), FINAL_DEFEAT_FADE_DURATION)
@@ -203,14 +200,22 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 			if machine_sfx and machine_sfx.has_method("play_idle_eye"):
 				machine_sfx.play_idle_eye()
 			_set_phase_gate_active(true)
+			_update_healthbar_visibility()
 		MachineState.CLOSING:
 			_state = MachineState.TRACKING
-			if healthbar:
-				healthbar.visible = false
+			_update_healthbar_visibility()
 			_update_animation_for_player_position()
 			phase_gate_destroyed.emit()
 		_:
 			_update_animation_for_player_position()
+
+func _update_healthbar_visibility() -> void:
+	if healthbar == null:
+		return
+
+	healthbar.visible = _state == MachineState.VULNERABLE \
+		and anim_sprite != null \
+		and anim_sprite.animation == &"eyepop_IDLE"
 
 func _find_game_container() -> GameContainer:
 	var current: Node = get_parent()

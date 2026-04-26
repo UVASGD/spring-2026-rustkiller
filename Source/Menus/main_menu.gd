@@ -40,3 +40,12 @@ func _on_exit_button_pressed() -> void:
 func _on_credits_pressed():
 	game_container.spawn_credits()
 	queue_free()
+
+
+func _on_play_button_mouse_entered():
+	pass # Replace with function body.
+
+
+func _on_tutorial_pressed():
+	game_container.spawn_level("tutorial")
+	queue_free()

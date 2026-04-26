@@ -521,11 +521,12 @@ debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
 scale = Vector2(5.6400003, 1.235)
 texture = ExtResource("6_ifc7m")
 
-[node name="Offwhitebg" type="Sprite2D" parent="Environment" unique_id=209026157]
+[node name="Offwhitebg" type="Sprite2D" parent="Environment" unique_id=503445552]
 z_index = -1
 position = Vector2(-66.33348, -958.49994)
 scale = Vector2(2.5097225, 2.5097222)
 texture = ExtResource("6_r12yy")
+
 [node name="StaticBody2D" type="StaticBody2D" parent="Environment" unique_id=671202499]
 position = Vector2(0, -200)
 scale = Vector2(91.36801, 20.007002)

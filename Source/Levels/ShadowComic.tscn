@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://biveds7k3ht48"]
+
+[ext_resource type="Script" uid="uid://dvvgea58lu37g" path="res://Source/Levels/shadow_comic.gd" id="1_qe51o"]
+[ext_resource type="AudioStream" uid="uid://c1or17xlhctyj" path="res://Source/Resources/Audio/SFX/ShadowComic/3P1.mp3" id="2_1mpsb"]
+[ext_resource type="AudioStream" uid="uid://bwtokyjniupwm" path="res://Source/Resources/Audio/SFX/Comic1/Panel 1.mp3" id="2_j8eer"]
+[ext_resource type="AudioStream" uid="uid://7jot3yfk4p0y" path="res://Source/Resources/Audio/SFX/ShadowComic/3P2.mp3" id="3_6tgw7"]
+[ext_resource type="AudioStream" uid="uid://py7q3oudoa6a" path="res://Source/Resources/Audio/SFX/ShadowComic/3P3.mp3" id="4_j8eer"]
+[ext_resource type="AudioStream" uid="uid://d4gf3jvq278vs" path="res://Source/Resources/Audio/SFX/ShadowComic/3P4_new.mp3" id="5_6tgw7"]
+[ext_resource type="AudioStream" uid="uid://byyrre10hb6rl" path="res://Source/Resources/Audio/SFX/ShadowComic/Horn.mp3" id="6_j8eer"]
+[ext_resource type="Texture2D" uid="uid://d3plwc2yy577p" path="res://Source/Resources/Comics/shadow/projector comic nb p1.png" id="7_gs6cl"]
+[ext_resource type="Texture2D" uid="uid://e6sllpvcogjy" path="res://Source/Resources/Comics/shadow/projector comic nb p2.png" id="8_e04op"]
+[ext_resource type="Texture2D" uid="uid://4p3iuvndjhct" path="res://Source/Resources/Comics/shadow/projector comic nb p3.png" id="9_pfg3k"]
+[ext_resource type="Texture2D" uid="uid://b76i8e3gneyv5" path="res://Source/Resources/Comics/shadow/projector comic nb p4.png" id="10_qqknb"]
+[ext_resource type="Texture2D" uid="uid://beqqjr0hyubdm" path="res://Source/Resources/Comics/shadow/projector comic nb p4+projector.png" id="11_t7qup"]
+[ext_resource type="AudioStream" uid="uid://5488nuqcqlq7" path="res://Source/Resources/Audio/SFX/ShadowComic/3BACK.mp3" id="12_8m4sb"]
+
+[node name="ShadowComic" type="Node2D" unique_id=1779542933]
+script = ExtResource("1_qe51o")
+panel_sounds = Array[AudioStream]([ExtResource("2_1mpsb"), ExtResource("3_6tgw7"), ExtResource("4_j8eer"), ExtResource("5_6tgw7"), ExtResource("6_j8eer")])
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1780680746]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=945714583]
+z_index = -1
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(25.92, 14.28)
+mouse_filter = 2
+color = Color(0.039215688, 0.039215688, 0.078431375, 1)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=100760204]
+stream = ExtResource("2_j8eer")
+
+[node name="PanelsContainer" type="Control" parent="." unique_id=570041909]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel1" type="Sprite2D" parent="PanelsContainer" unique_id=499511464]
+position = Vector2(480, 270)
+texture = ExtResource("7_gs6cl")
+
+[node name="Panel2" type="Sprite2D" parent="PanelsContainer" unique_id=1629653274]
+position = Vector2(480, 270)
+texture = ExtResource("8_e04op")
+
+[node name="Panel3" type="Sprite2D" parent="PanelsContainer" unique_id=947847685]
+position = Vector2(480, 270)
+texture = ExtResource("9_pfg3k")
+
+[node name="Panel4" type="Sprite2D" parent="PanelsContainer" unique_id=1059492656]
+z_index = -1
+position = Vector2(480, 270)
+texture = ExtResource("10_qqknb")
+
+[node name="Panel5" type="Sprite2D" parent="PanelsContainer" unique_id=1767768301]
+position = Vector2(480, 270)
+texture = ExtResource("11_t7qup")
+
+[node name="Constant" type="AudioStreamPlayer2D" parent="." unique_id=1657235264]
+stream = ExtResource("12_8m4sb")
+volume_db = -2.0
+
+[connection signal="finished" from="Constant" to="." method="_on_constant_finished"]

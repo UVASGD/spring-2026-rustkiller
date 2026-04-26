@@ -42,6 +42,7 @@ const SHADOW_PORCUPINE_SCENE := preload("res://Source/Entities/Projectiles/Shado
 @export var reaper_projectile_lifetime := 4.0
 @export var reaper_projectile_attack_side_padding := 84.0
 @export var reaper_projectile_volley_count := 3
+@export var reaper_phase_attack_states: Array[String] = ["ReaperSlash", "ReaperProjectileSlash", "ReaperTriple"]
 
 @export_group("Animal")
 @export var animal_idle_duration := 1.25
@@ -731,6 +732,10 @@ func set_reaper_hitbox_enabled(enabled: bool) -> void:
 	reaper_hitbox.damage_enabled = enabled
 
 func parry_charge_attack() -> bool:
+	var active_state := state_machine.get_lowest_active_state()
+	if active_state and active_state.has_method("parry_cancel"):
+		active_state.parry_cancel()
+		return true
 	return false
 
 func disable_phase_hitboxes() -> void:
@@ -1221,7 +1226,7 @@ func _update_light_platform_mask() -> void:
 	shader_material.set_shader_parameter("platform_texture_size", _light_platform.texture.get_size())
 
 func _refill_reaper_attack_bag() -> void:
-	_reaper_attack_bag = ["ReaperSlash", "ReaperProjectileSlash", "ReaperTriple"]
+	_reaper_attack_bag = _get_configured_reaper_attack_states()
 	_reaper_attack_bag.shuffle()
 
 	if _reaper_attack_bag.size() > 1 and _last_reaper_attack_state != "" and _reaper_attack_bag.back() == _last_reaper_attack_state:
@@ -1229,3 +1234,21 @@ func _refill_reaper_attack_bag() -> void:
 		var swapped_attack_state := _reaper_attack_bag[swap_index]
 		_reaper_attack_bag[swap_index] = _reaper_attack_bag.back()
 		_reaper_attack_bag[_reaper_attack_bag.size() - 1] = swapped_attack_state
+
+func _get_configured_reaper_attack_states() -> Array[String]:
+	var default_attack_states: Array[String] = ["ReaperSlash", "ReaperProjectileSlash", "ReaperTriple"]
+	var allowed_attack_states := {
+		"ReaperSlash": true,
+		"ReaperProjectileSlash": true,
+		"ReaperTriple": true,
+	}
+	var configured_attack_states: Array[String] = []
+
+	for attack_state in reaper_phase_attack_states:
+		if allowed_attack_states.has(attack_state):
+			configured_attack_states.append(attack_state)
+
+	if configured_attack_states.is_empty():
+		return default_attack_states.duplicate()
+
+	return configured_attack_states

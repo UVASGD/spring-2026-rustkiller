@@ -5691,7 +5691,7 @@ tracks/12/keys = {
 "times": PackedFloat32Array(0, 1, 1.2, 1.3000001, 1.4),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(13, 52), Vector2(13, 52), Vector2(13, 86.92042), Vector2(24.943272, 90.44632), Vector2(24.943272, 56.956566)]
+"values": [Vector2(13, 52), Vector2(13, 52), Vector2(56.618416, 86.70601), Vector2(56.279194, 112.64644), Vector2(50.480377, 86.57368)]
 }
 tracks/13/type = "value"
 tracks/13/imported = false
@@ -5703,7 +5703,7 @@ tracks/13/keys = {
 "times": PackedFloat32Array(0, 1, 1.1, 1.2, 1.3000001, 1.4),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-34.5, 5), Vector2(26.000004, -57), Vector2(4, -48), Vector2(-64.09619, -20.734951), Vector2(-38.421955, 55.95787), Vector2(-24.91594, 65.85627)]
+"values": [Vector2(-34.5, 5), Vector2(26.000004, -57), Vector2(4, -48), Vector2(-44.41841, -11.330826), Vector2(-39.644268, 34.294468), Vector2(-29.31229, 46.80368)]
 }
 tracks/14/type = "value"
 tracks/14/imported = false
@@ -5715,7 +5715,7 @@ tracks/14/keys = {
 "times": PackedFloat32Array(0, 1, 1.1, 1.2, 1.3000001, 1.4),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [0.0, 0.91788435, 0.694699, 0.450732, -0.93833715, -0.93833715]
+"values": [0.0, 0.91788435, 0.694699, 0.4507321, -0.6120168, -0.93833715]
 }
 tracks/15/type = "value"
 tracks/15/imported = false
@@ -7236,6 +7236,7 @@ move_name = "Range"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1678892094]
 libraries/ = SubResource("3")
+speed_scale = 0.5
 
 [node name="HfsmDebugLabelComponent" parent="." unique_id=993298933 node_paths=PackedStringArray("hfsm") instance=ExtResource("6")]
 visible = false
@@ -7285,7 +7286,7 @@ script = ExtResource("4_hitbox")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ReaperHitbox" unique_id=531002756]
 position = Vector2(-34.5, 5)
-scale = Vector2(0.99999976, 0.99999976)
+scale = Vector2(0.9999997, 0.9999997)
 shape = SubResource("RectangleShape2D_ltwve")
 disabled = true
 

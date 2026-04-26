@@ -64,5 +64,5 @@ func _on_shadow_mouse_exited():
 
 
 func _on_shadow_pressed():
-	game_container.spawn_level("shadow_level")
+	game_container.spawn_level("shadow_comic")
 	queue_free()

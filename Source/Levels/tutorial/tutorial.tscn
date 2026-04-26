@@ -525,6 +525,7 @@ color = Color(0, 0, 0, 1)
 [node name="BetterPlayer" parent="." unique_id=462766173 instance=ExtResource("7_b8u4h")]
 z_index = 1
 position = Vector2(-492, -143)
+hp = 99999999
 
 [node name="TutorialManager" type="CanvasLayer" parent="." unique_id=1807565938 node_paths=PackedStringArray("player")]
 script = ExtResource("10_r5c6j")

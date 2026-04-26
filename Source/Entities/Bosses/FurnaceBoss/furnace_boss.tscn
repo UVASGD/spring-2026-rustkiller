@@ -3173,6 +3173,7 @@ animation = "combo_2"
 libraries/ = SubResource("AnimationLibrary_1guws")
 
 [node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 node_paths=PackedStringArray("hfsm") instance=ExtResource("17_8xws3")]
+visible = false
 offset_left = 31.0
 offset_top = -52.0
 offset_right = 134.0

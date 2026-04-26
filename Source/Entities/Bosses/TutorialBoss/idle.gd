@@ -9,6 +9,8 @@ func check_transition(_delta) -> TransitionData:
 
 func on_enter() -> void:
 	character.velocity = Vector2.ZERO
+	if character and character.attack_hitbox:
+		character.attack_hitbox.damage_enabled = false
 
 func update(_delta: float) -> void:
 	character.velocity = Vector2.ZERO

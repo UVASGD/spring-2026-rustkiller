@@ -125,6 +125,9 @@ func set_charge_hitbox_enabled(enabled: bool) -> void:
 		charge_hitbox_shape.set_deferred("disabled", not enabled)
 	if charge_hitbox:
 		charge_hitbox.process_mode = Node.PROCESS_MODE_INHERIT if enabled else Node.PROCESS_MODE_DISABLED
+		charge_hitbox.monitoring = enabled
+		charge_hitbox.monitorable = enabled
+		charge_hitbox.damage_enabled = enabled
 
 func update_charge_hitbox_transform(direction: Vector2) -> void:
 	if charge_hitbox == null:

@@ -15,7 +15,9 @@ var is_audio_playing: bool = false
 @onready var levels = {
 	"furnace_comic": preload("res://Source/Levels/FurnaceComic.tscn"),
 	"furnace_level": preload("res://Source/Levels/furnace/furnace_level.tscn"),
-	"shadow_level": preload("res://Source/Levels/shadow_level/shadow_level.tscn")
+	"shadow_comic": preload("res://Source/Levels/ShadowComic.tscn"),
+	"shadow_level": preload("res://Source/Levels/shadow_level/shadow_level.tscn"),
+	"tutorial": preload("res://Source/Levels/tutorial/tutorial.tscn")
 }
 #
 func _ready():

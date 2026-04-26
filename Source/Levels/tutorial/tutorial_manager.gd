@@ -19,6 +19,9 @@ var _current_step: Step = Step.MOVE
 var _dummy_spawned := false
 var _firing := false
 var _dummy_hit := false
+var _projectile_parry_count := 0
+var _dummy_parry_count := 0
+var _dummy_parry_goal_complete := false
 
 func _ready() -> void:
 	tutorial_label.modulate.a = 0.0
@@ -36,8 +39,9 @@ func _on_move_zone_entered(body: Node2D) -> void:
 
 func _advance_to_parry_step() -> void:
 	_current_step = Step.PARRY_OR_DASH
+	_projectile_parry_count = 0
 	show_hint("Use Right Click to Parry and Shift to Dodge!")
-	_show_text("Parry or Dash to dodge the incoming projectiles!")
+	_show_text("Parry or Dash to dodge the incoming projectiles! Parry 5 projectiles to move on to the next stage!")
 	_start_firing()
 
 func _start_firing() -> void:
@@ -71,19 +75,32 @@ func _fire_projectile() -> void:
 	get_tree().current_scene.add_child(projectile)
 
 func _on_player_parried() -> void:
-	if _current_step != Step.PARRY_OR_DASH:
-		return
-	_advance_to_dummy_step()
+	match _current_step:
+		Step.PARRY_OR_DASH:
+			_handle_projectile_parry()
+		Step.DUMMY:
+			_handle_dummy_parry()
 
 # call this from player blitz/dash if you also want dash to count:
 func notify_dashed() -> void:
 	if _current_step != Step.PARRY_OR_DASH:
 		return
+
+func _handle_projectile_parry() -> void:
+	if _current_step != Step.PARRY_OR_DASH:
+		return
+
+	_projectile_parry_count += 1
+	if _projectile_parry_count < 5:
+		return
+
 	_advance_to_dummy_step()
 
 func _advance_to_dummy_step() -> void:
 	_current_step = Step.DUMMY
 	_firing = false
+	_dummy_parry_count = 0
+	_dummy_parry_goal_complete = false
 	if not _dummy_spawned and dummy_scene:
 		var dummy := dummy_scene.instantiate()
 		dummy.global_position = dummy_spawn_point.global_position
@@ -94,13 +111,24 @@ func _advance_to_dummy_step() -> void:
 		if health:
 			health.health_changed.connect(_on_dummy_hit)
 		
-	_show_text("Now attack the dummy!")
+	_show_text("Parrying also works on boss attacks! Parry the boss three times when its attacking to move on!")
+
+func _handle_dummy_parry() -> void:
+	if _current_step != Step.DUMMY or _dummy_parry_goal_complete:
+		return
+
+	_dummy_parry_count += 1
+	if _dummy_parry_count < 3:
+		return
+
+	_dummy_parry_goal_complete = true
+	_show_text("Press q to lock on and lock off the dummy. Switch between melee and range with f and click to attack!")
 
 func _on_dummy_hit(health_update: HealthComponent.HealthUpdate) -> void:
 	var damage := health_update.previous_health - health_update.health
 	if damage <= 0.0:
 		return
-	if _current_step != Step.DUMMY:
+	if _current_step != Step.DUMMY or not _dummy_parry_goal_complete:
 		return
 	_current_step = Step.SANDBOX
 	show_hint("Great job! Keep practicing!")
@@ -128,7 +156,9 @@ func _spawn_exit_marker() -> void:
 func _on_exit_zone_entered(body: Node2D) -> void:
 	if body != player:
 		return
-	get_tree().change_scene_to_file("res://Source/Game Container/game_container.tscn")
+	var game_container := _find_game_container()
+	if game_container:
+		game_container.call_deferred("return_to_main_menu", self)
 
 func _show_text(text: String) -> void:
 	var tween := create_tween()
@@ -145,3 +175,11 @@ func show_hint(text: String) -> void:
 		hint_label.text = text
 	)
 	tween.tween_property(hint_label, "modulate:a", 1.0, 0.4)
+
+func _find_game_container() -> GameContainer:
+	var current: Node = get_parent()
+	while current:
+		if current is GameContainer:
+			return current as GameContainer
+		current = current.get_parent()
+	return null
