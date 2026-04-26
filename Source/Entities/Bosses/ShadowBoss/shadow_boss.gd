@@ -14,9 +14,9 @@ const SHADOW_PORCUPINE_SCENE := preload("res://Source/Entities/Projectiles/Shado
 
 @export_group("Phase")
 @export var start_in_player_phase := false
-@export var player_phase_health := 100.0
-@export var animal_phase_health := 100.0
-@export var reaper_phase_health := 100.0
+@export var player_phase_health := 800.0
+@export var animal_phase_health := 800.0
+@export var reaper_phase_health := 600.0
 @export var animal_idle_animation: StringName = &"animal_idle"
 @export var animal_transform_animation: StringName = &"animal_snake_transform"
 @export var animal_slither_animation: StringName = &"animal_snake_slither"
@@ -33,7 +33,8 @@ const SHADOW_PORCUPINE_SCENE := preload("res://Source/Entities/Projectiles/Shado
 @export var reaper_post_melee_idle_duration := 1.0
 @export var reaper_move_speed := 180.0
 @export var reaper_post_melee_walk_speed := 90.0
-@export var reaper_slash_damage := 25.0
+@export var reaper_slash_damage := 150
+@export var reaper_triple_damage := 500
 @export var reaper_slash_cooldown := 1.2
 @export var reaper_melee_charge_count := 3
 @export var reaper_projectile_damage := 18.0
@@ -47,6 +48,8 @@ const SHADOW_PORCUPINE_SCENE := preload("res://Source/Entities/Projectiles/Shado
 @export var animal_move_speed := 90.0
 @export var animal_attack_stop_distance := 72.0
 @export var animal_attack_damage := 20.0
+@export var animal_wolf_attack_damage := 20.0
+@export var animal_porcupine_attack_damage := 20.0
 @export var animal_wolf_intro_animation: StringName = &"wolf_init"
 @export var animal_wolf_approach_animations: Array[StringName] = [&"wolf_app_1", &"wolf_app_2", &"wolf_app_3"]
 @export var animal_wolf_attack_animations: Array[StringName] = [&"wolf_attack_1", &"wolf_attack_2", &"wolf_attack_3"]
@@ -80,6 +83,7 @@ const SHADOW_PORCUPINE_SCENE := preload("res://Source/Entities/Projectiles/Shado
 @export var skull_spawn_radius := 120.0
 @export var skull_spawn_min_distance := 42.0
 @export_range(0.0, 1.0, 0.01) var skull_spawn_chance := 0.5
+@export var skull_attack_damage := 20.0
 
 @onready var state_machine: HFSM = $ShadowHFSM
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -345,6 +349,12 @@ func get_animal_wolf_attack_animations() -> Array[String]:
 func get_animal_wolf_circle_radius() -> float:
 	return maxf(animal_wolf_circle_radius, 1.0)
 
+func get_animal_attack_damage() -> float:
+	return maxf(animal_attack_damage, 0.0)
+
+func get_animal_wolf_attack_damage() -> float:
+	return maxf(animal_wolf_attack_damage, 0.0)
+
 func choose_animal_attack_type() -> String:
 	var attack_types := ["snake", "wolf", "porcupine"]
 	var attack_type: String = attack_types[_animal_attack_index % attack_types.size()]
@@ -364,6 +374,9 @@ func get_animal_porcupine_attack_duration() -> float:
 	var minimum_duration := get_animal_porcupine_wave_interval() * float(maxi(get_animal_porcupine_wave_count() - 1, 0)) + 0.4
 	return maxf(animal_porcupine_attack_duration, minimum_duration)
 
+func get_animal_porcupine_attack_damage() -> float:
+	return maxf(animal_porcupine_attack_damage, 0.0)
+
 func spawn_porcupine_wave_on_map() -> void:
 	var spawn_positions := _get_animal_porcupine_spawn_positions()
 	for spawn_position in spawn_positions:
@@ -373,7 +386,7 @@ func spawn_porcupine_wave_on_map() -> void:
 
 		var projectile_hitbox := HitboxComponent.get_child_component(porcupine)
 		if projectile_hitbox:
-			projectile_hitbox.init(animal_attack_damage, "boss")
+			projectile_hitbox.init(get_animal_porcupine_attack_damage(), "boss")
 
 		porcupine.add_to_group("shadow_projectile")
 
@@ -447,6 +460,12 @@ func get_reaper_post_melee_idle_duration() -> float:
 
 func get_reaper_post_melee_walk_speed() -> float:
 	return maxf(reaper_post_melee_walk_speed, 0.0)
+
+func get_reaper_slash_damage() -> float:
+	return maxf(reaper_slash_damage, 0.0)
+
+func get_reaper_triple_damage() -> float:
+	return maxf(reaper_triple_damage, 0.0)
 
 func get_reaper_melee_charge_count() -> int:
 	return maxi(reaper_melee_charge_count, 1)
@@ -655,7 +674,7 @@ func _configure_ouroboros_hitbox() -> void:
 		return
 
 	ouroboros_hitbox.hit_owner = "boss"
-	ouroboros_hitbox.damage = animal_attack_damage
+	ouroboros_hitbox.damage = get_animal_attack_damage()
 	ouroboros_hitbox.damage_enabled = true
 
 func _configure_slash_hitbox() -> void:
@@ -671,7 +690,7 @@ func _configure_reaper_hitbox() -> void:
 		return
 
 	reaper_hitbox.hit_owner = "boss"
-	reaper_hitbox.damage = reaper_slash_damage
+	reaper_hitbox.damage = get_reaper_slash_damage()
 	reaper_hitbox.damage_enabled = true
 
 func _configure_wolf_hitbox() -> void:
@@ -679,8 +698,51 @@ func _configure_wolf_hitbox() -> void:
 		return
 
 	wolf_hitbox.hit_owner = "boss"
-	wolf_hitbox.damage = animal_attack_damage
+	wolf_hitbox.damage = get_animal_wolf_attack_damage()
 	wolf_hitbox.damage_enabled = true
+
+func set_reaper_hitbox_slash_damage() -> void:
+	if reaper_hitbox == null:
+		return
+	reaper_hitbox.damage = get_reaper_slash_damage()
+
+func set_reaper_hitbox_triple_damage() -> void:
+	if reaper_hitbox == null:
+		return
+	reaper_hitbox.damage = get_reaper_triple_damage()
+
+func set_reaper_hitbox_active(enabled: bool) -> void:
+	if reaper_hitbox == null:
+		return
+
+	reaper_hitbox.monitoring = enabled
+	reaper_hitbox.monitorable = enabled
+	reaper_hitbox.damage_enabled = enabled
+
+	for child in reaper_hitbox.get_children():
+		_set_collision_shapes_disabled_recursive(child, not enabled)
+
+func set_reaper_hitbox_enabled(enabled: bool) -> void:
+	if reaper_hitbox == null:
+		return
+
+	reaper_hitbox.monitoring = enabled
+	reaper_hitbox.monitorable = enabled
+	reaper_hitbox.damage_enabled = enabled
+
+func parry_charge_attack() -> bool:
+	if state_machine == null:
+		return false
+
+	var active_state := state_machine.get_lowest_active_state()
+	if active_state == null:
+		return false
+	if active_state.has_method("parry_charge_attack"):
+		return active_state.parry_charge_attack()
+	if active_state.has_method("parry_cancel"):
+		active_state.parry_cancel()
+		return true
+	return false
 
 func disable_phase_hitboxes() -> void:
 	_disable_hitbox_collision_shapes(ouroboros_hitbox)
@@ -751,6 +813,14 @@ func _disable_collision_shapes_recursive(node: Node) -> void:
 
 	for child in node.get_children():
 		_disable_collision_shapes_recursive(child)
+
+func _set_collision_shapes_disabled_recursive(node: Node, disabled: bool) -> void:
+	var collision_shape := node as CollisionShape2D
+	if collision_shape:
+		collision_shape.set_deferred("disabled", disabled)
+
+	for child in node.get_children():
+		_set_collision_shapes_disabled_recursive(child, disabled)
 
 func _enable_hitbox(hitbox: HitboxComponent) -> void:
 	if hitbox == null:
@@ -888,6 +958,10 @@ func spawn_shadow_skulls_near_player() -> void:
 		var projectile_scene := SHADOW_SKULL_SCENE if randf() < skull_spawn_chance else SHADOW_BAT_SCENE
 		var projectile := projectile_scene.instantiate()
 		projectile.global_position = spawn_position
+		if projectile_scene == SHADOW_SKULL_SCENE:
+			var projectile_hitbox := HitboxComponent.get_child_component(projectile)
+			if projectile_hitbox:
+				projectile_hitbox.init(skull_attack_damage, "boss")
 		projectile.add_to_group("shadow_projectile")
 		get_tree().current_scene.add_child(projectile)
 

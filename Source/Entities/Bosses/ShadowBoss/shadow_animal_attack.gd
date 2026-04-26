@@ -149,7 +149,13 @@ func _configure_attack_hitbox() -> void:
 
 	var damage := 1.0
 	if character:
-		damage = float(character.get("animal_attack_damage"))
+		match _attack_mode:
+			AttackMode.WOLF:
+				if character.has_method("get_animal_wolf_attack_damage"):
+					damage = character.get_animal_wolf_attack_damage()
+			_:
+				if character.has_method("get_animal_attack_damage"):
+					damage = character.get_animal_attack_damage()
 
 	_attack_hitbox.damage = damage
 	_attack_hitbox.hit_owner = "boss"

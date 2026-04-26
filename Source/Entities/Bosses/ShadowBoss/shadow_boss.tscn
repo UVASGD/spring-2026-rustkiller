@@ -7058,13 +7058,19 @@ size = Vector2(120, 38.71128)
 motion_mode = 1
 script = ExtResource("1")
 reaper_move_speed = 450.0
+reaper_projectile_damage = 100.0
 animal_move_speed = 200.0
+animal_attack_damage = 50.0
+animal_wolf_attack_damage = 200.0
+animal_porcupine_attack_damage = 50.0
 move_speed = 60.0
 orbit_radius = 100.0
+slash_damage = 300.0
 range_cooldown = 2.0
 skulls_per_range_loop = 5
 skull_spawn_radius = 50.0
 skull_spawn_chance = 1.0
+skull_attack_damage = 60.0
 
 [node name="LightCircle" type="Sprite2D" parent="." unique_id=100654360]
 material = SubResource("ShaderMaterial_light_circle_mask")

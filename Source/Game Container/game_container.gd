@@ -6,6 +6,8 @@ class_name GameContainer
 @onready var tutorial_scene = preload("res://Source/Levels/tutorial/tutorial.tscn")
 #@onready var credits = preload("res://Source/Menus/Credits.tscn")
 @onready var select_map = preload("res://Source/Menus/select_boss.tscn")
+@onready var credits = preload("res://Source/Menus/credits.tscn")
+
 @onready var audio_player:AudioStreamPlayer = $AudioStreamPlayer
 
 var is_audio_playing: bool = false
@@ -26,6 +28,12 @@ func spawn_main_menu():
 	#$AudioStreamPlayer.playing = true
 	var main_menu_inst = main_menu_scene.instantiate()
 	add_child(main_menu_inst)
+	
+func spawn_credits():
+	if not is_audio_playing:
+		play_audio()
+	var credit_inst = credits.instantiate()
+	add_child(credit_inst)
 	
 func spawn_map_select():
 	if not is_audio_playing:

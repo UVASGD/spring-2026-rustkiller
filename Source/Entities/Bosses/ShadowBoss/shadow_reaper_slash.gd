@@ -1,14 +1,20 @@
 extends HFSM
 
 var _charges_remaining := 0
+var _was_parried := false
 
 func on_enter() -> void:
 	_charges_remaining = _get_reaper_melee_charge_count()
+	_was_parried = false
 	if character and character.has_method("begin_reaper_slash_cooldown"):
 		character.begin_reaper_slash_cooldown()
+	if character and character.has_method("set_reaper_hitbox_slash_damage"):
+		character.set_reaper_hitbox_slash_damage()
 	_begin_charge()
 
 func on_exit() -> void:
+	if character and character.has_method("set_reaper_hitbox_active"):
+		character.set_reaper_hitbox_active(false)
 	if character and character.has_method("reset_reaper_slash_movement"):
 		character.reset_reaper_slash_movement()
 	if character and character.has_method("stop_motion"):
@@ -29,6 +35,10 @@ func update(delta: float) -> void:
 			character.reaper_move_toward_target(delta)
 
 func check_transition(_delta: float) -> TransitionData:
+	if _was_parried:
+		if character and character.has_method("should_enter_player_phase") and character.should_enter_player_phase():
+			return TransitionData.new(true, "ReaperExit")
+		return TransitionData.new(true, "ReaperPostMeleeIdle")
 	if _animation_finished(_get_reaper_slash_animation()):
 		_clear_animation_finished(_get_reaper_slash_animation())
 		_charges_remaining -= 1
@@ -43,8 +53,20 @@ func check_transition(_delta: float) -> TransitionData:
 func _begin_charge() -> void:
 	if character and character.has_method("reset_reaper_slash_movement"):
 		character.reset_reaper_slash_movement()
+	if character and character.has_method("set_reaper_hitbox_enabled"):
+		character.set_reaper_hitbox_enabled(true)
 	if character and character.has_method("play_visual_animation"):
 		character.play_visual_animation(_get_reaper_slash_animation())
+
+func parry_cancel() -> void:
+	_was_parried = true
+	_charges_remaining = 0
+	if character and character.has_method("set_reaper_hitbox_active"):
+		character.set_reaper_hitbox_active(false)
+	if character and character.has_method("stop_reaper_slash_movement"):
+		character.stop_reaper_slash_movement()
+	if character and character.has_method("stop_motion"):
+		character.stop_motion()
 
 func _get_reaper_slash_animation() -> String:
 	if character and character.has_method("get_reaper_slash_animation"):

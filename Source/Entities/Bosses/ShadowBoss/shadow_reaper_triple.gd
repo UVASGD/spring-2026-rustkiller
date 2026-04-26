@@ -14,6 +14,8 @@ func on_enter() -> void:
 		character.reset_reaper_slash_movement()
 	if character and character.has_method("begin_reaper_slash_cooldown"):
 		character.begin_reaper_slash_cooldown()
+	if character and character.has_method("set_reaper_hitbox_triple_damage"):
+		character.set_reaper_hitbox_triple_damage()
 	if character and character.has_method("stop_motion"):
 		character.stop_motion()
 	if character and character.has_method("play_visual_animation"):
