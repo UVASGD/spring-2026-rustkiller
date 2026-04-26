@@ -369,7 +369,7 @@ _data = {
 &"porcupine": SubResource("Animation_uwxjw")
 }
 
-[node name="ShadowPorcupine" type="Node2D" unique_id=929834442]
+[node name="ShadowPorcupine" type="Node2D" unique_id=929834442 groups=["enemy_projectile"]]
 script = ExtResource("1_ntn0u")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1206096889]

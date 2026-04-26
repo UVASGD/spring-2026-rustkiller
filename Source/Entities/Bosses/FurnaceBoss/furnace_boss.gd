@@ -2,8 +2,11 @@ extends CharacterBody2D
 class_name FurnaceBoss
 
 const SINE_PROJECTILE_SCENE := preload("res://Source/Entities/Projectiles/SineProjectile/SineProjectile.tscn")
+const DEFEAT_FADE_DURATION := 0.75
+const RETURN_TO_BOSS_SELECT_DELAY := 5.0
 
 @export var player : CharacterBody2D
+@export var max_health: float = 400.0
 
 @export_group("Movement")
 @export var chase_speed := 250.0
@@ -22,11 +25,19 @@ const SINE_PROJECTILE_SCENE := preload("res://Source/Entities/Projectiles/SinePr
 @onready var animation_player = $AnimationPlayer
 @onready var projectile_origin = $Visuals/projectile_origin
 @onready var health_component = $HealthComponent as HealthComponent
+@onready var visuals = $Visuals as Node2D
+@onready var hurtbox_component = $HurtboxComponent as HurtboxComponent
+@onready var healthbar = $Healthbar as CanvasLayer
 
 var invulnerable := false
 var phase_2_entered := false
+var defeat_sequence_started := false
 
 func _ready():
+	if health_component != null:
+		health_component.max_health = max_health
+		health_component.health = max_health
+
 	state_machine.player = player
 	state_machine.character = self
 	state_machine.animator = animation_player
@@ -35,6 +46,10 @@ func _ready():
 	animation_player.speed_scale = 1.0
 
 func _physics_process(delta):
+	if _should_start_defeat_sequence():
+		_start_defeat_sequence()
+		return
+
 	state_machine._update(delta)
 
 func is_invulnerable() -> bool:
@@ -59,6 +74,36 @@ func begin_phase_2() -> void:
 func complete_phase_2_transition() -> void:
 	velocity = Vector2.ZERO
 	set_invulnerable(false)
+
+func _should_start_defeat_sequence() -> bool:
+	return phase_2_entered and not defeat_sequence_started and health_component != null and health_component.health <= 0.0
+
+func _start_defeat_sequence() -> void:
+	if defeat_sequence_started:
+		return
+
+	defeat_sequence_started = true
+	velocity = Vector2.ZERO
+	set_invulnerable(true)
+	set_physics_process(false)
+	if animation_player:
+		animation_player.stop()
+	if hurtbox_component:
+		hurtbox_component.set_deferred("monitoring", false)
+		hurtbox_component.set_deferred("monitorable", false)
+	if healthbar:
+		healthbar.visible = false
+
+	var fade_tween := create_tween()
+	if visuals:
+		fade_tween.tween_property(visuals, "modulate", Color(1.0, 1.0, 1.0, 0.0), DEFEAT_FADE_DURATION)
+	await fade_tween.finished
+	hide()
+	await get_tree().create_timer(RETURN_TO_BOSS_SELECT_DELAY, true, false, true).timeout
+
+	var game_container := _find_game_container()
+	if game_container:
+		game_container.call_deferred("return_to_boss_select", self)
 
 func fire_sine_projectile(projectile_rows: int = 1, row_spacing: float = 28.0) -> void:
 	if player == null:
@@ -100,3 +145,11 @@ func parry_charge_attack() -> bool:
 		active_state.parry_cancel()
 		return true
 	return false
+
+func _find_game_container() -> GameContainer:
+	var current: Node = get_parent()
+	while current:
+		if current is GameContainer:
+			return current as GameContainer
+		current = current.get_parent()
+	return null

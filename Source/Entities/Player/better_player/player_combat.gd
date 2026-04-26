@@ -72,26 +72,37 @@ func try_parry() -> void:
 	for area in _parry_window.get_overlapping_areas():
 		if area is HitboxComponent:
 			var hitbox := area as HitboxComponent
+			if not hitbox.damage_enabled:
+				continue
 			if hitbox.hit_owner == "boss":
-				var hit_source := hitbox.get_parent()
-				var parry_receiver := _find_parry_receiver(hit_source)
-				var parry_succeeded := false
-				if parry_receiver and parry_receiver.has_method("parry_charge_attack"):
-					parry_succeeded = parry_receiver.parry_charge_attack()
-				elif _is_boss_attack_source(hit_source):
-					parry_succeeded = true
-				elif _should_destroy_parry_source(hit_source):
-					hit_source.queue_free()
-					parry_succeeded = true
+				var parry_succeeded := _try_parry_hit_source(hitbox)
 
 				if not parry_succeeded:
 					continue
+				if _player.has_method("heal_from_successful_parry"):
+					_player.heal_from_successful_parry()
 				_player.activate_parry_invulnerability()
 				_player.set_state("parrying")
 				_anim.stop()
 				_anim.play("parry")
 				_anim.seek(0.0, true)
 				return
+
+func _try_parry_hit_source(hit_source: Node) -> bool:
+	var parry_receiver := _find_parry_receiver(hit_source)
+	if parry_receiver and parry_receiver.has_method("parry_charge_attack"):
+		if parry_receiver.parry_charge_attack():
+			return true
+
+	if _is_boss_attack_source(hit_source):
+		return true
+
+	var destroyable_source := _find_destroyable_parry_source(hit_source)
+	if destroyable_source != null:
+		destroyable_source.queue_free()
+		return true
+
+	return false
 
 func fire_burst() -> void:
 	is_shooting = true
@@ -150,16 +161,17 @@ func _should_destroy_parry_source(hit_source: Node) -> bool:
 	if _is_boss_attack_source(hit_source):
 		return false
 
-	if hit_source.is_in_group("shadow_projectile"):
-		return true
+	return hit_source.is_in_group("enemy_projectile")
 
-	var script := hit_source.get_script() as Script
-	if script:
-		var script_path := script.resource_path
-		if script_path.contains("/Projectiles/"):
-			return true
-
-	return false
+func _find_destroyable_parry_source(hit_source: Node) -> Node:
+	var current := hit_source
+	while current != null:
+		if _should_destroy_parry_source(current):
+			return current
+		if _is_boss_attack_source(current):
+			return null
+		current = current.get_parent()
+	return null
 
 func _start_melee() -> void:
 	if combo_window:

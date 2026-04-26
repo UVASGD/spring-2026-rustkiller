@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://b2gsdpw60cla3" path="res://Source/Entities/Components/HitboxComponent/hitbox_component.tscn" id="7_2jere"]
 [ext_resource type="Texture2D" uid="uid://0i8ka85rtui0" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushParryNoEnergy.png" id="7_36sdt"]
 [ext_resource type="Texture2D" uid="uid://he47ke6bx1pr" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushParryEnergy.png" id="10_n5m2y"]
+[ext_resource type="Texture2D" uid="uid://bn2ylli6j8hrw" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushDeath.png" id="10_qv273"]
 [ext_resource type="Script" uid="uid://djq05o0j702he" path="res://Source/Entities/Player/better_player/cursor.gd" id="11_1ysy8"]
 [ext_resource type="Texture2D" uid="uid://ci2yohgjua3kq" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushAttackCombo_FirstOne.png" id="11_ht1kh"]
 [ext_resource type="Texture2D" uid="uid://e4rc2ositmbn" path="res://Source/Entities/Player/better_player/Art/PlayerBossRushAttackCombo_SecondOne.png" id="12_oah5i"]
@@ -346,6 +347,35 @@ tracks/6/keys = {
 "values": [true, false, true]
 }
 
+[sub_resource type="Animation" id="Animation_vu88f"]
+resource_name = "death"
+length = 1.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteManager/PlayerSprites:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"death"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteManager/PlayerSprites:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.90000004, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+}
+
 [sub_resource type="Animation" id="Animation_uxmjj"]
 resource_name = "idle"
 loop_mode = 1
@@ -514,6 +544,7 @@ _data = {
 &"WalkLeft": SubResource("Animation_ohtk3"),
 &"a1": SubResource("Animation_2r8k3"),
 &"a2": SubResource("Animation_c2joo"),
+&"death": SubResource("Animation_vu88f"),
 &"idle": SubResource("Animation_uxmjj"),
 &"parry": SubResource("Animation_02bga"),
 &"shoot": SubResource("Animation_2jere")
@@ -574,6 +605,50 @@ region = Rect2(348, 0, 116, 116)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ngsdn"]
 atlas = ExtResource("12_oah5i")
 region = Rect2(464, 0, 116, 116)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqh0h"]
+atlas = ExtResource("10_qv273")
+region = Rect2(0, 0, 75, 75)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_75kmn"]
+atlas = ExtResource("10_qv273")
+region = Rect2(75, 0, 75, 75)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6djbh"]
+atlas = ExtResource("10_qv273")
+region = Rect2(150, 0, 75, 75)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wniso"]
+atlas = ExtResource("10_qv273")
+region = Rect2(225, 0, 75, 75)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_efo35"]
+atlas = ExtResource("10_qv273")
+region = Rect2(300, 0, 75, 75)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w8d22"]
+atlas = ExtResource("10_qv273")
+region = Rect2(375, 0, 75, 75)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5qbnb"]
+atlas = ExtResource("10_qv273")
+region = Rect2(450, 0, 75, 75)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_krbcq"]
+atlas = ExtResource("10_qv273")
+region = Rect2(525, 0, 75, 75)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_daxww"]
+atlas = ExtResource("10_qv273")
+region = Rect2(600, 0, 75, 75)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ba2p"]
+atlas = ExtResource("10_qv273")
+region = Rect2(675, 0, 75, 75)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fjv62"]
+atlas = ExtResource("10_qv273")
+region = Rect2(750, 0, 75, 75)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6a5c5"]
 atlas = ExtResource("3_g17sf")
@@ -747,6 +822,44 @@ animations = [{
 "loop": true,
 "name": &"a2",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dqh0h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_75kmn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6djbh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wniso")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_efo35")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w8d22")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5qbnb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_krbcq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_daxww")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ba2p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fjv62")
+}],
+"loop": true,
+"name": &"death",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -1065,7 +1178,7 @@ animations = [{
 
 [node name="BetterPlayer" type="CharacterBody2D" unique_id=462766173 node_paths=PackedStringArray("_sfx_player", "_walk_sfx_player") groups=["PLAYER"]]
 script = ExtResource("1_ohtk3")
-hp = 200000
+successful_parry_heal_amount = 200.0
 _sfx_player = NodePath("SFXPlayer")
 _walk_sfx_player = NodePath("WalkSFXPlayer")
 

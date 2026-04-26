@@ -51,6 +51,7 @@ func apply_hitbox(hitbox_component: HitboxComponent) -> bool:
 	if !detect_only:
 		_deal_damage_with_resistances(hitbox_component.damage)
 	hit_by_hitbox.emit(hitbox_component)
+	_disable_projectile_hitbox_after_successful_hit(hitbox_component)
 	return true
 
 func _on_area_entered(other_area: Area2D) -> void:
@@ -58,3 +59,26 @@ func _on_area_entered(other_area: Area2D) -> void:
 		return
 
 	apply_hitbox(other_area as HitboxComponent)
+
+func _disable_projectile_hitbox_after_successful_hit(hitbox_component: HitboxComponent) -> void:
+	if hitbox_component == null:
+		return
+
+	var hit_source := hitbox_component.get_parent()
+	if hit_source == null:
+		return
+
+	if hit_source.is_in_group("shadow_projectile"):
+		hitbox_component.damage_enabled = false
+		if hit_source.has_method("disable_active"):
+			hit_source.disable_active()
+		return
+
+	var script := hit_source.get_script() as Script
+	if script == null:
+		return
+
+	if script.resource_path.contains("/Projectiles/"):
+		hitbox_component.damage_enabled = false
+		if hit_source.has_method("disable_active"):
+			hit_source.disable_active()

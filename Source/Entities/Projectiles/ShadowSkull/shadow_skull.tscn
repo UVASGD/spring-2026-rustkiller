@@ -200,7 +200,7 @@ _data = {
 &"skull": SubResource("Animation_ntw3g")
 }
 
-[node name="ShadowSkull" type="Node2D" unique_id=1059470260]
+[node name="ShadowSkull" type="Node2D" unique_id=1059470260 groups=["enemy_projectile"]]
 script = ExtResource("1_a4twt")
 min_pitch_scale = 0.7
 

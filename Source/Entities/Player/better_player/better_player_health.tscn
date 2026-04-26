@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c3afunl511glt"]
 
 [ext_resource type="Script" uid="uid://x0rrup07hl3q" path="res://Source/Entities/Player/better_player/player_controller.gd" id="1_loo1l"]
-[ext_resource type="Script" path="res://Source/Entities/Player/better_player/player_movement.gd" id="2_ro2eu"]
+[ext_resource type="Script" uid="uid://bl41g785xak2s" path="res://Source/Entities/Player/better_player/player_movement.gd" id="2_ro2eu"]
 [ext_resource type="PackedScene" uid="uid://cccn2edq2kj7x" path="res://Source/Entities/Components/HealthComponent/health_component.tscn" id="3_65ask"]
 [ext_resource type="PackedScene" uid="uid://ccu0np30bscvr" path="res://Source/Entities/Components/HurtboxComponent/hurtbox_component.tscn" id="4_76jwt"]
 [ext_resource type="Shader" uid="uid://tioybr8qi5hn" path="res://Source/Entities/Player/better_player/shaders/color_tint_shader.gdshader" id="5_jmdt4"]
@@ -1082,6 +1082,7 @@ script = ExtResource("2_ro2eu")
 [node name="HealthComponent" parent="." unique_id=528490001 instance=ExtResource("3_65ask")]
 
 [node name="HurtboxComponent" parent="." unique_id=1746099221 node_paths=PackedStringArray("health_component") instance=ExtResource("4_76jwt")]
+visible = false
 health_component = NodePath("../HealthComponent")
 entity_name = "player"
 

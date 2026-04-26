@@ -1,22 +1,17 @@
-[gd_scene format=3 uid="uid://dv865mv0x2504"]
+[gd_scene format=3 uid="uid://da0w334tjwadk"]
 
-[ext_resource type="Script" uid="uid://gookq0g8ivi" path="res://Source/Levels/shadow_level/shadow_level.gd" id="1_l30bm"]
-[ext_resource type="Script" uid="uid://np8yjxnxxm8m" path="res://Source/Entities/Components/LockOnComponent/lockon_system.gd" id="2_q0bfg"]
-[ext_resource type="PackedScene" uid="uid://cb71enmyu25jy" path="res://Source/Entities/Player/better_player/UI/player_ui.tscn" id="2_ragnm"]
-[ext_resource type="Texture2D" uid="uid://cdkm5mxrhden3" path="res://Source/Entities/Environment/StageOne/Art/pillar.png" id="3_0kpjy"]
-[ext_resource type="Texture2D" uid="uid://x8n2aq26kuv7" path="res://Source/Entities/Environment/StageOne/Art/stagebackground.png" id="4_7vhmf"]
-[ext_resource type="Texture2D" uid="uid://bktdkuma36eod" path="res://Source/Entities/Environment/StageOne/Art/Stage.png" id="5_4bo1q"]
-[ext_resource type="Texture2D" uid="uid://crqau6b6gebpq" path="res://Source/Levels/shadow_level/stage3_curtain_back.png" id="5_i24mp"]
-[ext_resource type="Texture2D" uid="uid://dhc3xltm4mims" path="res://Source/Entities/Environment/StageOne/Art/offwhitebg.png" id="6_inx5i"]
-[ext_resource type="Texture2D" uid="uid://d1t4cckuncenq" path="res://Source/Entities/Environment/StageOne/Art/StagePillar.png" id="6_o0rlx"]
-[ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="7_x4wbb"]
-[ext_resource type="PackedScene" uid="uid://crvepxby1imcj" path="res://Source/Entities/Player/better_player/better_player.tscn" id="8_rwrje"]
-[ext_resource type="PackedScene" uid="uid://b0u27366q5in1" path="res://Source/Entities/Bosses/ShadowBoss/shadow_boss.tscn" id="9_l30bm"]
-[ext_resource type="PackedScene" uid="uid://cn1ddvofhbwom" path="res://Source/Entities/Bosses/ShadowBoss/shadow_boss_machine.tscn" id="11_w0hja"]
-[ext_resource type="Texture2D" uid="uid://birlbd6ass7kl" path="res://Source/Levels/shadow_level/stage.png" id="12_wwydi"]
-[ext_resource type="Texture2D" uid="uid://dkwqy6pu45w06" path="res://Source/Levels/shadow_level/stage3_curtain_left.png" id="14_ragnm"]
-[ext_resource type="Texture2D" uid="uid://dc23ujqytghrj" path="res://Source/Levels/shadow_level/stage3_curtain_right.png" id="15_0240w"]
-[ext_resource type="AudioStream" uid="uid://dno5l1tjxtu6i" path="res://Source/Resources/Audio/Music/Shadow/rust-boss-f.mp3" id="16_h8i7r"]
+[ext_resource type="Script" uid="uid://co4focenal3gu" path="res://Source/Levels/furnace/furnace_level.gd" id="1_m3eoj"]
+[ext_resource type="Script" uid="uid://np8yjxnxxm8m" path="res://Source/Entities/Components/LockOnComponent/lockon_system.gd" id="2_4ut58"]
+[ext_resource type="Texture2D" uid="uid://cdkm5mxrhden3" path="res://Source/Entities/Environment/StageOne/Art/pillar.png" id="3_57d2n"]
+[ext_resource type="Texture2D" uid="uid://x8n2aq26kuv7" path="res://Source/Entities/Environment/StageOne/Art/stagebackground.png" id="4_l51s1"]
+[ext_resource type="Texture2D" uid="uid://bktdkuma36eod" path="res://Source/Entities/Environment/StageOne/Art/Stage.png" id="5_x7f0q"]
+[ext_resource type="Texture2D" uid="uid://dhc3xltm4mims" path="res://Source/Entities/Environment/StageOne/Art/offwhitebg.png" id="6_1bcva"]
+[ext_resource type="Texture2D" uid="uid://d1t4cckuncenq" path="res://Source/Entities/Environment/StageOne/Art/StagePillar.png" id="6_kollc"]
+[ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="7_y8ixg"]
+[ext_resource type="PackedScene" uid="uid://ckif5hgi5j0q7" path="res://Source/Entities/Bosses/FurnaceBoss/furnace_boss.tscn" id="8_cf83t"]
+[ext_resource type="PackedScene" uid="uid://cb71enmyu25jy" path="res://Source/Entities/Player/better_player/UI/player_ui.tscn" id="9_lj8hg"]
+[ext_resource type="AudioStream" uid="uid://cy2es733ar0fh" path="res://Source/Resources/Audio/Music/Furnace/rboss-1.mp3" id="12_m3eoj"]
+[ext_resource type="PackedScene" uid="uid://crvepxby1imcj" path="res://Source/Entities/Player/better_player/better_player.tscn" id="13_24ma2"]
 
 [sub_resource type="Environment" id="Environment_f8vh1"]
 background_mode = 3
@@ -27,42 +22,14 @@ adjustment_enabled = true
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_86f36"]
 size = Vector2(24.600004, 12.145748)
 
-[node name="TestLevel" type="Node2D" unique_id=276251252]
-script = ExtResource("1_l30bm")
-
-[node name="player_ui" parent="." unique_id=732973211 instance=ExtResource("2_ragnm")]
-
-[node name="Node2D" type="Node2D" parent="." unique_id=1631854621]
-position = Vector2(0, -664)
-scale = Vector2(1.4, 1.4)
-
-[node name="Sprite2D" type="Sprite2D" parent="Node2D" unique_id=980926697]
-texture = ExtResource("12_wwydi")
-
-[node name="bg2" type="Sprite2D" parent="Node2D" unique_id=118523124]
-scale = Vector2(0.99999994, 0.99999994)
-texture = ExtResource("5_i24mp")
-
-[node name="curtain" type="Sprite2D" parent="Node2D" unique_id=1016330508]
-scale = Vector2(0.99999994, 0.99999994)
-texture = ExtResource("15_0240w")
-
-[node name="curtain2" type="Sprite2D" parent="Node2D" unique_id=917050316]
-texture = ExtResource("14_ragnm")
-
-[node name="ColorRect" type="ColorRect" parent="Node2D" unique_id=1918776168]
-offset_left = -1539.2308
-offset_top = 710.7693
-offset_right = -1496.7559
-offset_bottom = 750.7693
-scale = Vector2(72.846, 40)
-color = Color(0.14117648, 0.08235294, 0.15294118, 1)
+[node name="FurnaceLevel" type="Node2D" unique_id=276251252]
+script = ExtResource("1_m3eoj")
 
 [node name="LockOnSystem" type="Node2D" parent="." unique_id=857070825 node_paths=PackedStringArray("camera", "player")]
 z_index = 1
-script = ExtResource("2_q0bfg")
+script = ExtResource("2_4ut58")
 camera = NodePath("../Camera2D")
-player = NodePath("../BetterPlayer")
+player = NodePath("../BetterPlayer2")
 lerp_speed = 10.0
 padding = 300.0
 shake_magnitude = 40.0
@@ -75,57 +42,51 @@ environment = SubResource("Environment_f8vh1")
 [node name="Environment" type="Node2D" parent="." unique_id=1417361352]
 
 [node name="Pillar3" type="Sprite2D" parent="Environment" unique_id=875237494]
-visible = false
-modulate = Color(0.79521304, 0.901673, 1, 1)
+modulate = Color(0.504, 0.56909996, 0.63, 1)
 position = Vector2(539.00006, -231)
 scale = Vector2(3.3981662, 9.544174)
-texture = ExtResource("3_0kpjy")
+texture = ExtResource("3_57d2n")
 
 [node name="Pillar" type="Sprite2D" parent="Environment" unique_id=249386930]
-visible = false
-modulate = Color(0.79521304, 0.901673, 1, 1)
+modulate = Color(0.352, 0.39746666, 0.44, 1)
 position = Vector2(941, -177)
 rotation = -0.2617994
 scale = Vector2(9.398168, 26.395927)
-texture = ExtResource("3_0kpjy")
+texture = ExtResource("3_57d2n")
 
 [node name="Gate" type="Sprite2D" parent="Environment" unique_id=260732666]
-visible = false
-modulate = Color(0.79521304, 0.901673, 1, 1)
+modulate = Color(0.488, 0.5510333, 0.61, 1)
 position = Vector2(-188, 4260.9995)
 rotation = 0.5235988
 scale = Vector2(19.134907, 19.134907)
-texture = ExtResource("4_7vhmf")
+texture = ExtResource("4_l51s1")
 
 [node name="Pillar2" type="Sprite2D" parent="Environment" unique_id=466119357]
-visible = false
-modulate = Color(0.79521304, 0.901673, 1, 1)
+modulate = Color(0.28, 0.31616664, 0.35, 1)
 position = Vector2(1254, -443.00003)
 rotation = -0.2617994
 scale = Vector2(9.398168, 26.395927)
-texture = ExtResource("3_0kpjy")
+texture = ExtResource("3_57d2n")
 
 [node name="Gate2" type="Sprite2D" parent="Environment" unique_id=1194214810]
-visible = false
-modulate = Color(0.79607844, 0.9019608, 1, 0.56078434)
+modulate = Color(0.544, 0.61426663, 0.68, 0.56078434)
 position = Vector2(1304.0001, 2062)
 rotation = -0.2617994
 scale = Vector2(10.6624155, 10.6624155)
-texture = ExtResource("4_7vhmf")
+texture = ExtResource("4_l51s1")
 
 [node name="Pillar4" type="Sprite2D" parent="Environment" unique_id=1707300526]
-visible = false
-modulate = Color(0.79607844, 0.9019608, 1, 0.50980395)
+modulate = Color(0.504, 0.56909996, 0.63, 0.50980395)
 z_index = 1
 position = Vector2(-632, 34.999985)
 rotation = 0.7853982
 scale = Vector2(9.398168, 26.395927)
-texture = ExtResource("3_0kpjy")
+texture = ExtResource("3_57d2n")
 
 [node name="Platform" type="Sprite2D" parent="Environment" unique_id=680183571]
-modulate = Color(0.3111991, 0.311199, 1.92523e-07, 0.3254902)
+modulate = Color(0.9849624, 0.8246254, 0.8042059, 1)
 scale = Vector2(5.6400003, 1.235)
-texture = ExtResource("5_4bo1q")
+texture = ExtResource("5_x7f0q")
 
 [node name="Wall3" type="StaticBody2D" parent="Environment/Platform" unique_id=535631182]
 position = Vector2(0, 77.73279)
@@ -527,27 +488,25 @@ position = Vector2(-75, -103.643715)
 shape = SubResource("RectangleShape2D_86f36")
 debug_color = Color(0, 0.6406014, 0.3521538, 0.41960785)
 
-[node name="StagePillar" type="Sprite2D" parent="Environment" unique_id=291899250]
-visible = false
+[node name="Sprite2D" type="Sprite2D" parent="Environment" unique_id=962803788]
+modulate = Color(0, 0, 0, 1)
 scale = Vector2(5.6400003, 1.235)
-texture = ExtResource("6_o0rlx")
+texture = ExtResource("6_kollc")
 
 [node name="Offwhitebg" type="Sprite2D" parent="Environment" unique_id=209026157]
-visible = false
+modulate = Color(0.77117527, 0, 0.30082595, 1)
 z_index = -1
 position = Vector2(-66.33348, -958.49994)
 scale = Vector2(2.5097225, 2.5097222)
-texture = ExtResource("6_inx5i")
+texture = ExtResource("6_1bcva")
 
 [node name="Ashes" type="Sprite2D" parent="Environment" unique_id=658814904]
-visible = false
 z_index = -1
 position = Vector2(66.444565, -791.5)
 scale = Vector2(1.8736109, 1.8736111)
-texture = ExtResource("7_x4wbb")
+texture = ExtResource("7_y8ixg")
 
 [node name="RainParticles" type="Node2D" parent="Environment" unique_id=1997374975]
-visible = false
 position = Vector2(0, -388)
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="Environment/RainParticles" unique_id=1187162435]
@@ -560,22 +519,16 @@ gravity = Vector2(-200, 980)
 scale_amount_max = 2.5
 color = Color(0, 0, 0, 1)
 
-[node name="BetterPlayer" parent="." unique_id=1864309119 instance=ExtResource("8_rwrje")]
-z_index = 1
-position = Vector2(-41, -186)
+[node name="TankBoss3" parent="." unique_id=1995595152 node_paths=PackedStringArray("player") instance=ExtResource("8_cf83t")]
+position = Vector2(499, -230)
+player = NodePath("../BetterPlayer2")
 
-[node name="ShadowBoss" parent="." unique_id=2058246983 node_paths=PackedStringArray("player") instance=ExtResource("9_l30bm")]
-position = Vector2(122, -217)
-player = NodePath("../BetterPlayer")
-animal_move_speed = 400.0
+[node name="CanvasLayer" parent="." unique_id=732973211 instance=ExtResource("9_lj8hg")]
 
-[node name="ShadowBossMachine" parent="." unique_id=1528051355 instance=ExtResource("11_w0hja")]
-position = Vector2(0, -369)
-player_path = NodePath("../BetterPlayer")
-platform_path = NodePath("../Environment/Platform")
+[node name="BetterPlayer2" parent="." unique_id=462766173 instance=ExtResource("13_24ma2")]
+position = Vector2(85, -257)
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=862287898]
-stream = ExtResource("16_h8i7r")
-volume_db = -12.0
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=423528841]
+stream = ExtResource("12_m3eoj")
 
 [connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]

@@ -47,7 +47,7 @@ size = Vector2(34, 53)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dbnxv"]
 size = Vector2(28.356407, 88.677704)
 
-[node name="ReaperProjectile" type="Node2D" unique_id=19105523]
+[node name="ReaperProjectile" type="Node2D" unique_id=19105523 groups=["enemy_projectile"]]
 script = ExtResource("1_teuyb")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1435827704]

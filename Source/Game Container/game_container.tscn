@@ -1,8 +1,12 @@
 [gd_scene format=3 uid="uid://c8w76kny700u8"]
 
 [ext_resource type="Script" uid="uid://bq5lvjklgig7p" path="res://Source/Game Container/game_container.gd" id="1_14tbk"]
+[ext_resource type="AudioStream" uid="uid://btsf0o3cuuikq" path="res://Source/Resources/Audio/Music/main_menu/Geehun Wang - Three Valve Eyes (1).wav" id="2_ubv38"]
 
 [node name="GameContainer" type="Node2D" unique_id=177544250]
 script = ExtResource("1_14tbk")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=545430319]
+stream = ExtResource("2_ubv38")
+
+[connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]

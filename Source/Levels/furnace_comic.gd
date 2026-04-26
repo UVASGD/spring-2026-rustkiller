@@ -13,6 +13,7 @@ extends Node2D
 
 @onready var sfx_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
 @onready var sfx_constant: AudioStreamPlayer2D = $Constant
+@onready var game_container: GameContainer = get_parent() as GameContainer
 
 var current_panel := -1
 var waiting_for_panel_6 := false
@@ -40,6 +41,8 @@ func advance_panel() -> void:
 
 	if current_panel >= panels.size():
 		cutscene_finished.emit()
+		if game_container:
+			game_container.call_deferred("spawn_level", "furnace_level")
 		queue_free()
 		return
 

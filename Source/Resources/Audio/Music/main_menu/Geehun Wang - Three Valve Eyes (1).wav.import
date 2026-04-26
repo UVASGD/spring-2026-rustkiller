@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://btsf0o3cuuikq"
+path="res://.godot/imported/Geehun Wang - Three Valve Eyes (1).wav-81a18c71ddfc1b18de4f8f54096a09fa.sample"
+
+[deps]
+
+source_file="res://Source/Resources/Audio/Music/main_menu/Geehun Wang - Three Valve Eyes (1).wav"
+dest_files=["res://.godot/imported/Geehun Wang - Three Valve Eyes (1).wav-81a18c71ddfc1b18de4f8f54096a09fa.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

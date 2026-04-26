@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://4hr3r4fp483o"]
+[gd_scene format=3 uid="uid://4hr3r4fp483o"]
 
 [ext_resource type="Script" uid="uid://br7m12abjsmjl" path="res://Source/Menus/main_menu.gd" id="1_1yr64"]
 [ext_resource type="FontFile" uid="uid://q3nv0ymtcxp0" path="res://Source/Resources/Fonts/Helmet-lWZV.otf" id="2_y5vwj"]
@@ -13,10 +13,10 @@ font_size = 100
 font = ExtResource("2_y5vwj")
 font_size = 32
 
-[node name="MainMenu" type="CanvasLayer"]
+[node name="MainMenu" type="CanvasLayer" unique_id=1366523521]
 script = ExtResource("1_1yr64")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=1787793860]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,13 +28,13 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ColorRect" type="ColorRect" parent="Control"]
+[node name="ColorRect" type="ColorRect" parent="Control" unique_id=647934703]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(1, 1, 1, 0)
 
-[node name="LabelControl" type="Control" parent="Control/ColorRect"]
+[node name="LabelControl" type="Control" parent="Control/ColorRect" unique_id=552221902]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -45,7 +45,7 @@ offset_right = -138.0
 offset_bottom = 12.0
 grow_horizontal = 2
 
-[node name="Label" type="Label" parent="Control/ColorRect/LabelControl"]
+[node name="Label" type="Label" parent="Control/ColorRect/LabelControl" unique_id=1948460557]
 clip_contents = true
 layout_mode = 1
 offset_left = 301.0
@@ -55,7 +55,7 @@ offset_bottom = 253.0
 text = "RUSTKILLER"
 label_settings = SubResource("LabelSettings_8bybp")
 
-[node name="Label2" type="Label" parent="Control/ColorRect/LabelControl"]
+[node name="Label2" type="Label" parent="Control/ColorRect/LabelControl" unique_id=1219224897]
 visible = false
 layout_mode = 0
 offset_left = 352.0
@@ -65,13 +65,13 @@ offset_bottom = 157.0
 text = "はは、これ本当に訳したんだね！草"
 label_settings = SubResource("LabelSettings_mardn")
 
-[node name="Control" type="Control" parent="Control"]
+[node name="Control" type="Control" parent="Control" unique_id=344819307]
 anchors_preset = 0
 offset_left = -292.0
 offset_right = -252.0
 offset_bottom = 40.0
 
-[node name="PlayButton" type="Button" parent="Control/Control"]
+[node name="PlayButton" type="Button" parent="Control/Control" unique_id=853669172]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 628.0
@@ -82,7 +82,7 @@ theme_override_fonts/font = ExtResource("2_y5vwj")
 theme_override_font_sizes/font_size = 86
 text = "Play"
 
-[node name="ExitButton" type="Button" parent="Control/Control"]
+[node name="ExitButton" type="Button" parent="Control/Control" unique_id=681216639]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 1097.0
@@ -93,18 +93,20 @@ theme_override_fonts/font = ExtResource("2_y5vwj")
 theme_override_font_sizes/font_size = 40
 text = "Exit"
 
-[node name="Screenshot20251220181127" type="Sprite2D" parent="."]
+[node name="Screenshot20251220181127" type="Sprite2D" parent="." unique_id=98922006]
 visible = false
 z_index = -1
 position = Vector2(572, 326)
 scale = Vector2(2.145688, 0.9746428)
 texture = ExtResource("3_y5vwj")
 
-[node name="RustKillerbgExport" type="Sprite2D" parent="."]
+[node name="RustKillerbgExport" type="Sprite2D" parent="." unique_id=459095006]
 z_index = -1
 position = Vector2(476, 266)
 scale = Vector2(1.1764486, 1.1764486)
 texture = ExtResource("4_8bybp")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2038809788]
 
 [connection signal="mouse_entered" from="Control/Control/PlayButton" to="." method="_on_play_mouse_entered"]
 [connection signal="mouse_exited" from="Control/Control/PlayButton" to="." method="_on_play_button_mouse_exited"]

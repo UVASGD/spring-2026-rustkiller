@@ -3,7 +3,7 @@ extends CharacterBody2D
 
 @export var entity_name: String = "player"
 @export var speed: float = 200.0
-@export var hp: int = 3
+@export var hp: int = 1000
 
 var sfx_melee_attack: AudioStream = preload("res://Source/Entities/Player/better_player/SFX/Single Swipe.mp3")
 var sfx_shoot: AudioStream 
@@ -17,6 +17,10 @@ var walk_pitch_max: float = 1.04
 @export var damage_hitstop_duration: float = 0.08
 @export var damage_flash_duration: float = 0.08
 @export var parry_invulnerability_duration: float = 0.5
+@export var successful_parry_heal_amount: float = 50.0
+
+const DEATH_ANIMATION := "death"
+const DEATH_RETURN_DELAY := 5.0
 
 var current_state: String = "idle"
 var curr_weapon: String = "melee"
@@ -24,6 +28,7 @@ var last_move_dir: Vector2 = Vector2.RIGHT
 var _damage_flash_generation: int = 0
 var _invulnerability_generation: int = 0
 var _is_invulnerable: bool = false
+var _is_dead: bool = false
 
 signal parrying
 
@@ -65,6 +70,10 @@ func _physics_process(delta: float) -> void:
 	_handle_weapon_switch()
 
 	match current_state:
+		"dead":
+			velocity = Vector2.ZERO
+			move_and_slide()
+			return
 		"parrying":
 			velocity = Vector2.ZERO
 			move_and_slide()
@@ -170,6 +179,12 @@ func activate_parry_invulnerability() -> void:
 	if invulnerability_generation == _invulnerability_generation:
 		_is_invulnerable = false
 
+func heal_from_successful_parry() -> void:
+	if health_component == null:
+		return
+
+	health_component.heal(successful_parry_heal_amount)
+
 func _on_hurtbox_hit_by_hitbox(_hitbox: HitboxComponent) -> void:
 	_flash_damage_white()
 	_trigger_damage_camera_shake(_hitbox)
@@ -183,10 +198,38 @@ func _on_health_changed(health_update: HealthComponent.HealthUpdate) -> void:
 	_combat.hitstop(lerpf(damage_hitstop_duration, 1, damage_ratio), false)
 
 func _on_health_died() -> void:
-	set_physics_process(false)
+	if _is_dead:
+		return
+
+	_is_dead = true
+	current_state = "dead"
 	set_process_input(false)
 	velocity = Vector2.ZERO
-	hide()
+	_stop_walk_sfx()
+	if hurtbox_component:
+		hurtbox_component.set_deferred("monitoring", false)
+		hurtbox_component.set_deferred("monitorable", false)
+
+	await _play_death_sequence()
+
+func _play_death_sequence() -> void:
+	if anim_player and anim_player.has_animation(DEATH_ANIMATION):
+		anim_player.play(DEATH_ANIMATION)
+		await anim_player.animation_finished
+
+	await get_tree().create_timer(DEATH_RETURN_DELAY, true, false, true).timeout
+
+	var game_container := _find_game_container()
+	if game_container:
+		game_container.call_deferred("return_to_boss_select", self)
+
+func _find_game_container() -> GameContainer:
+	var current: Node = get_parent()
+	while current:
+		if current is GameContainer:
+			return current as GameContainer
+		current = current.get_parent()
+	return null
 
 func _flash_damage_white() -> void:
 	_damage_flash_generation += 1

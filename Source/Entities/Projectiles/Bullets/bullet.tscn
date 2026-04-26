@@ -8,7 +8,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p72mb"]
 size = Vector2(2, 2)
 
-[node name="Bullet" type="Node2D" unique_id=1720163868]
+[node name="Bullet" type="Node2D" unique_id=1720163868 groups=["enemy_projectile"]]
 scale = Vector2(5, 5)
 script = ExtResource("1_7ff0x")
 
