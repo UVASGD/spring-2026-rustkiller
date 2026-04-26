@@ -40,7 +40,7 @@ func _on_move_zone_entered(body: Node2D) -> void:
 func _advance_to_parry_step() -> void:
 	_current_step = Step.PARRY_OR_DASH
 	_projectile_parry_count = 0
-	show_hint("Use Right Click to Parry and Shift to Dodge!")
+	show_hint("Use Right Click to Parry, which heals you, and Shift to Dodge!")
 	_show_text("Parry or Dash to dodge the incoming projectiles! Parry 5 projectiles to move on to the next stage!")
 	_start_firing()
 
