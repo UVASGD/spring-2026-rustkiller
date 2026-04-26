@@ -726,22 +726,11 @@ func set_reaper_hitbox_enabled(enabled: bool) -> void:
 	if reaper_hitbox == null:
 		return
 
-	reaper_hitbox.monitoring = enabled
-	reaper_hitbox.monitorable = enabled
+	reaper_hitbox.monitoring = true
+	reaper_hitbox.monitorable = true
 	reaper_hitbox.damage_enabled = enabled
 
 func parry_charge_attack() -> bool:
-	if state_machine == null:
-		return false
-
-	var active_state := state_machine.get_lowest_active_state()
-	if active_state == null:
-		return false
-	if active_state.has_method("parry_charge_attack"):
-		return active_state.parry_charge_attack()
-	if active_state.has_method("parry_cancel"):
-		active_state.parry_cancel()
-		return true
 	return false
 
 func disable_phase_hitboxes() -> void:
@@ -1086,6 +1075,7 @@ func _begin_machine_intermission() -> void:
 	set_invulnerable(true)
 	_set_boss_hittable(false)
 	disable_phase_hitboxes()
+	_clear_shadow_projectiles()
 	if healthbar:
 		healthbar.visible = false
 	stop_motion()
@@ -1098,6 +1088,8 @@ func _begin_machine_intermission() -> void:
 func _open_machine_phase_gate() -> void:
 	_machine_waiting_for_defeat = true
 	if is_instance_valid(_machine):
+		if _machine.has_method("set_final_defeat_mode"):
+			_machine.set_final_defeat_mode(_machine_pending_phase == "")
 		_machine.open_phase_gate()
 		return
 	_on_machine_phase_gate_destroyed()
@@ -1130,7 +1122,10 @@ func _finish_final_boss_sequence() -> void:
 	_machine_pending_phase = ""
 	_player_phase_appear_ready = false
 	if is_instance_valid(_machine):
-		_machine.queue_free()
+		if _machine.has_method("start_final_defeat_sequence"):
+			_machine.start_final_defeat_sequence()
+		else:
+			_machine.queue_free()
 		_machine = null
 	queue_free()
 
@@ -1145,6 +1140,20 @@ func _restore_after_machine_intermission() -> void:
 		light_circle.modulate = Color(1, 1, 1, 1)
 	if animated_sprite:
 		animated_sprite.modulate = Color(1, 1, 1, 1)
+
+func _clear_shadow_projectiles() -> void:
+	for projectile in get_tree().get_nodes_in_group("shadow_projectile"):
+		if not is_instance_valid(projectile):
+			continue
+
+		var projectile_hitbox := HitboxComponent.get_child_component(projectile)
+		if projectile_hitbox:
+			projectile_hitbox.damage_enabled = false
+
+		if projectile.has_method("disable_active"):
+			projectile.disable_active()
+
+		projectile.queue_free()
 
 func _get_next_phase_after_current_form() -> String:
 	if _is_currently_in_move(&"AnimalPhase"):

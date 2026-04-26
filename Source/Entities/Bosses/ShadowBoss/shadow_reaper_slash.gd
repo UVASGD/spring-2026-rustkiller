@@ -2,10 +2,15 @@ extends HFSM
 
 var _charges_remaining := 0
 var _was_parried := false
+var _reaper_hitbox: HitboxComponent
+var _reaper_hitbox_shape: CollisionShape2D
+var _damaged_hurtboxes: Array[HurtboxComponent] = []
 
 func on_enter() -> void:
 	_charges_remaining = _get_reaper_melee_charge_count()
 	_was_parried = false
+	_assign_reaper_hitbox()
+	_damaged_hurtboxes.clear()
 	if character and character.has_method("begin_reaper_slash_cooldown"):
 		character.begin_reaper_slash_cooldown()
 	if character and character.has_method("set_reaper_hitbox_slash_damage"):
@@ -13,8 +18,6 @@ func on_enter() -> void:
 	_begin_charge()
 
 func on_exit() -> void:
-	if character and character.has_method("set_reaper_hitbox_active"):
-		character.set_reaper_hitbox_active(false)
 	if character and character.has_method("reset_reaper_slash_movement"):
 		character.reset_reaper_slash_movement()
 	if character and character.has_method("stop_motion"):
@@ -34,6 +37,8 @@ func update(delta: float) -> void:
 		if character.has_method("reaper_move_toward_target"):
 			character.reaper_move_toward_target(delta)
 
+	_apply_reaper_slash_hits()
+
 func check_transition(_delta: float) -> TransitionData:
 	if _was_parried:
 		if character and character.has_method("should_enter_player_phase") and character.should_enter_player_phase():
@@ -51,22 +56,45 @@ func check_transition(_delta: float) -> TransitionData:
 	return TransitionData.new(false, "")
 
 func _begin_charge() -> void:
+	_damaged_hurtboxes.clear()
 	if character and character.has_method("reset_reaper_slash_movement"):
 		character.reset_reaper_slash_movement()
-	if character and character.has_method("set_reaper_hitbox_enabled"):
-		character.set_reaper_hitbox_enabled(true)
 	if character and character.has_method("play_visual_animation"):
 		character.play_visual_animation(_get_reaper_slash_animation())
 
 func parry_cancel() -> void:
 	_was_parried = true
 	_charges_remaining = 0
-	if character and character.has_method("set_reaper_hitbox_active"):
-		character.set_reaper_hitbox_active(false)
 	if character and character.has_method("stop_reaper_slash_movement"):
 		character.stop_reaper_slash_movement()
 	if character and character.has_method("stop_motion"):
 		character.stop_motion()
+
+func _assign_reaper_hitbox() -> void:
+	if character == null:
+		_reaper_hitbox = null
+		_reaper_hitbox_shape = null
+		return
+
+	_reaper_hitbox = character.get("reaper_hitbox") as HitboxComponent
+	_reaper_hitbox_shape = _reaper_hitbox.get_node_or_null("CollisionShape2D") as CollisionShape2D if _reaper_hitbox else null
+
+func _apply_reaper_slash_hits() -> void:
+	if _reaper_hitbox == null or _reaper_hitbox_shape == null:
+		return
+	if _reaper_hitbox_shape.disabled or not _reaper_hitbox.damage_enabled:
+		return
+
+	for area in _reaper_hitbox.get_overlapping_areas():
+		if not (area is HurtboxComponent):
+			continue
+		var hurtbox := area as HurtboxComponent
+		if hurtbox.entity_name != "player":
+			continue
+		if _damaged_hurtboxes.has(hurtbox):
+			continue
+		if hurtbox.apply_hitbox(_reaper_hitbox):
+			_damaged_hurtboxes.append(hurtbox)
 
 func _get_reaper_slash_animation() -> String:
 	if character and character.has_method("get_reaper_slash_animation"):

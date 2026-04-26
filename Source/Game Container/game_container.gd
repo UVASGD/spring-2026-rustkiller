@@ -59,6 +59,23 @@ func return_to_boss_select(from_node: Node = null) -> void:
 
 	call_deferred("spawn_map_select")
 
+func return_to_main_menu(from_node: Node = null) -> void:
+	var active_child := _find_direct_child_for_node(from_node)
+	if active_child:
+		active_child.queue_free()
+
+	call_deferred("spawn_main_menu")
+
+func schedule_return_to_main_menu(from_node: Node = null, delay: float = 0.0) -> void:
+	var active_child := _find_direct_child_for_node(from_node)
+	if delay > 0.0:
+		await get_tree().create_timer(delay, true, false, true).timeout
+
+	if active_child and is_instance_valid(active_child):
+		active_child.queue_free()
+
+	call_deferred("spawn_main_menu")
+
 func _find_direct_child_for_node(node: Node) -> Node:
 	var current := node
 	while current:

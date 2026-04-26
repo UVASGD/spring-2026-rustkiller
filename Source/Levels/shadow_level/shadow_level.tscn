@@ -567,6 +567,9 @@ position = Vector2(-41, -186)
 [node name="ShadowBoss" parent="." unique_id=2058246983 node_paths=PackedStringArray("player") instance=ExtResource("9_l30bm")]
 position = Vector2(122, -217)
 player = NodePath("../BetterPlayer")
+player_phase_health = 200.0
+animal_phase_health = 200.0
+reaper_phase_health = 100.0
 animal_move_speed = 400.0
 
 [node name="ShadowBossMachine" parent="." unique_id=1528051355 instance=ExtResource("11_w0hja")]

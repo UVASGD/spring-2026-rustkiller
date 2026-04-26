@@ -3,6 +3,9 @@ class_name ShadowBossMachine
 
 signal phase_gate_destroyed
 
+const FINAL_DEFEAT_FADE_DURATION := 0.75
+const RETURN_TO_MAIN_MENU_DELAY := 5.0
+
 @export var player_path: NodePath
 @export var platform_path: NodePath
 
@@ -14,6 +17,8 @@ signal phase_gate_destroyed
 @onready var machine_sfx: Node = $machine_sfx
 var _player: Node2D
 var _platform: Sprite2D
+var _defeat_sequence_started := false
+var _final_defeat_mode := false
 
 enum MachineState {
 	TRACKING,
@@ -97,6 +102,8 @@ func _play_animation(animation_name: StringName) -> void:
 	anim_sprite.play(animation_name)
 
 func open_phase_gate() -> void:
+	if _defeat_sequence_started:
+		return
 	if anim_sprite == null or _state != MachineState.TRACKING:
 		return
 
@@ -112,7 +119,12 @@ func open_phase_gate() -> void:
 	if machine_sfx and machine_sfx.has_method("play_falling_eye"):
 		machine_sfx.play_falling_eye()
 
+func set_final_defeat_mode(enabled: bool) -> void:
+	_final_defeat_mode = enabled
+
 func close_phase_gate() -> void:
+	if _defeat_sequence_started:
+		return
 	if anim_sprite == null or _state != MachineState.VULNERABLE:
 		return
 
@@ -133,7 +145,41 @@ func _set_phase_gate_active(enabled: bool) -> void:
 		collision_shape.disabled = not enabled
 
 func _on_health_component_died() -> void:
+	if _final_defeat_mode:
+		_set_phase_gate_active(false)
+		if machine_sfx and machine_sfx.has_method("stop_machine_eye_audio"):
+			machine_sfx.stop_machine_eye_audio()
+		if healthbar:
+			healthbar.visible = false
+		phase_gate_destroyed.emit()
+		return
 	close_phase_gate()
+
+func start_final_defeat_sequence() -> void:
+	if _defeat_sequence_started:
+		return
+
+	_defeat_sequence_started = true
+	_state = MachineState.CLOSING
+	_set_phase_gate_active(false)
+	set_process(false)
+	if anim_sprite:
+		anim_sprite.stop()
+	if machine_sfx and machine_sfx.has_method("stop_machine_eye_audio"):
+		machine_sfx.stop_machine_eye_audio()
+	if healthbar:
+		healthbar.visible = false
+
+	var fade_tween := create_tween()
+	fade_tween.tween_property(self, "modulate", Color(1.0, 1.0, 1.0, 0.0), FINAL_DEFEAT_FADE_DURATION)
+	await fade_tween.finished
+	hide()
+
+	var game_container := _find_game_container()
+	if game_container:
+		game_container.schedule_return_to_main_menu(self, RETURN_TO_MAIN_MENU_DELAY)
+
+	queue_free()
 
 func _get_platform_world_width() -> float:
 	if _platform == null or _platform.texture == null:
@@ -148,6 +194,8 @@ func _get_platform_texture_width() -> float:
 	return _platform.texture.get_size().x
 
 func _on_animated_sprite_2d_animation_finished() -> void:
+	if _defeat_sequence_started:
+		return
 	match _state:
 		MachineState.OPENING:
 			_state = MachineState.VULNERABLE
@@ -163,3 +211,11 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 			phase_gate_destroyed.emit()
 		_:
 			_update_animation_for_player_position()
+
+func _find_game_container() -> GameContainer:
+	var current: Node = get_parent()
+	while current:
+		if current is GameContainer:
+			return current as GameContainer
+		current = current.get_parent()
+	return null
