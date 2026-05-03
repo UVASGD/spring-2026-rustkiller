@@ -21,6 +21,8 @@ func init(new_damage: float, new_hit_owner: String) -> void:
 	damage_enabled = true
 
 func _on_body_entered(body: Node2D) -> void:
+		if not damage_enabled or damage <= 0.0:
+			return
 		if body.has_method("apply_knockback"):
 			var direction = (body.global_position - global_position).normalized()	
 			body.apply_knockback(direction * knockback_strength)
