@@ -155,6 +155,8 @@ func parry_charge_attack() -> bool:
 	if active_state and active_state.has_method("parry_cancel"):
 		active_state.parry_cancel()
 		return true
+	if active_state and active_state != self and active_state.has_method("parry_charge_attack"):
+		return active_state.parry_charge_attack()
 	return false
 
 func _find_game_container() -> GameContainer:

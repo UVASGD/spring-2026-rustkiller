@@ -100,6 +100,18 @@ const SHADOW_PORCUPINE_SCENE := preload("res://Source/Entities/Projectiles/Shado
 @onready var wolf_hitbox: HitboxComponent = $WolfHitbox
 @onready var healthbar: CanvasItem = $Healthbar
 @onready var sfx_manager: SfxManager = $sfx_manager
+@onready var player_phase_controller: ShadowPlayerPhaseController = $PlayerPhaseController
+@onready var player_walk_state_controller: ShadowPlayerWalkState = $PlayerPhaseController/WalkState
+@onready var player_slash_state_controller: ShadowPlayerSlashStateController = $PlayerPhaseController/SlashAttack
+@onready var player_range_attack_controller: ShadowPlayerRangeAttackController = $PlayerPhaseController/RangeAttack
+@onready var animal_phase_controller: ShadowAnimalPhaseController = $AnimalPhaseController
+@onready var animal_snake_attack_controller: ShadowAnimalSnakeAttack = $AnimalPhaseController/SnakeAttack
+@onready var animal_wolf_attack_controller: ShadowAnimalWolfAttack = $AnimalPhaseController/WolfAttack
+@onready var animal_porcupine_attack_controller: ShadowAnimalPorcupineAttack = $AnimalPhaseController/PorcupineAttack
+@onready var reaper_phase_controller: ShadowReaperPhaseController = $ReaperPhaseController
+@onready var reaper_slash_attack_controller: ShadowReaperSlashAttackController = $ReaperPhaseController/SlashAttack
+@onready var reaper_projectile_slash_controller: ShadowReaperProjectileSlashController = $ReaperPhaseController/ProjectileSlashAttack
+@onready var reaper_triple_attack_controller: ShadowReaperTripleAttackController = $ReaperPhaseController/TripleAttack
 
 var _is_invulnerable := false
 var _knockback_velocity := Vector2.ZERO
@@ -224,30 +236,22 @@ func should_chase_target() -> bool:
 	return distance_to_target() > orbit_reengage_radius
 
 func can_start_slash() -> bool:
-	return has_target() and _slash_cooldown_remaining <= 0.0
+	return player_slash_state_controller.can_start_slash()
 
 func begin_slash_cooldown() -> void:
-	_slash_cooldown_remaining = slash_cooldown
+	player_slash_state_controller.begin_slash_cooldown()
 
 func can_start_reaper_slash() -> bool:
-	return has_target() and _reaper_slash_cooldown_remaining <= 0.0
+	return reaper_slash_attack_controller.can_start_reaper_slash()
 
 func begin_reaper_slash_cooldown() -> void:
-	_reaper_slash_cooldown_remaining = reaper_slash_cooldown
+	reaper_slash_attack_controller.begin_reaper_slash_cooldown()
 
 func choose_reaper_attack_state() -> String:
-	if _reaper_attack_bag.is_empty():
-		_refill_reaper_attack_bag()
-
-	if _reaper_attack_bag.is_empty():
-		return "ReaperSlash"
-
-	var next_state: String = _reaper_attack_bag.pop_back()
-	_last_reaper_attack_state = next_state
-	return next_state
+	return reaper_phase_controller.choose_reaper_attack_state()
 
 func can_start_range() -> bool:
-	return has_target() and _range_cooldown_remaining <= 0.0
+	return player_range_attack_controller.can_start_range()
 
 func should_start_in_player_phase() -> bool:
 	return start_in_player_phase
@@ -256,44 +260,13 @@ func should_enter_reaper_phase() -> bool:
 	return _reaper_phase_switch_ready
 
 func enter_reaper_phase() -> void:
-	if not _reaper_phase_active:
-		_refill_health_for_phase(reaper_phase_health)
-	_reaper_phase_active = true
-	_player_phase_active = false
-	_player_phase_appear_ready = false
-	_reaper_phase_switch_ready = false
-	_player_phase_switch_ready = false
-	_reaper_phase_complete = false
-	_machine_pending_phase = ""
-	_animal_attack_index = 0
-	reset_reaper_slash_movement()
-	_reaper_attack_bag.clear()
-	_last_reaper_attack_state = ""
-	_restore_after_machine_intermission()
-	enable_phase_hitboxes()
-	stop_motion()
-	if sfx_manager:
-		sfx_manager.play_reaper_arrival_audio()
+	reaper_phase_controller.enter_phase()
 
 func should_enter_player_phase() -> bool:
 	return _player_phase_switch_ready
 
 func enter_player_phase() -> void:
-	if not _player_phase_active:
-		_refill_health_for_phase(player_phase_health)
-	_player_phase_active = true
-	_reaper_phase_active = false
-	_player_phase_switch_ready = false
-	_reaper_phase_complete = false
-	_machine_pending_phase = ""
-	reset_reaper_slash_movement()
-	_reaper_attack_bag.clear()
-	_last_reaper_attack_state = ""
-	_restore_after_machine_intermission()
-	enable_phase_hitboxes()
-	stop_motion()
-	if sfx_manager:
-		sfx_manager.play_player_arrival_audio()
+	player_phase_controller.enter_phase()
 
 func _refill_health_for_phase(phase_health: float) -> void:
 	if health_component == null:
@@ -318,290 +291,142 @@ func _get_active_phase_health() -> float:
 	return animal_phase_health
 
 func get_animal_idle_animation() -> String:
-	return String(animal_idle_animation)
+	return animal_phase_controller.get_animal_idle_animation()
 
 func get_animal_transform_animation() -> String:
-	return String(animal_transform_animation)
+	return animal_phase_controller.get_animal_transform_animation()
 
 func get_animal_slither_animation() -> String:
-	return String(animal_slither_animation)
+	return animal_phase_controller.get_animal_slither_animation()
 
 func get_animal_ouroboros_animation() -> String:
-	return String(animal_ouroboros_animation)
+	return animal_phase_controller.get_animal_ouroboros_animation()
 
 func get_animal_idle_duration() -> float:
-	return maxf(animal_idle_duration, 0.0)
+	return animal_phase_controller.get_animal_idle_duration()
 
 func get_animal_wolf_intro_animation() -> String:
-	return String(animal_wolf_intro_animation)
+	return animal_phase_controller.get_animal_wolf_intro_animation()
 
 func get_animal_wolf_approach_animations() -> Array[String]:
-	var animations: Array[String] = []
-	for animation_name in animal_wolf_approach_animations:
-		animations.append(String(animation_name))
-	return animations
+	return animal_phase_controller.get_animal_wolf_approach_animations()
 
 func get_animal_wolf_attack_animations() -> Array[String]:
-	var animations: Array[String] = []
-	for animation_name in animal_wolf_attack_animations:
-		animations.append(String(animation_name))
-	return animations
+	return animal_phase_controller.get_animal_wolf_attack_animations()
 
 func get_animal_wolf_circle_radius() -> float:
-	return maxf(animal_wolf_circle_radius, 1.0)
+	return animal_phase_controller.get_animal_wolf_circle_radius()
 
 func get_animal_attack_damage() -> float:
-	return maxf(animal_attack_damage, 0.0)
+	return animal_phase_controller.get_animal_attack_damage()
 
 func get_animal_wolf_attack_damage() -> float:
-	return maxf(animal_wolf_attack_damage, 0.0)
+	return animal_phase_controller.get_animal_wolf_attack_damage()
 
 func choose_animal_attack_type() -> String:
-	var attack_types := ["snake", "wolf", "porcupine"]
-	var attack_type: String = attack_types[_animal_attack_index % attack_types.size()]
-	_animal_attack_index = (_animal_attack_index + 1) % attack_types.size()
-	return attack_type
+	return animal_phase_controller.choose_animal_attack_type()
 
 func get_animal_porcupine_wave_count() -> int:
-	return maxi(animal_porcupine_wave_count, 1)
+	return animal_phase_controller.get_animal_porcupine_wave_count()
 
 func get_animal_porcupine_wave_size() -> int:
-	return maxi(animal_porcupine_wave_size, 1)
+	return animal_phase_controller.get_animal_porcupine_wave_size()
 
 func get_animal_porcupine_wave_interval() -> float:
-	return maxf(animal_porcupine_wave_interval, 0.05)
+	return animal_phase_controller.get_animal_porcupine_wave_interval()
 
 func get_animal_porcupine_attack_duration() -> float:
-	var minimum_duration := get_animal_porcupine_wave_interval() * float(maxi(get_animal_porcupine_wave_count() - 1, 0)) + 0.4
-	return maxf(animal_porcupine_attack_duration, minimum_duration)
+	return animal_phase_controller.get_animal_porcupine_attack_duration()
 
 func get_animal_porcupine_attack_damage() -> float:
-	return maxf(animal_porcupine_attack_damage, 0.0)
+	return animal_phase_controller.get_animal_porcupine_attack_damage()
 
 func spawn_porcupine_wave_on_map() -> void:
-	var spawn_positions := _get_animal_porcupine_spawn_positions()
-	for spawn_position in spawn_positions:
-		var porcupine := SHADOW_PORCUPINE_SCENE.instantiate()
-		if porcupine is Node2D:
-			(porcupine as Node2D).global_position = spawn_position
-
-		var projectile_hitbox := HitboxComponent.get_child_component(porcupine)
-		if projectile_hitbox:
-			projectile_hitbox.init(get_animal_porcupine_attack_damage(), "boss")
-
-		porcupine.add_to_group("shadow_projectile")
-
-		var current_scene := get_tree().current_scene
-		if current_scene:
-			current_scene.add_child(porcupine)
-		else:
-			add_child(porcupine)
-
-func _get_animal_porcupine_spawn_positions() -> Array[Vector2]:
-	var spawn_positions: Array[Vector2] = []
-	var porcupine_count := get_animal_porcupine_wave_size()
-	if porcupine_count <= 0:
-		return spawn_positions
-
-	var center_x := _light_platform.global_position.x if _light_platform != null else global_position.x
-	var center_y := _light_platform.global_position.y if _light_platform != null else global_position.y
-	var half_width := 240.0
-
-	if _light_platform != null and _light_platform.texture != null:
-		var platform_scale := _light_platform.global_transform.get_scale()
-		half_width = _light_platform.texture.get_size().x * absf(platform_scale.x) * 0.5
-
-	var usable_half_width := maxf(half_width - 24.0, 24.0)
-	var min_spacing := minf(usable_half_width * 0.35, 42.0)
-	var max_attempts := porcupine_count * 12
-	var attempts := 0
-	while spawn_positions.size() < porcupine_count and attempts < max_attempts:
-		attempts += 1
-		var spawn_x := randf_range(center_x - usable_half_width, center_x + usable_half_width)
-		var jitter_y := randf_range(-12.0, 12.0)
-		var candidate := Vector2(spawn_x, center_y - animal_porcupine_spawn_height + jitter_y)
-		var is_clear := true
-		for existing_position in spawn_positions:
-			if absf(candidate.x - existing_position.x) < min_spacing:
-				is_clear = false
-				break
-		if is_clear:
-			spawn_positions.append(candidate)
-
-	while spawn_positions.size() < porcupine_count:
-		var spawn_x := randf_range(center_x - usable_half_width, center_x + usable_half_width)
-		var jitter_y := randf_range(-12.0, 12.0)
-		spawn_positions.append(Vector2(spawn_x, center_y - animal_porcupine_spawn_height + jitter_y))
-
-	return spawn_positions
+	animal_porcupine_attack_controller.spawn_porcupine_wave_on_map()
 
 func get_reaper_appear_animation() -> String:
-	return String(reaper_appear_animation)
+	return reaper_phase_controller.get_reaper_appear_animation()
 
 func get_reaper_disintegrate_animation() -> String:
-	return String(reaper_disintegrate_animation)
+	return reaper_phase_controller.get_reaper_disintegrate_animation()
 
 func get_reaper_idle_animation() -> String:
-	return String(reaper_idle_animation)
+	return reaper_phase_controller.get_reaper_idle_animation()
 
 func get_reaper_slash_animation() -> String:
-	return String(reaper_slash_animation)
+	return reaper_phase_controller.get_reaper_slash_animation()
 
 func get_reaper_triple_animation() -> String:
-	return String(reaper_triple_animation)
+	return reaper_phase_controller.get_reaper_triple_animation()
 
 func get_reaper_projectile_slash_animation() -> String:
-	return String(reaper_projectile_slash_animation)
+	return reaper_phase_controller.get_reaper_projectile_slash_animation()
 
 func get_reaper_idle_duration() -> float:
-	return maxf(reaper_idle_duration, 0.0)
+	return reaper_phase_controller.get_reaper_idle_duration()
 
 func get_reaper_post_melee_idle_duration() -> float:
-	return maxf(reaper_post_melee_idle_duration, 0.0)
+	return reaper_phase_controller.get_reaper_post_melee_idle_duration()
 
 func get_reaper_post_melee_walk_speed() -> float:
-	return maxf(reaper_post_melee_walk_speed, 0.0)
+	return reaper_phase_controller.get_reaper_post_melee_walk_speed()
 
 func get_reaper_slash_damage() -> float:
-	return maxf(reaper_slash_damage, 0.0)
+	return reaper_phase_controller.get_reaper_slash_damage()
 
 func get_reaper_triple_damage() -> float:
-	return maxf(reaper_triple_damage, 0.0)
+	return reaper_phase_controller.get_reaper_triple_damage()
 
 func get_reaper_melee_charge_count() -> int:
-	return maxi(reaper_melee_charge_count, 1)
+	return reaper_phase_controller.get_reaper_melee_charge_count()
 
 func get_reaper_projectile_volley_count() -> int:
-	return maxi(reaper_projectile_volley_count, 1)
+	return reaper_phase_controller.get_reaper_projectile_volley_count()
 
 func animal_move_toward_target(delta: float) -> void:
-	if not has_target():
-		stop_motion()
-		return
-
-	var direction := global_position.direction_to(player.global_position)
-	var desired_velocity := direction * animal_move_speed
-	velocity = velocity.move_toward(desired_velocity, acceleration * delta * 100.0)
-	_face_direction(direction)
+	animal_snake_attack_controller.animal_move_toward_target(delta)
 
 func is_near_animal_attack_target() -> bool:
-	return has_target() and distance_to_target() <= animal_attack_stop_distance
+	return animal_snake_attack_controller.is_near_animal_attack_target()
 
 func begin_animal_wolf_circle() -> void:
-	if not has_target():
-		return
-
-	var offset := global_position - player.global_position
-	if is_zero_approx(offset.length_squared()):
-		offset = Vector2.RIGHT * get_animal_wolf_circle_radius()
-
-	_animal_wolf_circle_start_angle = offset.angle()
-	set_animal_wolf_circle_progress(0.0)
+	animal_wolf_attack_controller.begin_animal_wolf_circle()
 
 func set_animal_wolf_circle_progress(progress: float) -> void:
-	if not has_target():
-		stop_motion()
-		return
-
-	var orbit_progress := clampf(progress, 0.0, 1.0)
-	var orbit_sign := 1.0 if orbit_direction >= 0.0 else -1.0
-	var radius := get_animal_wolf_circle_radius()
-	var angle := _animal_wolf_circle_start_angle + orbit_sign * TAU * orbit_progress
-	var offset := Vector2.RIGHT.rotated(angle) * radius
-	global_position = player.global_position + offset
-	stop_motion()
-
-	var tangent_direction := Vector2(-sin(angle), cos(angle)) * orbit_sign
-	_face_direction(tangent_direction)
+	animal_wolf_attack_controller.set_animal_wolf_circle_progress(progress)
 
 func triple_attack() -> void:
-	_reaper_triple_should_follow_target = false
+	reaper_triple_attack_controller.triple_attack()
 
 func begin_reaper_triple_follow() -> void:
-	_reaper_triple_should_follow_target = true
+	reaper_triple_attack_controller.begin_reaper_triple_follow()
 
 func should_follow_during_reaper_triple() -> bool:
-	return _reaper_triple_should_follow_target
+	return reaper_triple_attack_controller.should_follow_during_reaper_triple()
 
 func reaper_move_toward_target(delta: float) -> void:
-	_reaper_move_toward_target_with_speed(delta, reaper_move_speed)
+	reaper_phase_controller.reaper_move_toward_target(delta)
 
 func reaper_move_toward_target_post_melee(delta: float) -> void:
-	_reaper_move_toward_target_with_speed(delta, reaper_post_melee_walk_speed)
-
-func _reaper_move_toward_target_with_speed(delta: float, movement_speed: float) -> void:
-	if not has_target():
-		stop_motion()
-		return
-
-	var direction := global_position.direction_to(player.global_position)
-	var desired_velocity := direction * movement_speed
-	velocity = velocity.move_toward(desired_velocity, acceleration * delta * 100.0)
-	_face_direction(direction)
+	reaper_phase_controller.reaper_move_toward_target_post_melee(delta)
 
 func reaper_orbit_target(delta: float) -> void:
-	_reaper_orbit_target_with_speed(delta, reaper_move_speed)
+	reaper_phase_controller.reaper_orbit_target(delta)
 
 func reaper_orbit_target_post_melee(delta: float) -> void:
-	_reaper_orbit_target_with_speed(delta, reaper_post_melee_walk_speed)
-
-func _reaper_orbit_target_with_speed(delta: float, movement_speed: float) -> void:
-	if not has_target():
-		velocity = velocity.move_toward(Vector2.ZERO, acceleration * delta * 100.0)
-		return
-
-	var to_player := player.global_position - global_position
-	var distance := to_player.length()
-	if is_zero_approx(distance):
-		velocity = velocity.move_toward(Vector2.ZERO, acceleration * delta * 100.0)
-		return
-
-	var radial_direction := to_player / distance
-	var tangent_direction := Vector2(-radial_direction.y, radial_direction.x) * signf(orbit_direction)
-	var radius_error := distance - orbit_radius
-	var correction_strength := clampf(radius_error / maxf(orbit_radius, 1.0), -0.65, 0.65)
-	var desired_direction := (tangent_direction + radial_direction * correction_strength).normalized()
-	var desired_velocity := desired_direction * movement_speed
-
-	velocity = velocity.move_toward(desired_velocity, acceleration * delta * 100.0)
-	_face_direction(desired_direction)
+	reaper_phase_controller.reaper_orbit_target_post_melee(delta)
 
 func should_use_range_attack() -> bool:
-	return can_start_range() and randf() <= range_attack_chance
+	return player_range_attack_controller.should_use_range_attack()
 
 func begin_range_cooldown() -> void:
-	_range_cooldown_remaining = range_cooldown
+	player_range_attack_controller.begin_range_cooldown()
 
 func move_toward_target(delta: float) -> void:
-	if not has_target():
-		velocity = velocity.move_toward(Vector2.ZERO, acceleration * delta * 100.0)
-		return
-
-	var direction := global_position.direction_to(player.global_position)
-	var desired_velocity := direction * move_speed
-	velocity = velocity.move_toward(desired_velocity, acceleration * delta * 100.0)
-	_face_direction(direction)
+	player_walk_state_controller.move_toward_target(delta)
 
 func orbit_target(delta: float) -> void:
-	if not has_target():
-		velocity = velocity.move_toward(Vector2.ZERO, acceleration * delta * 100.0)
-		return
-
-	var to_player := player.global_position - global_position
-	var distance := to_player.length()
-	if is_zero_approx(distance):
-		velocity = velocity.move_toward(Vector2.ZERO, acceleration * delta * 100.0)
-		return
-
-	var radial_direction := to_player / distance
-	var tangent_direction := Vector2(-radial_direction.y, radial_direction.x) * signf(orbit_direction)
-	var radius_error := distance - orbit_radius
-	var correction_strength := clampf(radius_error / maxf(orbit_radius, 1.0), -0.65, 0.65)
-	var desired_direction := (tangent_direction + radial_direction * correction_strength).normalized()
-	var desired_velocity := desired_direction * move_speed
-
-	velocity = velocity.move_toward(desired_velocity, acceleration * delta * 100.0)
-	_face_direction(desired_direction)
+	player_walk_state_controller.orbit_target(delta)
 
 func play_visual_animation(animation_name: String, restart: bool = true) -> void:
 	if restart:
@@ -703,39 +528,24 @@ func _configure_wolf_hitbox() -> void:
 	wolf_hitbox.damage_enabled = true
 
 func set_reaper_hitbox_slash_damage() -> void:
-	if reaper_hitbox == null:
-		return
-	reaper_hitbox.damage = get_reaper_slash_damage()
+	reaper_slash_attack_controller.set_reaper_hitbox_slash_damage()
 
 func set_reaper_hitbox_triple_damage() -> void:
-	if reaper_hitbox == null:
-		return
-	reaper_hitbox.damage = get_reaper_triple_damage()
+	reaper_slash_attack_controller.set_reaper_hitbox_triple_damage()
 
 func set_reaper_hitbox_active(enabled: bool) -> void:
-	if reaper_hitbox == null:
-		return
-
-	reaper_hitbox.monitoring = enabled
-	reaper_hitbox.monitorable = enabled
-	reaper_hitbox.damage_enabled = enabled
-
-	for child in reaper_hitbox.get_children():
-		_set_collision_shapes_disabled_recursive(child, not enabled)
+	reaper_slash_attack_controller.set_reaper_hitbox_active(enabled)
 
 func set_reaper_hitbox_enabled(enabled: bool) -> void:
-	if reaper_hitbox == null:
-		return
-
-	reaper_hitbox.monitoring = true
-	reaper_hitbox.monitorable = true
-	reaper_hitbox.damage_enabled = enabled
+	reaper_slash_attack_controller.set_reaper_hitbox_enabled(enabled)
 
 func parry_charge_attack() -> bool:
 	var active_state := state_machine.get_lowest_active_state()
 	if active_state and active_state.has_method("parry_cancel"):
 		active_state.parry_cancel()
 		return true
+	if active_state and active_state != self and active_state.has_method("parry_charge_attack"):
+		return active_state.parry_charge_attack()
 	return false
 
 func disable_phase_hitboxes() -> void:
@@ -862,145 +672,34 @@ func face_target() -> void:
 	_face_direction(player.global_position - global_position)
 
 func teleport_next_to_target() -> void:
-	if not has_target():
-		return
-
-	var side := signf(global_position.x - player.global_position.x)
-	if is_zero_approx(side):
-		side = -1.0 if randf() < 0.5 else 1.0
-
-	global_position = player.global_position + Vector2(side * slash_teleport_offset, 0.0)
-	stop_motion()
-	face_target()
+	player_slash_state_controller.teleport_next_to_target()
 
 func teleport_close_to_target_for_phase_transition() -> void:
-	if not has_target():
-		return
-
-	var side := signf(global_position.x - player.global_position.x)
-	if is_zero_approx(side):
-		side = -1.0 if randf() < 0.5 else 1.0
-
-	global_position = player.global_position + Vector2(side * phase_transition_teleport_offset, 0.0)
-	stop_motion()
-	face_target()
+	player_slash_state_controller.teleport_close_to_target_for_phase_transition()
 
 func stop_reaper_slash_movement() -> void:
-	_reaper_slash_should_stop = true
-	stop_motion()
+	reaper_slash_attack_controller.stop_reaper_slash_movement()
 
 func should_stop_reaper_slash_movement() -> bool:
-	return _reaper_slash_should_stop
+	return reaper_slash_attack_controller.should_stop_reaper_slash_movement()
 
 func reset_reaper_slash_movement() -> void:
-	_reaper_slash_should_stop = false
+	reaper_slash_attack_controller.reset_reaper_slash_movement()
 
 func move_to_reaper_projectile_attack_side() -> void:
-	global_position = _get_reaper_projectile_attack_position()
-	stop_motion()
-	face_target()
+	reaper_projectile_slash_controller.move_to_reaper_projectile_attack_side()
 
 func spawn_reaper_projectile() -> void:
-	if not has_target():
-		return
-
-	var projectile := REAPER_PROJECTILE_SCENE.instantiate()
-	if projectile is Node2D:
-		var projectile_node := projectile as Node2D
-		var projectile_scale := projectile_node.scale
-		projectile_scale.x = visuals.scale.x
-		projectile_node.scale = projectile_scale
-
-	var projectile_hitbox := HitboxComponent.get_child_component(projectile)
-	if projectile_hitbox:
-		projectile_hitbox.init(reaper_projectile_damage, "boss")
-
-	var motion_component := ProjectileMotionComponent.get_child_component(projectile)
-	var spawn_position := projectile_origin.global_position if projectile_origin != null else global_position
-	var direction_to_target := (player.global_position - spawn_position).normalized()
-	if direction_to_target == Vector2.ZERO:
-		direction_to_target = Vector2.LEFT if visuals.scale.x > 0.0 else Vector2.RIGHT
-
-	if motion_component:
-		motion_component.shoot(
-			spawn_position,
-			direction_to_target,
-			reaper_projectile_speed,
-			reaper_projectile_lifetime
-		)
-
-	projectile.add_to_group("shadow_projectile")
-
-	var current_scene := get_tree().current_scene
-	if current_scene:
-		current_scene.add_child(projectile)
-	else:
-		add_child(projectile)
+	reaper_projectile_slash_controller.spawn_reaper_projectile()
 
 func mark_reaper_phase_complete() -> void:
-	_reaper_phase_complete = true
+	reaper_phase_controller.mark_reaper_phase_complete()
 
 func is_reaper_phase_complete() -> bool:
-	return _reaper_phase_complete
+	return reaper_phase_controller.is_reaper_phase_complete()
 
 func spawn_shadow_skulls_near_player() -> void:
-	if not has_target():
-		return
-
-	var spawn_positions := _get_shadow_skull_spawn_positions()
-	for spawn_position in spawn_positions:
-		var projectile_scene := SHADOW_SKULL_SCENE if randf() < skull_spawn_chance else SHADOW_BAT_SCENE
-		var projectile := projectile_scene.instantiate()
-		projectile.global_position = spawn_position
-		if projectile_scene == SHADOW_SKULL_SCENE:
-			var projectile_hitbox := HitboxComponent.get_child_component(projectile)
-			if projectile_hitbox:
-				projectile_hitbox.init(skull_attack_damage, "boss")
-		projectile.add_to_group("shadow_projectile")
-		get_tree().current_scene.add_child(projectile)
-
-func _get_shadow_skull_spawn_positions() -> Array[Vector2]:
-	var spawn_positions: Array[Vector2] = []
-	var skull_count := maxi(skulls_per_range_loop, 0)
-	if skull_count <= 0:
-		return spawn_positions
-
-	var radius := maxf(skull_spawn_radius, 1.0)
-	var min_distance := maxf(skull_spawn_min_distance, 1.0)
-	var player_position := player.global_position
-	var max_attempts := skull_count * 24
-	var attempts := 0
-
-	while spawn_positions.size() < skull_count and attempts < max_attempts:
-		attempts += 1
-		var offset := Vector2.RIGHT.rotated(randf() * TAU) * randf_range(0.0, radius)
-		var candidate_position := player_position + offset
-		if _is_shadow_skull_spawn_position_clear(candidate_position, spawn_positions, min_distance):
-			spawn_positions.append(candidate_position)
-
-	if spawn_positions.size() >= skull_count:
-		return spawn_positions
-
-	var ring_radius := min_distance
-	while spawn_positions.size() < skull_count:
-		var angle := TAU * float(spawn_positions.size()) / float(skull_count)
-		var candidate_position := player_position + Vector2.RIGHT.rotated(angle) * ring_radius
-		if _is_shadow_skull_spawn_position_clear(candidate_position, spawn_positions, min_distance):
-			spawn_positions.append(candidate_position)
-		ring_radius += min_distance
-
-	return spawn_positions
-
-func _is_shadow_skull_spawn_position_clear(candidate_position: Vector2, spawn_positions: Array[Vector2], min_distance: float) -> bool:
-	for spawn_position in spawn_positions:
-		if candidate_position.distance_to(spawn_position) < min_distance:
-			return false
-	for projectile in get_tree().get_nodes_in_group("shadow_projectile"):
-		if not is_instance_valid(projectile) or not (projectile is Node2D):
-			continue
-		if candidate_position.distance_to(projectile.global_position) < min_distance:
-			return false
-	return true
+	player_range_attack_controller.spawn_shadow_skulls_near_player()
 
 func _find_light_platform() -> Sprite2D:
 	if not light_platform_path.is_empty():
@@ -1029,30 +728,6 @@ func _find_machine() -> ShadowBossMachine:
 		return null
 
 	return current_scene.find_child("ShadowBossMachine", true, false) as ShadowBossMachine
-
-func _get_reaper_projectile_attack_position() -> Vector2:
-	var side_sign := _get_reaper_projectile_attack_side_sign()
-	var attack_position := global_position
-
-	if _light_platform != null and _light_platform.texture != null:
-		var platform_scale := _light_platform.global_transform.get_scale()
-		var half_width := _light_platform.texture.get_size().x * absf(platform_scale.x) * 0.5
-		var horizontal_extent := maxf(half_width - reaper_projectile_attack_side_padding, 0.0)
-		attack_position.x = _light_platform.global_position.x + side_sign * horizontal_extent
-	else:
-		attack_position.x += side_sign * 260.0
-
-	if has_target():
-		attack_position.y = player.global_position.y
-
-	return attack_position
-
-func _get_reaper_projectile_attack_side_sign() -> float:
-	if not has_target():
-		return -1.0 if randf() < 0.5 else 1.0
-
-	var arena_center_x := _light_platform.global_position.x if _light_platform != null else player.global_position.x
-	return -1.0 if player.global_position.x >= arena_center_x else 1.0
 
 func _should_begin_machine_intermission() -> bool:
 	if _machine_intermission_active:
@@ -1224,31 +899,3 @@ func _update_light_platform_mask() -> void:
 	shader_material.set_shader_parameter("platform_scale", _light_platform.global_transform.get_scale())
 	shader_material.set_shader_parameter("platform_rotation", _light_platform.global_transform.get_rotation())
 	shader_material.set_shader_parameter("platform_texture_size", _light_platform.texture.get_size())
-
-func _refill_reaper_attack_bag() -> void:
-	_reaper_attack_bag = _get_configured_reaper_attack_states()
-	_reaper_attack_bag.shuffle()
-
-	if _reaper_attack_bag.size() > 1 and _last_reaper_attack_state != "" and _reaper_attack_bag.back() == _last_reaper_attack_state:
-		var swap_index := randi_range(0, _reaper_attack_bag.size() - 2)
-		var swapped_attack_state := _reaper_attack_bag[swap_index]
-		_reaper_attack_bag[swap_index] = _reaper_attack_bag.back()
-		_reaper_attack_bag[_reaper_attack_bag.size() - 1] = swapped_attack_state
-
-func _get_configured_reaper_attack_states() -> Array[String]:
-	var default_attack_states: Array[String] = ["ReaperSlash", "ReaperProjectileSlash", "ReaperTriple"]
-	var allowed_attack_states := {
-		"ReaperSlash": true,
-		"ReaperProjectileSlash": true,
-		"ReaperTriple": true,
-	}
-	var configured_attack_states: Array[String] = []
-
-	for attack_state in reaper_phase_attack_states:
-		if allowed_attack_states.has(attack_state):
-			configured_attack_states.append(attack_state)
-
-	if configured_attack_states.is_empty():
-		return default_attack_states.duplicate()
-
-	return configured_attack_states

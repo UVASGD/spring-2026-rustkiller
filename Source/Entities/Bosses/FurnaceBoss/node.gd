@@ -1,14 +1,16 @@
 extends HFSM
 
 var timer := 0.0
+var _base_animation := ""
 
 func on_enter():
+	if _base_animation == "":
+		_base_animation = animation
 	if animator.has_animation("RESET"):
 		animator.play("RESET")
 		animator.advance(0.0)
 
 	var active_animation := get_active_animation_name()
-	animation = active_animation
 	animator.play(active_animation)
 	timer = 0.1
 
@@ -25,6 +27,6 @@ func check_transition(_delta) -> TransitionData:
 	return TransitionData.new(false, "")
 
 func get_active_animation_name() -> String:
-	if animation == "idle_1" and character and character.has_method("is_phase_2") and character.is_phase_2():
+	if _base_animation == "idle_1" and character and character.has_method("is_phase_2") and character.is_phase_2():
 		return "idle_2"
-	return animation
+	return _base_animation

@@ -186,6 +186,8 @@ func heal_from_successful_parry() -> void:
 	health_component.heal(successful_parry_heal_amount)
 
 func _on_hurtbox_hit_by_hitbox(_hitbox: HitboxComponent) -> void:
+	if _hitbox == null or _hitbox.damage <= 0.0:
+		return
 	_flash_damage_white()
 	_trigger_damage_camera_shake(_hitbox)
 

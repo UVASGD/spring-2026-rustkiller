@@ -22,6 +22,7 @@ var lunge_dir: Vector2 = Vector2.ZERO
 var lunge_time_left: float = 0.0
 var attack_direction: Vector2 = Vector2.ZERO
 var _hitstop_generation: int = 0
+var _hitstop_restore_deadline_msec: int = -1
 
 var _player: CharacterBody2D
 var _anim: AnimationPlayer
@@ -29,6 +30,21 @@ var _sprite_manager: Node2D
 var _muzzle: Node2D
 var _hitbox: Area2D
 var _parry_window: Area2D
+
+func _exit_tree() -> void:
+	Engine.time_scale = 1.0
+	_hitstop_restore_deadline_msec = -1
+
+func _process(_delta: float) -> void:
+	if Engine.time_scale != 0.0:
+		return
+	if _hitstop_restore_deadline_msec < 0:
+		return
+	if Time.get_ticks_msec() < _hitstop_restore_deadline_msec:
+		return
+
+	Engine.time_scale = 1.0
+	_hitstop_restore_deadline_msec = -1
 
 func setup(player: CharacterBody2D) -> void:
 	_player = player
@@ -94,9 +110,6 @@ func _try_parry_hit_source(hit_source: Node) -> bool:
 		if parry_receiver.parry_charge_attack():
 			return true
 
-	if _is_boss_attack_source(hit_source):
-		return true
-
 	var destroyable_source := _find_destroyable_parry_source(hit_source)
 	if destroyable_source != null:
 		destroyable_source.queue_free()
@@ -127,12 +140,15 @@ func update_a2_availability(make_available: bool = false) -> void:
 func hitstop(duration: float, emit_parry_signal: bool = true) -> void:
 	_hitstop_generation += 1
 	var hitstop_generation := _hitstop_generation
+	var clamped_duration := maxf(duration, 0.0)
+	_hitstop_restore_deadline_msec = Time.get_ticks_msec() + int(ceil((clamped_duration + 0.05) * 1000.0))
 	Engine.time_scale = 0.0
-	await _player.get_tree().create_timer(duration, true, false, true).timeout
+	await _player.get_tree().create_timer(clamped_duration, true, false, true).timeout
 	if hitstop_generation != _hitstop_generation:
 		return
 
 	Engine.time_scale = 1.0
+	_hitstop_restore_deadline_msec = -1
 	if emit_parry_signal:
 		_player.emit_parrying()
 

@@ -10,6 +10,7 @@ signal hit_by_hitbox(hitbox_component: HitboxComponent)
 @export var detect_only: bool = false
 @export var entity_name:String
 @export var knockback_strength: float = 400.0
+var _last_hitbox_frame_by_source: Dictionary = {}
 
 
 func _ready() -> void:
@@ -47,6 +48,12 @@ func apply_hitbox(hitbox_component: HitboxComponent) -> bool:
 		return false
 	if not can_receive_damage():
 		return false
+
+	var hitbox_source_id := hitbox_component.get_instance_id()
+	var current_physics_frame := Engine.get_physics_frames()
+	if _last_hitbox_frame_by_source.get(hitbox_source_id, -1) == current_physics_frame:
+		return false
+	_last_hitbox_frame_by_source[hitbox_source_id] = current_physics_frame
 
 	if !detect_only:
 		_deal_damage_with_resistances(hitbox_component.damage)

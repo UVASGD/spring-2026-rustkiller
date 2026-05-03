@@ -114,6 +114,9 @@ func parry_charge_attack() -> bool:
 		character.stop_motion()
 	return true
 
+func parry_cancel() -> void:
+	parry_charge_attack()
+
 func _choose_attack_mode() -> int:
 	if character and character.has_method("choose_animal_attack_type"):
 		var attack_type := String(character.choose_animal_attack_type())

@@ -140,9 +140,9 @@ func try_apply_charge_hit(hurtbox: HurtboxComponent) -> void:
 	if damaged_targets.has(target_id):
 		return
 	damaged_targets[target_id] = true
-	hurtbox._on_area_entered(charge_hitbox)
-	has_hit = true
-	hit_slowdown_timer = hit_slowdown_duration
+	if hurtbox.apply_hitbox(charge_hitbox):
+		has_hit = true
+		hit_slowdown_timer = hit_slowdown_duration
 
 func closest_point_on_segment(point: Vector2, segment_start: Vector2, segment_end: Vector2) -> Vector2:
 	var segment := segment_end - segment_start

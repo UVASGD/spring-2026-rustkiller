@@ -77,6 +77,18 @@
 [ext_resource type="Texture2D" uid="uid://bcvgvnamt4vfe" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_animal/wolf_attack_3_1.png" id="45_udltp"]
 [ext_resource type="Texture2D" uid="uid://i2pongm2jcie" path="res://Source/Entities/Bosses/ShadowBoss/Art/ph_animal/wolf_attack_3_2.png" id="46_46pew"]
 [ext_resource type="Script" uid="uid://8s5sjj263df" path="res://Source/Entities/Player/better_player/sfx_manager.gd" id="76_il8yn"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/ShadowBoss/shadow_player_phase_controller.gd" id="77_phase_player"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/ShadowBoss/shadow_player_walk_state.gd" id="78_player_walk_controller"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/ShadowBoss/shadow_player_slash_state_controller.gd" id="79_player_slash_controller"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/ShadowBoss/shadow_player_range_attack_controller.gd" id="80_player_range_controller"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/ShadowBoss/shadow_animal_phase_controller.gd" id="81_phase_animal"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/ShadowBoss/shadow_animal_snake_attack.gd" id="82_animal_snake_controller"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/ShadowBoss/shadow_animal_wolf_attack.gd" id="83_animal_wolf_controller"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/ShadowBoss/shadow_animal_porcupine_attack.gd" id="84_animal_porcupine_controller"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/ShadowBoss/shadow_reaper_phase_controller.gd" id="85_phase_reaper"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/ShadowBoss/shadow_reaper_slash_attack_controller.gd" id="86_reaper_slash_controller"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/ShadowBoss/shadow_reaper_projectile_slash_controller.gd" id="87_reaper_projectile_controller"]
+[ext_resource type="Script" path="res://Source/Entities/Bosses/ShadowBoss/shadow_reaper_triple_attack_controller.gd" id="88_reaper_triple_controller"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_light_circle_mask"]
 shader = ExtResource("15")
@@ -7237,6 +7249,42 @@ move_name = "Range"
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1678892094]
 libraries/ = SubResource("3")
 speed_scale = 0.5
+
+[node name="PlayerPhaseController" type="Node" parent="."]
+script = ExtResource("77_phase_player")
+
+[node name="WalkState" type="Node" parent="PlayerPhaseController"]
+script = ExtResource("78_player_walk_controller")
+
+[node name="SlashAttack" type="Node" parent="PlayerPhaseController"]
+script = ExtResource("79_player_slash_controller")
+
+[node name="RangeAttack" type="Node" parent="PlayerPhaseController"]
+script = ExtResource("80_player_range_controller")
+
+[node name="AnimalPhaseController" type="Node" parent="."]
+script = ExtResource("81_phase_animal")
+
+[node name="SnakeAttack" type="Node" parent="AnimalPhaseController"]
+script = ExtResource("82_animal_snake_controller")
+
+[node name="WolfAttack" type="Node" parent="AnimalPhaseController"]
+script = ExtResource("83_animal_wolf_controller")
+
+[node name="PorcupineAttack" type="Node" parent="AnimalPhaseController"]
+script = ExtResource("84_animal_porcupine_controller")
+
+[node name="ReaperPhaseController" type="Node" parent="."]
+script = ExtResource("85_phase_reaper")
+
+[node name="SlashAttack" type="Node" parent="ReaperPhaseController"]
+script = ExtResource("86_reaper_slash_controller")
+
+[node name="ProjectileSlashAttack" type="Node" parent="ReaperPhaseController"]
+script = ExtResource("87_reaper_projectile_controller")
+
+[node name="TripleAttack" type="Node" parent="ReaperPhaseController"]
+script = ExtResource("88_reaper_triple_controller")
 
 [node name="HfsmDebugLabelComponent" parent="." unique_id=993298933 node_paths=PackedStringArray("hfsm") instance=ExtResource("6")]
 visible = false

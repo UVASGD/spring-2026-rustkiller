@@ -3071,6 +3071,7 @@ debug_color = Color(0.972549, 0, 0.44313726, 0.105882354)
 
 [node name="ChargeHitboxComponent" parent="." unique_id=275943176 instance=ExtResource("16_l62nx")]
 process_mode = 4
+visible = false
 damage = 200.0
 hit_owner = "boss"
 knockback_strength = 550.0
@@ -3080,6 +3081,7 @@ shape = SubResource("RectangleShape2D_charge_hitbox")
 
 [node name="ComboHitboxComponent" parent="." unique_id=32422881 instance=ExtResource("16_l62nx")]
 process_mode = 4
+visible = false
 scale = Vector2(1, 0.72829646)
 damage = 50.0
 hit_owner = "boss"
