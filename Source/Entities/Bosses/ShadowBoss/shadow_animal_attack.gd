@@ -245,6 +245,8 @@ func _update_porcupine_attack(delta: float) -> void:
 	if _porcupine_waves_spawned >= wave_count and _phase_elapsed >= _phase_duration:
 		_porcupine_finished = true
 		_reset_visual_animation_speed()
+		if character and character.has_method("queue_animal_post_porcupine_idle_window"):
+			character.queue_animal_post_porcupine_idle_window()
 
 func _update_wolf_attack(delta: float) -> void:
 	match _wolf_phase:

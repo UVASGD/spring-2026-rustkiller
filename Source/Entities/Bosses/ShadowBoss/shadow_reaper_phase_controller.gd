@@ -16,6 +16,7 @@ func enter_phase() -> void:
 	boss._reaper_phase_complete = false
 	boss._machine_pending_phase = ""
 	boss._animal_attack_index = 0
+	boss._animal_next_idle_duration_override = -1.0
 	boss.reset_reaper_slash_movement()
 	boss._reaper_attack_bag.clear()
 	boss._last_reaper_attack_state = ""

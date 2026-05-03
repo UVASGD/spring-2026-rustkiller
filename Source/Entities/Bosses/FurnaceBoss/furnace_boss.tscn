@@ -2344,7 +2344,7 @@ size = Vector2(207, 136.63947)
 size = Vector2(146, 171.61734)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_combo_hitbox"]
-size = Vector2(150, 91.86534)
+size = Vector2(80.26316, 166.50247)
 
 [sub_resource type="Animation" id="Animation_cnbgx"]
 resource_name = "Pause"
@@ -2708,10 +2708,10 @@ tracks/4/path = NodePath("ComboHitboxComponent:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 1.52, 1.58, 1.61, 1.68, 1.77, 1.97, 2.16),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 1.1, 1.5, 1.5500001, 1.6, 1.65, 1.75, 1.95, 2.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(-13, -44), Vector2(-20, -49), Vector2(-26, 40), Vector2(-37, 84), Vector2(-39, 98), Vector2(-37, 78), Vector2(-32, 57)]
+"values": [Vector2(0, 0), Vector2(-23, -93), Vector2(-22, -147), Vector2(-11, -53), Vector2(-28, 7.999996), Vector2(-29, 58), Vector2(-28, 74), Vector2(-17, 44), Vector2(-12, -8)]
 }
 
 [sub_resource type="Animation" id="Animation_soki0"]
@@ -3081,14 +3081,13 @@ shape = SubResource("RectangleShape2D_charge_hitbox")
 
 [node name="ComboHitboxComponent" parent="." unique_id=32422881 instance=ExtResource("16_l62nx")]
 process_mode = 4
-visible = false
 scale = Vector2(1, 0.72829646)
 damage = 50.0
 hit_owner = "boss"
 knockback_strength = 550.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ComboHitboxComponent" unique_id=277989492]
-position = Vector2(0, -39.06733)
+position = Vector2(-26, 54.464996)
 shape = SubResource("RectangleShape2D_combo_hitbox")
 disabled = true
 debug_color = Color(0.8826867, 0.22263193, 0.63145745, 0.41960785)

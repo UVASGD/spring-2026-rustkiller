@@ -4,8 +4,8 @@ extends Node
 @export var lunge_distance: float   = 80.0
 @export var lunge_duration: float   = 0.12
 @export var projectile_speed: float = 500.0
-@export var wrench_projectile_damage: float = 1.0
-@export var melee_damage: float = 1.0
+@export var wrench_projectile_damage: float = .5
+@export var melee_damage: float = 20.0
 
 const BURST_COUNT := 3
 const BURST_INTERVAL := 0.08
@@ -105,6 +105,9 @@ func try_parry() -> void:
 				return
 
 func _try_parry_hit_source(hit_source: Node) -> bool:
+	if _is_boss_attack_source(hit_source):
+		return true
+
 	var parry_receiver := _find_parry_receiver(hit_source)
 	if parry_receiver and parry_receiver.has_method("parry_charge_attack"):
 		if parry_receiver.parry_charge_attack():

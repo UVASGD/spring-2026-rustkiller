@@ -139,6 +139,7 @@ var _player_phase_appear_ready := false
 var _phase_hitbox_shape_defaults: Dictionary = {}
 var _animal_wolf_circle_start_angle := 0.0
 var _animal_attack_index := 0
+var _animal_next_idle_duration_override := -1.0
 var _visual_animation_speed_scale := 1.0
 
 func _ready() -> void:
@@ -304,6 +305,16 @@ func get_animal_ouroboros_animation() -> String:
 
 func get_animal_idle_duration() -> float:
 	return animal_phase_controller.get_animal_idle_duration()
+
+func queue_animal_post_porcupine_idle_window() -> void:
+	_animal_next_idle_duration_override = 3.0
+
+func consume_animal_idle_duration() -> float:
+	if _animal_next_idle_duration_override >= 0.0:
+		var idle_duration := _animal_next_idle_duration_override
+		_animal_next_idle_duration_override = -1.0
+		return idle_duration
+	return get_animal_idle_duration()
 
 func get_animal_wolf_intro_animation() -> String:
 	return animal_phase_controller.get_animal_wolf_intro_animation()
