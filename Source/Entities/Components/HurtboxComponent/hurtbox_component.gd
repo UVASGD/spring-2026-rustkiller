@@ -2,6 +2,8 @@
 class_name HurtboxComponent
 extends Area2D
 
+const AttackDebug := preload("res://Source/Scripts/Util/attack_debug.gd")
+
 signal hit_by_hitbox(hitbox_component: HitboxComponent)
 
 @export var health_component: HealthComponent
@@ -10,7 +12,8 @@ signal hit_by_hitbox(hitbox_component: HitboxComponent)
 @export var detect_only: bool = false
 @export var entity_name:String
 @export var knockback_strength: float = 400.0
-var _last_hitbox_frame_by_source: Dictionary = {}
+var _last_processed_physics_frame: int = -1
+var _processed_hitboxes_this_frame: Dictionary = {}
 
 
 func _ready() -> void:
@@ -41,19 +44,34 @@ func _deal_damage_with_resistances(damage: float) -> float:
 
 func apply_hitbox(hitbox_component: HitboxComponent) -> bool:
 	if hitbox_component == null:
+		AttackDebug.trace_attack_event("apply_hitbox:null_hitbox", hitbox_component, self)
 		return false
 	if entity_name != "" and hitbox_component.hit_owner == entity_name:
+		AttackDebug.trace_attack_event("apply_hitbox:blocked_same_owner", hitbox_component, self)
 		return false
 	if not hitbox_component.damage_enabled:
+		AttackDebug.trace_attack_event("apply_hitbox:blocked_damage_disabled", hitbox_component, self)
 		return false
 	if not can_receive_damage():
+		AttackDebug.trace_attack_event("apply_hitbox:blocked_cannot_receive", hitbox_component, self)
 		return false
 
 	var hitbox_source_id := hitbox_component.get_instance_id()
 	var current_physics_frame := Engine.get_physics_frames()
-	if _last_hitbox_frame_by_source.get(hitbox_source_id, -1) == current_physics_frame:
+	if _last_processed_physics_frame != current_physics_frame:
+		_last_processed_physics_frame = current_physics_frame
+		_processed_hitboxes_this_frame.clear()
+
+	if _processed_hitboxes_this_frame.has(hitbox_source_id):
+		AttackDebug.trace_attack_event("apply_hitbox:blocked_duplicate_frame", hitbox_component, self, {
+			"physics_frame": current_physics_frame
+		})
 		return false
-	_last_hitbox_frame_by_source[hitbox_source_id] = current_physics_frame
+	_processed_hitboxes_this_frame[hitbox_source_id] = true
+
+	AttackDebug.trace_attack_event("apply_hitbox:accepted", hitbox_component, self, {
+		"physics_frame": current_physics_frame
+	})
 
 	if !detect_only:
 		_deal_damage_with_resistances(hitbox_component.damage)
@@ -65,7 +83,12 @@ func _on_area_entered(other_area: Area2D) -> void:
 	if not (other_area is HitboxComponent):
 		return
 
-	apply_hitbox(other_area as HitboxComponent)
+	var hitbox_component := other_area as HitboxComponent
+	if hitbox_component.manual_damage_application:
+		return
+
+	AttackDebug.trace_attack_event("hurtbox_area_entered", hitbox_component, self)
+	apply_hitbox(hitbox_component)
 
 func _disable_projectile_hitbox_after_successful_hit(hitbox_component: HitboxComponent) -> void:
 	if hitbox_component == null:

@@ -18,6 +18,8 @@ var walk_pitch_max: float = 1.04
 @export var damage_flash_duration: float = 0.08
 @export var parry_invulnerability_duration: float = 0.5
 @export var successful_parry_heal_amount: float = 50.0
+@export var max_knockback_speed: float = 600.0
+@export var max_valid_world_coordinate: float = 10000.0
 
 const DEATH_ANIMATION := "death"
 const DEATH_RETURN_DELAY := 5.0
@@ -29,6 +31,7 @@ var _damage_flash_generation: int = 0
 var _invulnerability_generation: int = 0
 var _is_invulnerable: bool = false
 var _is_dead: bool = false
+var _last_safe_global_position: Vector2 = Vector2.ZERO
 
 signal parrying
 
@@ -55,6 +58,7 @@ func _ready() -> void:
 	_movement.setup(self)
 	parrying.connect(_on_parrying)
 	_set_damage_flash_enabled(false)
+	_last_safe_global_position = global_position
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("quit"):
@@ -67,24 +71,29 @@ func _input(_event: InputEvent) -> void:
 			tutorial.notify_dashed()
 
 func _physics_process(delta: float) -> void:
+	_recover_from_invalid_world_position()
 	_handle_weapon_switch()
 
 	match current_state:
 		"dead":
 			velocity = Vector2.ZERO
 			move_and_slide()
+			_store_safe_world_position()
 			return
 		"parrying":
 			velocity = Vector2.ZERO
 			move_and_slide()
+			_store_safe_world_position()
 			return
 		"attacking":
 			_combat.process_attack(delta)
 			move_and_slide()
+			_store_safe_world_position()
 			return
 
 	_handle_movement_input(delta)
 	move_and_slide()
+	_store_safe_world_position()
 
 func _handle_weapon_switch() -> void:
 	if Input.is_action_just_pressed("switch_weapon"):
@@ -261,4 +270,23 @@ func _trigger_damage_camera_shake(hitbox: HitboxComponent) -> void:
 	lock_on_system.trigger_damage_shake(damage_ratio)
 
 func apply_knockback(force: Vector2) -> void:
-	_movement.knockback = force * 5.0
+	_movement.knockback = force.limit_length(max_knockback_speed)
+
+func _recover_from_invalid_world_position() -> void:
+	if _is_valid_world_position(global_position):
+		return
+
+	global_position = _last_safe_global_position
+	velocity = Vector2.ZERO
+	if _movement:
+		_movement.knockback = Vector2.ZERO
+
+func _store_safe_world_position() -> void:
+	if _is_valid_world_position(global_position):
+		_last_safe_global_position = global_position
+
+func _is_valid_world_position(value: Vector2) -> bool:
+	return is_finite(value.x) \
+		and is_finite(value.y) \
+		and absf(value.x) <= max_valid_world_coordinate \
+		and absf(value.y) <= max_valid_world_coordinate

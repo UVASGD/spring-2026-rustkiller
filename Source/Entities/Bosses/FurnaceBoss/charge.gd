@@ -21,6 +21,8 @@ func on_enter():
 	$Charge_Sound.play()
 	charge_hitbox = character.get_node_or_null("ChargeHitboxComponent") as HitboxComponent
 	charge_hitbox_shape = character.get_node_or_null("ChargeHitboxComponent/CollisionShape2D") as CollisionShape2D
+	if charge_hitbox:
+		charge_hitbox.manual_damage_application = true
 	set_charge_hitbox_enabled(false)
 	character.velocity = Vector2.ZERO
 	timer = aim_time

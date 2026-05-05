@@ -25,7 +25,11 @@ func set_animal_wolf_circle_progress(progress: float) -> void:
 	var radius := boss.get_animal_wolf_circle_radius()
 	var angle := boss._animal_wolf_circle_start_angle + orbit_sign * TAU * orbit_progress
 	var offset := Vector2.RIGHT.rotated(angle) * radius
-	boss.global_position = boss.player.global_position + offset
+	var destination := boss.player.global_position + offset
+	if not boss._is_valid_world_position(destination):
+		boss.stop_motion()
+		return
+	boss.global_position = destination
 	boss.stop_motion()
 
 	var tangent_direction := Vector2(-sin(angle), cos(angle)) * orbit_sign

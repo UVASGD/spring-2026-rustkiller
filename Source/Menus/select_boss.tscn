@@ -114,7 +114,7 @@ texture = ExtResource("3_65mmm")
 [node name="RustKillerbgExport" type="Sprite2D" parent="." unique_id=583672839]
 modulate = Color(0.2936601, 0.29366007, 0.29366007, 1)
 z_index = -1
-position = Vector2(476, 266)
+position = Vector2(480, 270)
 scale = Vector2(1.1764486, 1.1764486)
 texture = ExtResource("4_o31bv")
 

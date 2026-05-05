@@ -5,9 +5,12 @@ const SINE_PROJECTILE_SCENE := preload("res://Source/Entities/Projectiles/SinePr
 const LAVA_BOULDER_SCENE := preload("res://Source/Entities/Hazards/LavaBall/lavaboulder.tscn")
 const DEFEAT_FADE_DURATION := 0.75
 const RETURN_TO_BOSS_SELECT_DELAY := 5.0
+const MAX_ACTIVE_SINE_PROJECTILES := 32
+const MAX_ACTIVE_LAVA_BOULDERS := 8
 
 @export var player : CharacterBody2D
 @export var max_health: float = 400.0
+@export var max_valid_world_coordinate: float = 10000.0
 
 @export_group("Movement")
 @export var chase_speed := 250.0
@@ -33,6 +36,7 @@ const RETURN_TO_BOSS_SELECT_DELAY := 5.0
 var invulnerable := false
 var phase_2_entered := false
 var defeat_sequence_started := false
+var _last_safe_global_position: Vector2 = Vector2.ZERO
 
 func _ready():
 	if health_component != null:
@@ -45,13 +49,16 @@ func _ready():
 	state_machine._accept_export_fields()
 	state_machine._on_enter()
 	animation_player.speed_scale = 1.0
+	_last_safe_global_position = global_position
 
 func _physics_process(delta):
+	_recover_from_invalid_world_position()
 	if _should_start_defeat_sequence():
 		_start_defeat_sequence()
 		return
 
 	state_machine._update(delta)
+	_store_safe_world_position()
 
 func is_invulnerable() -> bool:
 	return invulnerable
@@ -109,6 +116,10 @@ func _start_defeat_sequence() -> void:
 func fire_sine_projectile(projectile_rows: int = 1, row_spacing: float = 28.0) -> void:
 	if player == null:
 		return
+	if not _is_valid_world_position(player.global_position):
+		return
+	if get_tree().get_nodes_in_group("enemy_projectile").size() >= MAX_ACTIVE_SINE_PROJECTILES:
+		return
 
 	var direction_to_player: Vector2 = (player.global_position - projectile_origin.global_position).normalized()
 	if direction_to_player == Vector2.ZERO:
@@ -142,6 +153,10 @@ func fire_sine_projectile(projectile_rows: int = 1, row_spacing: float = 28.0) -
 	
 var lastLavaBoulderSpot: Vector2 = Vector2.ZERO		
 func fire_lava_boulder():
+	if player == null or not _is_valid_world_position(player.global_position):
+		return
+	if get_tree().get_nodes_in_group("furnace_lava_boulder").size() >= MAX_ACTIVE_LAVA_BOULDERS:
+		return
 	if lastLavaBoulderSpot != Vector2.ZERO and player.global_position.distance_to(lastLavaBoulderSpot) <= 50:
 		return
 	var instance: Node2D = LAVA_BOULDER_SCENE.instantiate() as Node2D
@@ -166,3 +181,20 @@ func _find_game_container() -> GameContainer:
 			return current as GameContainer
 		current = current.get_parent()
 	return null
+
+func _recover_from_invalid_world_position() -> void:
+	if _is_valid_world_position(global_position):
+		return
+
+	global_position = _last_safe_global_position
+	velocity = Vector2.ZERO
+
+func _store_safe_world_position() -> void:
+	if _is_valid_world_position(global_position):
+		_last_safe_global_position = global_position
+
+func _is_valid_world_position(value: Vector2) -> bool:
+	return is_finite(value.x) \
+		and is_finite(value.y) \
+		and absf(value.x) <= max_valid_world_coordinate \
+		and absf(value.y) <= max_valid_world_coordinate

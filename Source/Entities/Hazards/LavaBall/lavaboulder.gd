@@ -7,17 +7,19 @@ class_name LavaBoulder
 var time_elapsed: float = 0
 @export var time_animate: int = 1
 var activated: bool = false
+var fall_started: bool = false
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	add_to_group("furnace_lava_boulder")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	time_elapsed += delta
-	if not activated and time_elapsed >= time_animate:
+	if not fall_started and time_elapsed >= time_animate:
+		fall_started = true
 		animPlayer.play("fall")
 	
 func activate():

@@ -8,9 +8,14 @@ var timer_node: Timer = Timer.new()
 func _ready():
 	animated_sprite.animation = &"default"
 	animated_sprite.frame = 0
-	timer_node.wait_time = 10
+	if timer_node.get_parent() == null:
+		add_child(timer_node)
+	timer_node.one_shot = true
+	timer_node.autostart = false
+	timer_node.wait_time = 10.0
+	if not timer_node.timeout.is_connected(on_timer_timeout):
+		timer_node.timeout.connect(on_timer_timeout)
 	timer_node.start()
-	timer_node.timeout.connect(on_timer_timeout)
 
 func _physics_process(delta):
 	if animated_sprite.sprite_frames == null:

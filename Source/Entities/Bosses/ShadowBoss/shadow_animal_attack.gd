@@ -272,7 +272,8 @@ func _update_wolf_approach_phase(delta: float) -> void:
 		character.stop_motion()
 	if character.has_method("has_target") and character.has_target():
 		_attack_anchor_position = character.player.global_position
-		character.global_position = character.player.global_position
+		if character.has_method("_is_valid_world_position") and character._is_valid_world_position(_attack_anchor_position):
+			character.global_position = _attack_anchor_position
 	if character.has_method("face_target"):
 		character.face_target()
 
@@ -320,7 +321,8 @@ func _start_wolf_approach_phase() -> void:
 		character.stop_motion()
 	if character and character.has_method("has_target") and character.has_target():
 		_attack_anchor_position = character.player.global_position
-		character.global_position = character.player.global_position
+		if character.has_method("_is_valid_world_position") and character._is_valid_world_position(_attack_anchor_position):
+			character.global_position = _attack_anchor_position
 	if character and character.has_method("face_target"):
 		character.face_target()
 	if _current_pair_index < _approach_animations.size():
@@ -333,7 +335,7 @@ func _start_wolf_attack_phase() -> void:
 	_set_attack_visual_animation_speed()
 	if character and character.has_method("stop_motion"):
 		character.stop_motion()
-	if character:
+	if character and (not character.has_method("_is_valid_world_position") or character._is_valid_world_position(_attack_anchor_position)):
 		character.global_position = _attack_anchor_position
 	if character and character.has_method("face_target"):
 		character.face_target()

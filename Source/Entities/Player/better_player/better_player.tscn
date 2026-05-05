@@ -553,8 +553,8 @@ _data = {
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1ysy8"]
 shader = ExtResource("17_6pmbg")
 shader_parameter/color = Color(1, 1, 1, 1)
-shader_parameter/tint_factor = 0.5
-shader_parameter/fade = 1.0
+shader_parameter/tint_factor = 0.0
+shader_parameter/fade = 0.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2jere"]
 radius = 60.0
@@ -1221,6 +1221,7 @@ position = Vector2(-31, -19)
 visible = false
 knockback_strength = 40.0
 damage_enabled = false
+manual_damage_application = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SpriteManager/HitboxComponent" unique_id=2048539670]
 shape = SubResource("CircleShape2D_2jere")

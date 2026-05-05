@@ -16,15 +16,21 @@ var locked_facing_sign := 1.0
 var combo_hitbox: HitboxComponent
 var combo_hitbox_shape: CollisionShape2D
 var damaged_targets: Dictionary = {}
+var persistent_damaged_targets: Dictionary = {}
 var current_window_index := -1
+var last_valid_target_position := Vector2.ZERO
 
 func on_enter():
 	combo_hitbox = character.get_node_or_null("ComboHitboxComponent") as HitboxComponent
 	combo_hitbox_shape = character.get_node_or_null("ComboHitboxComponent/CollisionShape2D") as CollisionShape2D
+	if combo_hitbox:
+		combo_hitbox.manual_damage_application = true
 	set_combo_hitbox_enabled(true)
 	damaged_targets.clear()
+	persistent_damaged_targets.clear()
 	current_window_index = -1
 	character.velocity = Vector2.ZERO
+	last_valid_target_position = character.global_position
 	update_window_state()
 	locked_facing_sign = facing_sign
 
@@ -32,6 +38,9 @@ func update(delta):
 	update_window_state()
 
 	var dest := get_target_position()
+	if not _is_valid_world_position(dest):
+		character.velocity = Vector2.ZERO
+		return
 	var to_target := dest - character.global_position
 	if to_target.length() <= position_tolerance:
 		character.global_position = dest
@@ -79,21 +88,35 @@ func get_window_index() -> int:
 	return 3
 
 func get_target_position() -> Vector2:
+	if player == null:
+		return last_valid_target_position
+	if not _is_valid_world_position(player.global_position):
+		return last_valid_target_position
+
+	var target_position := player.global_position
 	match current_window_index:
 		0:
-			return player.global_position + Vector2(horizontal_offset, 0.0)
+			target_position += Vector2(horizontal_offset, 0.0)
 		1:
-			return player.global_position + Vector2(-horizontal_offset, 0.0)
+			target_position += Vector2(-horizontal_offset, 0.0)
 		2:
-			return player.global_position + Vector2(0.0, vertical_offset)
+			target_position += Vector2(0.0, vertical_offset)
 		_:
-			return player.global_position + Vector2(0.0, -vertical_offset)
+			target_position += Vector2(0.0, -vertical_offset)
+
+	if _is_valid_world_position(target_position):
+		last_valid_target_position = target_position
+
+	return target_position
 
 func set_combo_hitbox_enabled(enabled: bool) -> void:
 	if combo_hitbox_shape:
 		combo_hitbox_shape.set_deferred("disabled", not enabled)
 	if combo_hitbox:
 		combo_hitbox.process_mode = Node.PROCESS_MODE_INHERIT if enabled else Node.PROCESS_MODE_DISABLED
+		combo_hitbox.monitoring = enabled
+		combo_hitbox.monitorable = enabled
+		combo_hitbox.damage_enabled = enabled
 
 func flip_visuals(direction: Vector2) -> void:
 	var visuals := character.get_node_or_null("Visuals") as Node2D
@@ -152,10 +175,13 @@ func try_apply_combo_hit(hurtbox: HurtboxComponent) -> void:
 	if hurtbox.entity_name == combo_hitbox.hit_owner:
 		return
 	var target_id := hurtbox.get_instance_id()
+	if persistent_damaged_targets.has(target_id):
+		return
 	if damaged_targets.has(target_id):
 		return
 	damaged_targets[target_id] = true
-	hurtbox.apply_hitbox(combo_hitbox)
+	if hurtbox.apply_hitbox(combo_hitbox):
+		persistent_damaged_targets[target_id] = true
 
 func closest_point_on_segment(point: Vector2, segment_start: Vector2, segment_end: Vector2) -> Vector2:
 	var segment := segment_end - segment_start
@@ -164,3 +190,9 @@ func closest_point_on_segment(point: Vector2, segment_start: Vector2, segment_en
 		return segment_start
 	var weight := clampf((point - segment_start).dot(segment) / segment_length_squared, 0.0, 1.0)
 	return segment_start + segment * weight
+
+func _is_valid_world_position(value: Vector2) -> bool:
+	return is_finite(value.x) \
+		and is_finite(value.y) \
+		and absf(value.x) <= 10000.0 \
+		and absf(value.y) <= 10000.0

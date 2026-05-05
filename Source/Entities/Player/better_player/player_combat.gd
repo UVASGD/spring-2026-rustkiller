@@ -54,11 +54,13 @@ func setup(player: CharacterBody2D) -> void:
 	_hitbox = player.get_node("SpriteManager/HitboxComponent")
 	_parry_window = player.get_node("SpriteManager/ParryWindow")
 
-	_anim.animation_finished.connect(_on_animation_finished)
+	if not _anim.animation_finished.is_connected(_on_animation_finished):
+		_anim.animation_finished.connect(_on_animation_finished)
 	_hitbox.hit_owner = player.entity_name
 	_hitbox.damage = melee_damage
 	_hitbox.damage_enabled = false
-	_hitbox.area_entered.connect(_on_hitbox_area_entered)
+	if not _hitbox.area_entered.is_connected(_on_hitbox_area_entered):
+		_hitbox.area_entered.connect(_on_hitbox_area_entered)
 	_parry_window.monitoring = true
 	_parry_window.monitorable = true
 
@@ -118,6 +120,9 @@ func _try_parry_hit_source(hit_source: Node) -> bool:
 		destroyable_source.queue_free()
 		return true
 
+	if _has_boss_owned_hitbox(hit_source):
+		return true
+
 	return false
 
 func fire_burst() -> void:
@@ -137,7 +142,6 @@ func update_melee_active(make_active: bool = false) -> void:
 
 
 func update_a2_availability(make_available: bool = false) -> void:
-	print("update_a2_availability called:", make_available, " anim:", _anim.current_animation)
 	a2_available = make_available
 
 func hitstop(duration: float, emit_parry_signal: bool = true) -> void:
@@ -191,6 +195,14 @@ func _find_destroyable_parry_source(hit_source: Node) -> Node:
 			return null
 		current = current.get_parent()
 	return null
+
+func _has_boss_owned_hitbox(hit_source: Node) -> bool:
+	var current := hit_source
+	while current != null:
+		if current is HitboxComponent and (current as HitboxComponent).hit_owner == "boss":
+			return true
+		current = current.get_parent()
+	return false
 
 func _start_melee() -> void:
 	if combo_window:
@@ -274,26 +286,20 @@ func _start_combo_window() -> void:
 	combo_window = false
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
-	print("area entered:", area.name, " anim:", _anim.current_animation, " active:", is_melee_hitbox_active)
 	_try_hit_area(area)
 
 func _try_hit_area(area: Area2D) -> void:
 	if not (area is HurtboxComponent):
-		print("not a hurtbox, skipping")
 		return
 
 	var hurtbox := area as HurtboxComponent
-	print("hurtbox entity:", hurtbox.entity_name)
-	print("can_accept_bullet:", hurtbox.can_accept_bullet_collision())
-	print("is_melee_hitbox_active:", is_melee_hitbox_active)
-	print("has_melee_hit:", has_melee_hit)
 
 	if hurtbox.can_accept_bullet_collision() \
 	and hurtbox.entity_name == "boss" \
 	and is_melee_hitbox_active \
 	and not has_melee_hit:
 		has_melee_hit = true
-		hurtbox._on_area_entered(_hitbox)
+		hurtbox.apply_hitbox(_hitbox)
 
 		if hurtbox.bullet_impact_scene:
 			var impact = hurtbox.bullet_impact_scene.instantiate()

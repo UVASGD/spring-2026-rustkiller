@@ -11,6 +11,7 @@ const SHADOW_PORCUPINE_SCENE := preload("res://Source/Entities/Projectiles/Shado
 @export var player: CharacterBody2D
 @export var light_platform_path: NodePath
 @export var machine_path: NodePath
+@export var max_valid_world_coordinate: float = 10000.0
 
 @export_group("Phase")
 @export var start_in_player_phase := false
@@ -141,6 +142,7 @@ var _animal_wolf_circle_start_angle := 0.0
 var _animal_attack_index := 0
 var _animal_next_idle_duration_override := -1.0
 var _visual_animation_speed_scale := 1.0
+var _last_safe_global_position: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	if not is_instance_valid(player):
@@ -172,8 +174,10 @@ func _ready() -> void:
 	state_machine.animator = animation_player
 	state_machine._accept_export_fields()
 	state_machine._on_enter()
+	_last_safe_global_position = global_position
 
 func _physics_process(delta: float) -> void:
+	_recover_from_invalid_world_position()
 	if _slash_cooldown_remaining > 0.0:
 		_slash_cooldown_remaining = maxf(_slash_cooldown_remaining - delta, 0.0)
 	if _reaper_slash_cooldown_remaining > 0.0:
@@ -208,6 +212,7 @@ func _physics_process(delta: float) -> void:
 	velocity += _knockback_velocity
 	move_and_slide()
 	_knockback_velocity = _knockback_velocity.move_toward(Vector2.ZERO, acceleration * delta * 120.0)
+	_store_safe_world_position()
 
 func is_invulnerable() -> bool:
 	return _is_invulnerable
@@ -223,7 +228,7 @@ func stop_motion() -> void:
 	_knockback_velocity = Vector2.ZERO
 
 func has_target() -> bool:
-	return is_instance_valid(player)
+	return is_instance_valid(player) and _is_valid_world_position(player.global_position)
 
 func distance_to_target() -> float:
 	if not has_target():
@@ -910,3 +915,20 @@ func _update_light_platform_mask() -> void:
 	shader_material.set_shader_parameter("platform_scale", _light_platform.global_transform.get_scale())
 	shader_material.set_shader_parameter("platform_rotation", _light_platform.global_transform.get_rotation())
 	shader_material.set_shader_parameter("platform_texture_size", _light_platform.texture.get_size())
+
+func _recover_from_invalid_world_position() -> void:
+	if _is_valid_world_position(global_position):
+		return
+
+	global_position = _last_safe_global_position
+	stop_motion()
+
+func _store_safe_world_position() -> void:
+	if _is_valid_world_position(global_position):
+		_last_safe_global_position = global_position
+
+func _is_valid_world_position(value: Vector2) -> bool:
+	return is_finite(value.x) \
+		and is_finite(value.y) \
+		and absf(value.x) <= max_valid_world_coordinate \
+		and absf(value.y) <= max_valid_world_coordinate

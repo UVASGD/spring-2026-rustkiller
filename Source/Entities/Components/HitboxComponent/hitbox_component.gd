@@ -6,6 +6,7 @@ extends Area2D
 @export var hit_owner: String
 @export var knockback_strength: float = 400.0
 @export var damage_enabled: bool = true
+@export var manual_damage_application: bool = false
 var velocity: Vector2 = Vector2.ZERO
 
 

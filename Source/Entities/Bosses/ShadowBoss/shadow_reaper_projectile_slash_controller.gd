@@ -6,7 +6,10 @@ class_name ShadowReaperProjectileSlashController
 func move_to_reaper_projectile_attack_side() -> void:
 	if boss == null:
 		return
-	boss.global_position = _get_reaper_projectile_attack_position()
+	var destination := _get_reaper_projectile_attack_position()
+	if not boss._is_valid_world_position(destination):
+		return
+	boss.global_position = destination
 	boss.stop_motion()
 	boss.face_target()
 

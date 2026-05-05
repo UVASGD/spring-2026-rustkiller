@@ -63,7 +63,6 @@ func _switch_to(move):
 	current_move = moves[move]
 	current_move._on_enter()
 	if not current_move.is_container:
-		print(current_move)
 		if animator and animator.has_animation(current_move.animation):
 			animator.play(current_move.animation)
 

@@ -8,6 +8,7 @@ extends Node
 @export var max_lock_on_zoom: float = 10.0
 @export var lock_on_range: float = 500.0
 @export var padding: float = 50.0
+@export var max_lock_on_follow_distance_multiplier: float = 2.0
 
 @export var shake_timer: float = 0.0
 @export var shake_duration: float = 0.1
@@ -16,10 +17,15 @@ extends Node
 
 var current_target: LockOnComponent = null
 var available_targets: Array[LockOnComponent] = []
+var _last_safe_camera_position: Vector2 = Vector2.ZERO
+var _last_safe_camera_zoom: Vector2 = Vector2.ONE
 
 func _ready() -> void:
 	#camera = player.get_node()
+	camera.enabled = true
 	camera.zoom = Vector2(default_zoom, default_zoom)
+	_last_safe_camera_position = camera.global_position
+	_last_safe_camera_zoom = camera.zoom
 	# Connect to player's "parrying" signal
 	if player and player.has_signal("parrying"):
 		player.parrying.connect(_on_player_parrying)
@@ -31,11 +37,16 @@ func _ready() -> void:
 			boss_health_component.health_changed.connect(_on_boss_health_changed)
 
 func _physics_process(delta: float) -> void:
-	if current_target and is_instance_valid(current_target):
+	_recover_camera_if_needed()
+
+	if _can_use_lock_on_target():
 		_update_camera_for_lock_on(delta)
 	else:
+		if current_target != null:
+			unlock()
 		_update_camera_default(delta)
 
+	_store_safe_camera_state()
 	_apply_camera_shake(delta)
 	
 func _apply_camera_shake(delta: float) -> void:
@@ -113,15 +124,29 @@ func unlock() -> void:
 
 func _update_camera_for_lock_on(delta: float) -> void:
 	var target_pos = (player.global_position + current_target.global_position) / 2.0
+	if not _is_finite_vector2(target_pos):
+		unlock()
+		_update_camera_default(delta)
+		return
+
 	camera.global_position = camera.global_position.lerp(target_pos, lerp_speed * delta)
 	
 	var distance = player.global_position.distance_to(current_target.global_position)
 	var required_zoom = (distance + padding) / get_viewport().get_visible_rect().size.x
 	var target_zoom = minf(max(default_zoom / (required_zoom * 2.0), 0.3), max_lock_on_zoom)
+	if not is_finite(target_zoom):
+		unlock()
+		_update_camera_default(delta)
+		return
 	
 	camera.zoom = camera.zoom.lerp(Vector2(target_zoom, target_zoom), lerp_speed * delta)
 
 func _update_camera_default(delta: float) -> void:
+	if player == null or not is_instance_valid(player):
+		return
+	if not _is_finite_vector2(player.global_position):
+		return
+
 	camera.global_position = camera.global_position.lerp(player.global_position, lerp_speed * delta)
 	camera.zoom = camera.zoom.lerp(Vector2(default_zoom, default_zoom), lerp_speed * delta)
 
@@ -133,3 +158,50 @@ func _find_all_targets() -> void:
 	for node in all_nodes:
 		if node is LockOnComponent:
 			available_targets.append(node)
+
+func _can_use_lock_on_target() -> bool:
+	if current_target == null:
+		return false
+	if not is_instance_valid(current_target):
+		return false
+	if player == null or not is_instance_valid(player):
+		return false
+	if camera == null or not is_instance_valid(camera):
+		return false
+	if not current_target.is_inside_tree():
+		return false
+	if not _is_finite_vector2(player.global_position):
+		return false
+	if not _is_finite_vector2(current_target.global_position):
+		return false
+	if not _is_finite_vector2(camera.global_position):
+		return false
+	if not _is_finite_vector2(camera.zoom):
+		return false
+
+	var follow_distance_limit := lock_on_range * maxf(max_lock_on_follow_distance_multiplier, 1.0)
+	if player.global_position.distance_to(current_target.global_position) > follow_distance_limit:
+		return false
+
+	return true
+
+func _recover_camera_if_needed() -> void:
+	if camera == null or not is_instance_valid(camera):
+		return
+
+	if not _is_finite_vector2(camera.global_position):
+		camera.global_position = _last_safe_camera_position
+
+	if not _is_finite_vector2(camera.zoom):
+		camera.zoom = _last_safe_camera_zoom
+
+func _store_safe_camera_state() -> void:
+	if camera == null or not is_instance_valid(camera):
+		return
+	if _is_finite_vector2(camera.global_position):
+		_last_safe_camera_position = camera.global_position
+	if _is_finite_vector2(camera.zoom):
+		_last_safe_camera_zoom = camera.zoom
+
+func _is_finite_vector2(value: Vector2) -> bool:
+	return is_finite(value.x) and is_finite(value.y)

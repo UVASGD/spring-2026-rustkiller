@@ -25,7 +25,6 @@ func _ready() -> void:
 	for panel in panels:
 		panel.modulate.a = 0.0
 
-	sfx_constant.finished.connect(_on_constant_finished)
 	sfx_constant.play()
 
 func _input(event: InputEvent) -> void:

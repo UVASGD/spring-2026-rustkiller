@@ -20,6 +20,8 @@ var damaged_targets: Dictionary = {}
 func on_enter():
 	combo_hitbox = character.get_node_or_null("ComboHitboxComponent") as HitboxComponent
 	combo_hitbox_shape = character.get_node_or_null("ComboHitboxComponent/CollisionShape2D") as CollisionShape2D
+	if combo_hitbox:
+		combo_hitbox.manual_damage_application = true
 	set_combo_hitbox_enabled(false)
 
 	phase = "reposition"
@@ -34,7 +36,6 @@ func on_enter():
 	update_combo_hitbox_transform(Vector2.DOWN)
 
 func update(delta):
-	print(timer)
 	match phase:
 		"reposition":
 			target_position = Vector2(
@@ -86,6 +87,9 @@ func set_combo_hitbox_enabled(enabled: bool) -> void:
 		combo_hitbox_shape.set_deferred("disabled", not enabled)
 	if combo_hitbox:
 		combo_hitbox.process_mode = Node.PROCESS_MODE_INHERIT if enabled else Node.PROCESS_MODE_DISABLED
+		combo_hitbox.monitoring = enabled
+		combo_hitbox.monitorable = enabled
+		combo_hitbox.damage_enabled = enabled
 
 func flip_visuals() -> void:
 	var visuals := character.get_node_or_null("Visuals") as Node2D
