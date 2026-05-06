@@ -13,6 +13,7 @@ func _ready() -> void:
 	animPlayer.play("blow")
 
 func _on_body_entered(body: Node2D) -> void:
+	print(body)
 	if body.has_method("apply_knockback"):
 		var direction = Vector2.UP
 		body.apply_knockback(direction * knockback_strength)

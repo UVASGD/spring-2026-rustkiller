@@ -597,6 +597,7 @@ sprite_frames = SubResource("SpriteFrames_ptvu5")
 animation = &"idle"
 
 [node name="Body" type="AnimatedSprite2D" parent="Visuals" unique_id=2025063792]
+modulate = Color(1, 1, 1, 0.44313726)
 sprite_frames = SubResource("SpriteFrames_sy50g")
 animation = &"steamburstsend"
 
@@ -614,6 +615,7 @@ shape = SubResource("CapsuleShape2D_rggcd")
 [node name="SlashHitboxComponent" parent="Visuals" unique_id=463746122 instance=ExtResource("6_2pi4k")]
 damage = 10.0
 hit_owner = "boss"
+manual_damage_application = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Visuals/SlashHitboxComponent" unique_id=816622634]
 position = Vector2(-61, -82)
