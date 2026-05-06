@@ -14,7 +14,7 @@ class_name HFSMSteamBoss
 @export var out_of_range := 320.0        # Lunge if player farther than this
 
 @export_group("SteamBlast")
-@export var steam_push_strength_p1 := 60.0
+@export var steam_push_strength_p1 := 600.0
 @export var steam_blast_cooldown_p1 := 15.0
 @export var steam_blast_cooldown_p2 := 10.0
 @export var steam_blast_cooldown_p3 := 7.0
