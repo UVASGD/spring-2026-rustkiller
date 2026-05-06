@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjqewjh5see85"
-path="res://.godot/imported/frame_4.png-95c468f87d68162fcb95c46d0dd077f3.ctex"
+uid="uid://dguaagjxil0oe"
+path="res://.godot/imported/BOSS_2_PH1_Idle_Armor.png-aa9ec86ed1a1285f08df0a7e4417dd19.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Source/Entities/Bosses/SteamBoss/Art/Idle/frame_4.png"
-dest_files=["res://.godot/imported/frame_4.png-95c468f87d68162fcb95c46d0dd077f3.ctex"]
+source_file="res://Source/Entities/Bosses/SteamBoss/Art/Idle/BOSS_2_PH1_Idle_Armor.png"
+dest_files=["res://.godot/imported/BOSS_2_PH1_Idle_Armor.png-aa9ec86ed1a1285f08df0a7e4417dd19.ctex"]
 
 [params]
 
