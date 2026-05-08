@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://ilsxehywdg7i" path="res://Source/Entities/Environment/StageOne/Art/ashes.png" id="7_3suvk"]
 [ext_resource type="PackedScene" uid="uid://crvepxby1imcj" path="res://Source/Entities/Player/better_player/better_player.tscn" id="8_umotc"]
 [ext_resource type="PackedScene" uid="uid://cqubqt0w5eg8m" path="res://Source/Entities/Bosses/SteamBoss/steam_boss.tscn" id="9_3oeeg"]
+[ext_resource type="PackedScene" uid="uid://cb71enmyu25jy" path="res://Source/Entities/Player/better_player/UI/player_ui.tscn" id="10_tthy6"]
 
 [sub_resource type="Environment" id="Environment_f8vh1"]
 background_mode = 3
@@ -517,3 +518,5 @@ position = Vector2(-41, -186)
 [node name="SteamBoss" parent="." unique_id=2117672993 node_paths=PackedStringArray("player") instance=ExtResource("9_3oeeg")]
 position = Vector2(233, -151)
 player = NodePath("../BetterPlayer")
+
+[node name="player_ui" parent="." unique_id=732973211 instance=ExtResource("10_tthy6")]
