@@ -10,9 +10,9 @@ func check_transition(_delta) -> TransitionData:
 func choose_internal_move() -> TransitionData:
 	var boss := character as HFSMSteamBoss
 	if not boss:
-		return TransitionData.new(true, "Dormant")
+		return TransitionData.new(true, "Awaken")
 
 	if boss.is_dormant:
-		return TransitionData.new(true, "Dormant")
+		return TransitionData.new(true, "Awaken")
 
 	return TransitionData.new(true, "Alive")
