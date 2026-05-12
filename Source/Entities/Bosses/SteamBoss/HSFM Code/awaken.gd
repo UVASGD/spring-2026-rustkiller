@@ -13,11 +13,14 @@ func check_transition(_delta: float) -> TransitionData:
 		var boss := character as HFSMSteamBoss
 		if boss:
 			boss.is_dormant = false
+			boss.set_invulnerable(false)
 		return TransitionData.new(true, "Alive")
 
 	return TransitionData.new(false, "")
 
 func _set_boss_active(v: bool) -> void:
+	var boss := character as HFSMSteamBoss
+	boss.set_invulnerable(not v)
 	if character == null:
 		return
 	for n in character.get_children():

@@ -41,17 +41,18 @@ class_name HFSMSteamBoss
 @onready var state_machine := $SteamBossHFSM as HFSM
 @onready var animator := $AnimationPlayer as AnimationPlayer
 @onready var lunge_hitbox := $LungeHitbox as Area2D
+@onready var health_component := $HealthComponent as HealthComponent
 
 signal warp_burst_over
 
 var _cooldowns := {} # String -> next-ready ms timestamp
-var health := 100
 var phase := 1
 var _steam_burst_cd := 8.0
 var _steam_burst_charges := 3
+var invulnerable := false
 
 func _ready():
-	health = max_health
+	health_component.health = max_health
 	state_machine.player = player
 	state_machine.character = self
 	state_machine.animator = animator
@@ -61,18 +62,18 @@ func _ready():
 func _physics_process(delta: float) -> void:
 	state_machine._update(delta)
 
-func take_damage(amount: int) -> void:
-	health = max(health - amount, 0)
-	_check_phase_transition()
-
-func _check_phase_transition() -> void:
-	if phase == 1 and float(health) <= float(max_health) * phase2_health_threshold:
+func check_phase_transition() -> bool:
+	if phase == 1 and health_component.health <= 0:
 		_enter_phase_2()
-	elif phase == 2 and float(health) <= float(max_health) * phase3_health_threshold:
-		_enter_phase_3()
+		return true
+	return false	
+#	elif phase == 2 and float(health) <= float(max_health) * phase3_health_threshold:
+#		_enter_phase_3()
 
 func _enter_phase_2() -> void:
+	set_invulnerable(true)
 	phase = 2
+	health_component.health = max_health
 	_steam_burst_charges = 5
 	_steam_burst_cd = 5.0
 	# Optional phase transition anim if it exists
@@ -429,3 +430,9 @@ func set_dormant(value: bool) -> void:
 	is_dormant = value
 	if is_dormant:
 		stop_motion()
+
+func set_invulnerable(value: bool) -> void:
+	invulnerable = value
+
+func is_invulnerable() -> bool:
+	return invulnerable	

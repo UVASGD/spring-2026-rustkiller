@@ -39,6 +39,10 @@
 [ext_resource type="Texture2D" uid="uid://exlai7wx7m00" path="res://Source/Entities/Bosses/SteamBoss/Art/Awaken/Boss_Ph2_Awaken_NonBody_2.png" id="16_sy50g"]
 [ext_resource type="Script" uid="uid://cwxcvmepswtir" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/steam_bursts.gd" id="24_3n1p4"]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rggcd"]
+radius = 55.0
+height = 194.0
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_agvqu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1cpe6"]
@@ -1143,10 +1147,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rggcd"]
-radius = 55.0
-height = 194.0
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rx823"]
 size = Vector2(46, 60)
 
@@ -1582,6 +1582,13 @@ _data = {
 script = ExtResource("1_udhqj")
 steamBurstHazard = ExtResource("2_odpgn")
 
+[node name="HurtboxComponent" parent="." unique_id=1715746792 node_paths=PackedStringArray("health_component") instance=ExtResource("2_tcsit")]
+health_component = NodePath("../HealthComponent")
+entity_name = "boss"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=1274812075]
+shape = SubResource("CapsuleShape2D_rggcd")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=619345553]
 shape = SubResource("CircleShape2D_agvqu")
 
@@ -1595,14 +1602,6 @@ animation = &"steamburstsend"
 sprite_frames = SubResource("SpriteFrames_4hvnm")
 animation = &"steamburstsend"
 
-[node name="HurtboxComponent" parent="Visuals" unique_id=1715746792 node_paths=PackedStringArray("health_component") instance=ExtResource("2_tcsit")]
-visible = false
-health_component = NodePath("../../HealthComponent")
-entity_name = "boss"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Visuals/HurtboxComponent" unique_id=1274812075]
-shape = SubResource("CapsuleShape2D_rggcd")
-
 [node name="SlashHitboxComponent" parent="Visuals" unique_id=463746122 instance=ExtResource("6_2pi4k")]
 damage = 10.0
 hit_owner = "boss"
@@ -1614,12 +1613,12 @@ disabled = true
 debug_color = Color(1, 0, 0, 0.25490198)
 
 [node name="HealthComponent" parent="." unique_id=813342211 instance=ExtResource("1_38s4a")]
-max_health = 10000.0
+max_health = 100.0
 
 [node name="LockonComponent" parent="." unique_id=1310222347 instance=ExtResource("3_djx6a")]
 
 [node name="HurtFlashComponent" parent="." unique_id=1236687298 node_paths=PackedStringArray("hurtbox_component", "sprite") instance=ExtResource("4_j1j5t")]
-hurtbox_component = NodePath("../Visuals/HurtboxComponent")
+hurtbox_component = NodePath("../HurtboxComponent")
 sprite = NodePath("..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1623423611]

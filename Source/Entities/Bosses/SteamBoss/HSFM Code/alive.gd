@@ -10,5 +10,8 @@ func update(_delta: float) -> void:
 	if boss == null: return
 
 func check_transition(_delta) -> TransitionData:
-	# alive -> death etc if needed
+	var boss := character as HFSMSteamBoss
+	if boss == null: return
+	if boss.check_phase_transition():
+		return TransitionData.new(true, "Awaken2")
 	return TransitionData.new(false, "")
