@@ -94,6 +94,7 @@ func _physics_process(delta: float) -> void:
 	_handle_movement_input(delta)
 	move_and_slide()
 	_store_safe_world_position()
+#	print("Player health:" + str(health_component.health))
 
 func _handle_weapon_switch() -> void:
 	if Input.is_action_just_pressed("switch_weapon"):

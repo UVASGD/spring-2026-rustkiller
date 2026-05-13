@@ -34,7 +34,7 @@ class_name HFSMSteamBoss
 @export var warp_burst_pre_delay := 0.25
 
 @export_group("Phase")
-@export var max_health := 100
+@export var max_health := 500
 @export var phase2_health_threshold := 0.5 # enter p2 at <= 50%
 @export var phase3_health_threshold := 0.15 # enter p3 at <= 15%
 
@@ -52,6 +52,7 @@ var _steam_burst_charges := 3
 var invulnerable := false
 
 func _ready():
+	health_component.max_health = max_health
 	health_component.health = max_health
 	state_machine.player = player
 	state_machine.character = self
@@ -61,6 +62,7 @@ func _ready():
 
 func _physics_process(delta: float) -> void:
 	state_machine._update(delta)
+#	print("Boss health:" + str(health_component.health))
 
 func check_phase_transition() -> bool:
 	if phase == 1 and health_component.health <= 0:
