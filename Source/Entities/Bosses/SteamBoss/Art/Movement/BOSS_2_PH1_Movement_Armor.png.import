@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2lb28uwyum1b"
-path="res://.godot/imported/BOSS_2_PH1_Movement_Armor.png-1b930a23f06d7cc09e3d7e1309c56190.ctex"
+uid="uid://ciocomc4p3hom"
+path="res://.godot/imported/BOSS_2_PH1_Movement_Armor.png-f08219b572ee19809bfda18b2fe44107.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Source/Entities/Bosses/SteamBoss/Art/Idle/BOSS_2_PH1_Movement_Armor.png"
-dest_files=["res://.godot/imported/BOSS_2_PH1_Movement_Armor.png-1b930a23f06d7cc09e3d7e1309c56190.ctex"]
+source_file="res://Source/Entities/Bosses/SteamBoss/Art/Movement/BOSS_2_PH1_Movement_Armor.png"
+dest_files=["res://.godot/imported/BOSS_2_PH1_Movement_Armor.png-f08219b572ee19809bfda18b2fe44107.ctex"]
 
 [params]
 
