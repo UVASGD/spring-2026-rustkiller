@@ -1613,6 +1613,7 @@ disabled = true
 debug_color = Color(1, 0, 0, 0.25490198)
 
 [node name="HealthComponent" parent="." unique_id=813342211 instance=ExtResource("1_38s4a")]
+max_health = 500.0
 
 [node name="LockonComponent" parent="." unique_id=1310222347 instance=ExtResource("3_djx6a")]
 
