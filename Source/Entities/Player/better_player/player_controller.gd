@@ -18,7 +18,7 @@ var walk_pitch_max: float = 1.04
 @export var damage_flash_duration: float = 0.08
 @export var parry_invulnerability_duration: float = 0.5
 @export var successful_parry_heal_amount: float = 50.0
-@export var max_knockback_speed: float = 600.0
+@export var max_knockback_speed: float = 1800.0
 @export var max_valid_world_coordinate: float = 10000.0
 
 const DEATH_ANIMATION := "death"

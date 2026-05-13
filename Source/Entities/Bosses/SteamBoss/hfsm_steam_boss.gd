@@ -15,10 +15,10 @@ class_name HFSMSteamBoss
 
 @export_group("SteamBlast")
 @export var steam_push_strength_p1 := 600.0
-@export var steam_blast_cooldown_p1 := 15.0
-@export var steam_blast_cooldown_p2 := 10.0
+@export var steam_blast_cooldown_p1 := 7.0
+@export var steam_blast_cooldown_p2 := 3.0
 @export var steam_blast_cooldown_p3 := 7.0
-@export var steam_push_multiplier_p2 := 1.15
+@export var steam_push_multiplier_p2 := 1.5
 @export var steam_push_multiplier_p3 := 1.3
 
 @export_group("SteamBursts")
@@ -47,7 +47,7 @@ signal warp_burst_over
 
 var _cooldowns := {} # String -> next-ready ms timestamp
 var phase := 1
-var _steam_burst_cd := 8.0
+@export var _steam_burst_cd := 13.0
 var _steam_burst_charges := 3
 var invulnerable := false
 
@@ -75,7 +75,7 @@ func _enter_phase_2() -> void:
 	phase = 2
 	health_component.health = max_health
 	_steam_burst_charges = 5
-	_steam_burst_cd = 5.0
+	_steam_burst_cd = 10.0
 	# Optional phase transition anim if it exists
 	if animator and animator.has_animation("phase_1_to_2"):
 		animator.play("phase_1_to_2")
