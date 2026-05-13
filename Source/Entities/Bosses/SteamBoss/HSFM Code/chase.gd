@@ -16,7 +16,7 @@ func check_transition(_delta: float) -> TransitionData:
 #	if boss.cd_ready("warp_burst"):
 #		return TransitionData.new(true, "WarpBlast")
 
-	if boss.cd_ready("steam_bursts"):
+	if boss.phase == 2 and boss.cd_ready("steam_bursts"):
 		return TransitionData.new(true, "SteamBursts")
 
 	# Close: Explosive (if ready) else Slash
