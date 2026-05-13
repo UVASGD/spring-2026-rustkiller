@@ -518,6 +518,5 @@ position = Vector2(-41, -186)
 [node name="SteamBoss" parent="." unique_id=2117672993 node_paths=PackedStringArray("player") instance=ExtResource("9_3oeeg")]
 position = Vector2(233, -151)
 player = NodePath("../BetterPlayer")
-max_health = 10
 
 [node name="player_ui" parent="." unique_id=732973211 instance=ExtResource("10_tthy6")]
