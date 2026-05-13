@@ -30,6 +30,7 @@
 [ext_resource type="Script" uid="uid://cov6uwa3x5w6o" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/explosive_blast.gd" id="10_k6d11"]
 [ext_resource type="Texture2D" uid="uid://v57ifwd0gwph" path="res://Source/Entities/Bosses/SteamBoss/Art/Awaken/Boss_Ph1_Awaken_NonBody-sheet_1.png" id="10_y5pvw"]
 [ext_resource type="Texture2D" uid="uid://sarf6q622a7x" path="res://Source/Entities/Bosses/SteamBoss/Art/Awaken/Boss_Ph1_Awaken_NonBody-sheet_2.png" id="11_a4e6v"]
+[ext_resource type="Texture2D" uid="uid://cpp088ucigsws" path="res://Source/Entities/Bosses/SteamBoss/Art/Movement/BOSS_2_PH2_Movement_Body.png" id="11_hqh73"]
 [ext_resource type="Script" uid="uid://ijtklukgkcb6" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/slash.gd" id="11_qs1b0"]
 [ext_resource type="Texture2D" uid="uid://dhwhm4u27xgxf" path="res://Source/Entities/Bosses/SteamBoss/Art/Awaken/Boss_Ph1_Awaken_NonBody-sheet_3.png" id="12_dj5ss"]
 [ext_resource type="Script" uid="uid://n173oyr2d0sh" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/lunge.gd" id="12_hbabe"]
@@ -37,6 +38,7 @@
 [ext_resource type="Texture2D" uid="uid://d1xamaqjgcueg" path="res://Source/Entities/Bosses/SteamBoss/Art/Awaken/Boss_Ph2_Awaken_NonBody_1.png" id="15_hqh73"]
 [ext_resource type="PackedScene" uid="uid://dbnhgp03q0xpy" path="res://Source/Entities/Components/HealthbarComponent/Healthbar.tscn" id="15_rggcd"]
 [ext_resource type="Texture2D" uid="uid://exlai7wx7m00" path="res://Source/Entities/Bosses/SteamBoss/Art/Awaken/Boss_Ph2_Awaken_NonBody_2.png" id="16_sy50g"]
+[ext_resource type="Texture2D" uid="uid://c3ufnooixt4h6" path="res://Source/Entities/Bosses/SteamBoss/Art/Movement/BOSS_2_PH2_Movement_Armor.png" id="21_sy50g"]
 [ext_resource type="Script" uid="uid://cwxcvmepswtir" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/steam_bursts.gd" id="24_3n1p4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rggcd"]
@@ -293,6 +295,22 @@ region = Rect2(480, 0, 240, 240)
 atlas = ExtResource("4_vl4fg")
 region = Rect2(720, 0, 240, 240)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_vijeh"]
+atlas = ExtResource("11_hqh73")
+region = Rect2(0, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ks3yf"]
+atlas = ExtResource("11_hqh73")
+region = Rect2(240, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6gl80"]
+atlas = ExtResource("11_hqh73")
+region = Rect2(480, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kphc1"]
+atlas = ExtResource("11_hqh73")
+region = Rect2(720, 0, 240, 240)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_vl4fg"]
 atlas = ExtResource("6_ptvu5")
 region = Rect2(0, 0, 240, 240)
@@ -547,6 +565,23 @@ animations = [{
 }],
 "loop": true,
 "name": &"moving",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vijeh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ks3yf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6gl80")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kphc1")
+}],
+"loop": true,
+"name": &"moving2",
 "speed": 5.0
 }, {
 "frames": [{
@@ -844,6 +879,22 @@ region = Rect2(480, 0, 240, 240)
 atlas = ExtResource("8_6h471")
 region = Rect2(720, 0, 240, 240)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_0aesk"]
+atlas = ExtResource("21_sy50g")
+region = Rect2(0, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sqn01"]
+atlas = ExtResource("21_sy50g")
+region = Rect2(240, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_df3xp"]
+atlas = ExtResource("21_sy50g")
+region = Rect2(480, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yghem"]
+atlas = ExtResource("21_sy50g")
+region = Rect2(720, 0, 240, 240)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_is3n0"]
 atlas = ExtResource("8_rggcd")
 region = Rect2(0, 0, 240, 240)
@@ -1098,6 +1149,23 @@ animations = [{
 }],
 "loop": true,
 "name": &"moving",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0aesk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sqn01")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_df3xp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yghem")
+}],
+"loop": true,
+"name": &"moving2",
 "speed": 5.0
 }, {
 "frames": [{
@@ -1463,6 +1531,60 @@ tracks/3/keys = {
 "values": [0, 1, 2, 3]
 }
 
+[sub_resource type="Animation" id="Animation_ydsyy"]
+resource_name = "moving2"
+length = 0.4
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Body:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"moving2"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/Body:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/Armor:animation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"moving2"]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals/Armor:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
 [sub_resource type="Animation" id="Animation_rx823"]
 resource_name = "slash"
 tracks/0/type = "value"
@@ -1574,6 +1696,7 @@ _data = {
 &"RESET": SubResource("Animation_2pi4k"),
 &"idle": SubResource("Animation_hbabe"),
 &"moving": SubResource("Animation_1cpe6"),
+&"moving2": SubResource("Animation_ydsyy"),
 &"slash": SubResource("Animation_rx823"),
 &"steam_bursts": SubResource("Animation_7y0wb")
 }
@@ -1690,6 +1813,52 @@ animation = "Awaken"
 script = ExtResource("8_fflm6")
 move_name = "Awaken2"
 animation = "Awaken2"
+
+[node name="Alive2" type="Node" parent="SteamBossHFSM" unique_id=578685584]
+script = ExtResource("6_j1j5t")
+move_name = "Alive2"
+
+[node name="Idle" type="Node" parent="SteamBossHFSM/Alive2" unique_id=905780915]
+script = ExtResource("7_fflm6")
+move_name = "Idle"
+animation = "idle"
+
+[node name="Chase" type="Node" parent="SteamBossHFSM/Alive2" unique_id=1250916484]
+script = ExtResource("7_agvqu")
+move_name = "Chase"
+animation = "moving2"
+
+[node name="SteamBlast" type="Node" parent="SteamBossHFSM/Alive2" unique_id=2073651159]
+script = ExtResource("9_k6d11")
+move_name = "SteamBlast"
+animation = "idle"
+
+[node name="ExplosiveBlast" type="Node" parent="SteamBossHFSM/Alive2" unique_id=1461829710]
+script = ExtResource("10_k6d11")
+move_name = "ExplosiveBlast"
+animation = "idle"
+
+[node name="Slash" type="Node" parent="SteamBossHFSM/Alive2" unique_id=670606077 node_paths=PackedStringArray("_hitbox", "_collision_shape")]
+script = ExtResource("11_qs1b0")
+_hitbox = NodePath("../../../Visuals/SlashHitboxComponent")
+_collision_shape = NodePath("../../../Visuals/SlashHitboxComponent/CollisionShape2D")
+move_name = "Slash"
+animation = "slash"
+
+[node name="Lunge" type="Node" parent="SteamBossHFSM/Alive2" unique_id=1798542448]
+script = ExtResource("12_hbabe")
+move_name = "Lunge"
+animation = "idle"
+
+[node name="WarpBlast" type="Node" parent="SteamBossHFSM/Alive2" unique_id=959182840]
+script = ExtResource("14_dhv1y")
+move_name = "WarpBlast"
+animation = "idle"
+
+[node name="SteamBursts" type="Node" parent="SteamBossHFSM/Alive2" unique_id=247529975]
+script = ExtResource("24_3n1p4")
+move_name = "SteamBursts"
+animation = "steam_bursts"
 
 [node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 node_paths=PackedStringArray("hfsm") instance=ExtResource("5_fflm6")]
 visible = false
