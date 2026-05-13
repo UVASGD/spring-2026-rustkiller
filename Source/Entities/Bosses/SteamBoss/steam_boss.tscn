@@ -1304,7 +1304,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [&"steamburstsend"]
+"values": [&"awaken"]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -1316,7 +1316,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [&"steamburstsend"]
+"values": [&"awaken"]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -1596,11 +1596,11 @@ shape = SubResource("CircleShape2D_agvqu")
 
 [node name="Body" type="AnimatedSprite2D" parent="Visuals" unique_id=2025063792]
 sprite_frames = SubResource("SpriteFrames_sy50g")
-animation = &"steamburstsend"
+animation = &"awaken"
 
 [node name="Armor" type="AnimatedSprite2D" parent="Visuals" unique_id=736978986]
 sprite_frames = SubResource("SpriteFrames_4hvnm")
-animation = &"steamburstsend"
+animation = &"awaken"
 
 [node name="SlashHitboxComponent" parent="Visuals" unique_id=463746122 instance=ExtResource("6_2pi4k")]
 damage = 100.0
@@ -1692,4 +1692,5 @@ move_name = "Awaken2"
 animation = "Awaken2"
 
 [node name="HfsmDebugLabelComponent" parent="." unique_id=1800658358 node_paths=PackedStringArray("hfsm") instance=ExtResource("5_fflm6")]
+visible = false
 hfsm = NodePath("../SteamBossHFSM")
