@@ -291,7 +291,7 @@ sprite_frames = SubResource("SpriteFrames_8tidu")
 animation = &"blow"
 
 [node name="HitboxComponent" parent="." unique_id=256469042 instance=ExtResource("2_ttlix")]
-damage = 10.0
+damage = 200.0
 hit_owner = "boss"
 knockback_strength = 1.0
 

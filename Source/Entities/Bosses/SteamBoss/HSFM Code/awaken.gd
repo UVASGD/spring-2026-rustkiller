@@ -14,7 +14,10 @@ func check_transition(_delta: float) -> TransitionData:
 		if boss:
 			boss.is_dormant = false
 			boss.set_invulnerable(false)
-		return TransitionData.new(true, "Alive")
+		if boss.phase == 1:	
+			return TransitionData.new(true, "Alive")
+		else:
+			return TransitionData.new(true, "Alive2")
 
 	return TransitionData.new(false, "")
 

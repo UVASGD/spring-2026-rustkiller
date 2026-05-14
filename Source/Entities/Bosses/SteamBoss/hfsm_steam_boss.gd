@@ -15,10 +15,10 @@ class_name HFSMSteamBoss
 
 @export_group("SteamBlast")
 @export var steam_push_strength_p1 := 600.0
-@export var steam_blast_cooldown_p1 := 15.0
-@export var steam_blast_cooldown_p2 := 10.0
+@export var steam_blast_cooldown_p1 := 7.0
+@export var steam_blast_cooldown_p2 := 3.0
 @export var steam_blast_cooldown_p3 := 7.0
-@export var steam_push_multiplier_p2 := 1.15
+@export var steam_push_multiplier_p2 := 1.5
 @export var steam_push_multiplier_p3 := 1.3
 
 @export_group("SteamBursts")
@@ -34,7 +34,7 @@ class_name HFSMSteamBoss
 @export var warp_burst_pre_delay := 0.25
 
 @export_group("Phase")
-@export var max_health := 100
+@export var max_health := 500
 @export var phase2_health_threshold := 0.5 # enter p2 at <= 50%
 @export var phase3_health_threshold := 0.15 # enter p3 at <= 15%
 
@@ -42,16 +42,24 @@ class_name HFSMSteamBoss
 @onready var animator := $AnimationPlayer as AnimationPlayer
 @onready var lunge_hitbox := $LungeHitbox as Area2D
 @onready var health_component := $HealthComponent as HealthComponent
+@onready var hurtbox_component := $HurtboxComponent as HurtboxComponent
+@onready var healthbar := $Healthbar
+@onready var visuals := $Visuals
 
 signal warp_burst_over
 
 var _cooldowns := {} # String -> next-ready ms timestamp
 var phase := 1
-var _steam_burst_cd := 8.0
+@export var _steam_burst_cd := 13.0
 var _steam_burst_charges := 3
 var invulnerable := false
 
+var defeat_sequence_started: bool = false
+const DEFEAT_FADE_DURATION := 0.75
+const RETURN_TO_BOSS_SELECT_DELAY := 5.0
+
 func _ready():
+	health_component.max_health = max_health
 	health_component.health = max_health
 	state_machine.player = player
 	state_machine.character = self
@@ -61,11 +69,15 @@ func _ready():
 
 func _physics_process(delta: float) -> void:
 	state_machine._update(delta)
+#	print("Boss health:" + str(health_component.health))
 
+# Returns true if we should transition from phase 1->2
 func check_phase_transition() -> bool:
 	if phase == 1 and health_component.health <= 0:
 		_enter_phase_2()
 		return true
+	if phase == 2 and health_component.health <= 0:
+		_start_defeat_sequence()
 	return false	
 #	elif phase == 2 and float(health) <= float(max_health) * phase3_health_threshold:
 #		_enter_phase_3()
@@ -75,7 +87,7 @@ func _enter_phase_2() -> void:
 	phase = 2
 	health_component.health = max_health
 	_steam_burst_charges = 5
-	_steam_burst_cd = 5.0
+	_steam_burst_cd = 10.0
 	# Optional phase transition anim if it exists
 	if animator and animator.has_animation("phase_1_to_2"):
 		animator.play("phase_1_to_2")
@@ -435,4 +447,38 @@ func set_invulnerable(value: bool) -> void:
 	invulnerable = value
 
 func is_invulnerable() -> bool:
-	return invulnerable	
+	return invulnerable
+	
+func _start_defeat_sequence() -> void:
+	if defeat_sequence_started:
+		return
+
+	defeat_sequence_started = true
+	velocity = Vector2.ZERO
+	set_invulnerable(true)
+	set_physics_process(false)
+	if animator:
+		animator.stop()
+	if hurtbox_component:
+		hurtbox_component.set_deferred("monitoring", false)
+		hurtbox_component.set_deferred("monitorable", false)
+	if healthbar:
+		healthbar.visible = false
+
+	var fade_tween := create_tween()
+	if visuals:
+		fade_tween.tween_property(visuals, "modulate", Color(1.0, 1.0, 1.0, 0.0), DEFEAT_FADE_DURATION)
+	await fade_tween.finished
+	await get_tree().create_timer(RETURN_TO_BOSS_SELECT_DELAY, true, false, true).timeout
+
+	var game_container := _find_game_container()
+	if game_container:
+		game_container.call_deferred("return_to_boss_select", self)
+
+func _find_game_container() -> GameContainer:
+	var current: Node = get_parent()
+	while current:
+		if current is GameContainer:
+			return current as GameContainer
+		current = current.get_parent()
+	return null		
