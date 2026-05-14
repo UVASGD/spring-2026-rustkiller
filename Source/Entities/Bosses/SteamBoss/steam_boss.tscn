@@ -38,10 +38,12 @@
 [ext_resource type="Script" uid="uid://cgkmmqeswbdax" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/warp_blast.gd" id="14_dhv1y"]
 [ext_resource type="Texture2D" uid="uid://d1xamaqjgcueg" path="res://Source/Entities/Bosses/SteamBoss/Art/Awaken/Boss_Ph2_Awaken_NonBody_1.png" id="15_hqh73"]
 [ext_resource type="PackedScene" uid="uid://dbnhgp03q0xpy" path="res://Source/Entities/Components/HealthbarComponent/Healthbar.tscn" id="15_rggcd"]
+[ext_resource type="Texture2D" uid="uid://cc8v3vjmd2llp" path="res://Source/Entities/Bosses/SteamBoss/Art/SteamBursts/BOSS_2_PH2_Burst_Start_Body.png" id="15_tcod4"]
 [ext_resource type="Texture2D" uid="uid://exlai7wx7m00" path="res://Source/Entities/Bosses/SteamBoss/Art/Awaken/Boss_Ph2_Awaken_NonBody_2.png" id="16_sy50g"]
 [ext_resource type="Texture2D" uid="uid://0jgh7h8f6qoq" path="res://Source/Entities/Bosses/SteamBoss/Art/Idle/BOSS_2_PH2_Idle_Armor.png" id="21_hmv3l"]
 [ext_resource type="Texture2D" uid="uid://c3ufnooixt4h6" path="res://Source/Entities/Bosses/SteamBoss/Art/Movement/BOSS_2_PH2_Movement_Armor.png" id="21_sy50g"]
 [ext_resource type="Script" uid="uid://cwxcvmepswtir" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/steam_bursts.gd" id="24_3n1p4"]
+[ext_resource type="Texture2D" uid="uid://df2jp11o7uf37" path="res://Source/Entities/Bosses/SteamBoss/Art/SteamBursts/BOSS_2_PH2_Burst_Start_Armor.png" id="27_rlf2y"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rggcd"]
 radius = 55.0
@@ -377,6 +379,38 @@ region = Rect2(480, 0, 240, 240)
 atlas = ExtResource("7_3n1p4")
 region = Rect2(720, 0, 240, 240)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_7xpk5"]
+atlas = ExtResource("15_tcod4")
+region = Rect2(0, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cvckr"]
+atlas = ExtResource("15_tcod4")
+region = Rect2(240, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ds7hf"]
+atlas = ExtResource("15_tcod4")
+region = Rect2(480, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oxjvr"]
+atlas = ExtResource("15_tcod4")
+region = Rect2(720, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mhveu"]
+atlas = ExtResource("15_tcod4")
+region = Rect2(960, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qh2qr"]
+atlas = ExtResource("15_tcod4")
+region = Rect2(1200, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ivlf"]
+atlas = ExtResource("15_tcod4")
+region = Rect2(1440, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2d5x8"]
+atlas = ExtResource("15_tcod4")
+region = Rect2(1680, 0, 240, 240)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_sy50g"]
 animations = [{
 "frames": [{
@@ -646,7 +680,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"steamburstsend",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -663,7 +697,36 @@ animations = [{
 }],
 "loop": true,
 "name": &"steamburstsidle",
-"speed": 5.0
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7xpk5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cvckr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ds7hf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oxjvr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mhveu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qh2qr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ivlf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2d5x8")
+}],
+"loop": true,
+"name": &"steamburstsstart",
+"speed": 10.0
 }]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ot4sd"]
@@ -994,6 +1057,38 @@ region = Rect2(480, 0, 240, 240)
 atlas = ExtResource("9_odpgn")
 region = Rect2(720, 0, 240, 240)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_4e72d"]
+atlas = ExtResource("27_rlf2y")
+region = Rect2(0, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_swrct"]
+atlas = ExtResource("27_rlf2y")
+region = Rect2(240, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_82hbh"]
+atlas = ExtResource("27_rlf2y")
+region = Rect2(480, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2baga"]
+atlas = ExtResource("27_rlf2y")
+region = Rect2(720, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0g7d6"]
+atlas = ExtResource("27_rlf2y")
+region = Rect2(960, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mwjsn"]
+atlas = ExtResource("27_rlf2y")
+region = Rect2(1200, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8o8ki"]
+atlas = ExtResource("27_rlf2y")
+region = Rect2(1440, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_86uro"]
+atlas = ExtResource("27_rlf2y")
+region = Rect2(1680, 0, 240, 240)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_4hvnm"]
 animations = [{
 "frames": [{
@@ -1263,7 +1358,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"steamburstsend",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -1280,7 +1375,36 @@ animations = [{
 }],
 "loop": true,
 "name": &"steamburstsidle",
-"speed": 5.0
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4e72d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_swrct")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_82hbh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2baga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0g7d6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mwjsn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8o8ki")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_86uro")
+}],
+"loop": true,
+"name": &"steamburstsstart",
+"speed": 10.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rx823"]
@@ -1748,8 +1872,8 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_7y0wb"]
 resource_name = "steam_bursts"
-length = 4.0
-step = 0.2
+length = 3.2
+step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1757,10 +1881,10 @@ tracks/0/path = NodePath("Visuals/Body:animation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 2.4),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.8, 2.4),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [&"steamburstsidle", &"steamburstsend"]
+"values": [&"steamburstsstart", &"steamburstsidle", &"steamburstsend"]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1769,10 +1893,10 @@ tracks/1/path = NodePath("Visuals/Armor:animation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 2.4),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.8, 2.4),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [&"steamburstsidle", &"steamburstsend"]
+"values": [&"steamburstsstart", &"steamburstsidle", &"steamburstsend"]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -1781,10 +1905,10 @@ tracks/2/path = NodePath("Visuals/Body:frame")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8000001, 2, 2.2, 2.4, 2.6000001, 2.8, 3, 3.2, 3.4, 3.6000001, 3.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.90000004, 1, 1.1, 1.2, 1.3000001, 1.4, 1.5, 1.6, 1.7, 1.8000001, 1.9, 2, 2.1000001, 2.2, 2.3, 2.4, 2.5, 2.6000001, 2.7, 2.8, 2.9, 3, 3.1000001),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7]
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -1793,10 +1917,10 @@ tracks/3/path = NodePath("Visuals/Armor:frame")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8000001, 2, 2.2, 2.4, 2.6000001, 2.8, 3, 3.2, 3.4, 3.6000001, 3.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.90000004, 1, 1.1, 1.2, 1.3000001, 1.4, 1.5, 1.6, 1.7, 1.8000001, 1.9, 2, 2.1, 2.2000003, 2.3000002, 2.4, 2.5, 2.6000001, 2.7, 2.8, 2.9, 3, 3.1000001),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7]
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
