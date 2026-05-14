@@ -12,9 +12,6 @@ func check_transition(_delta: float) -> TransitionData:
 		return TransitionData.new(false, "")
 
 	var d := boss.dist_to_player()
-	
-#	if boss.cd_ready("warp_burst"):
-#		return TransitionData.new(true, "WarpBlast")
 
 	if boss.phase == 2 and boss.cd_ready("steam_bursts"):
 		return TransitionData.new(true, "SteamBursts")
@@ -24,14 +21,12 @@ func check_transition(_delta: float) -> TransitionData:
 		if boss.cd_ready("steam_blast"):
 			return TransitionData.new(true, "SteamBlast")
 		return TransitionData.new(true, "Slash")
-#		if boss.cd_ready("explosive_blast"):
-#			return TransitionData.new(true, "ExplosiveBlast")
 
-	# In range but not for slash: SteamBlast (15s CD)
+	# In range but not for slash: SteamBlast
 	if d <= boss.steam_blast_range and boss.cd_ready("steam_blast"):
 		return TransitionData.new(true, "SteamBlast")
 
-	# Out of range: Lunge (no cooldown specified in your text; add if you want)
+	# Out of range: Lunge
 	if d >= boss.out_of_range and boss.cd_ready("lunge"):
 		return TransitionData.new(true, "Lunge")
 

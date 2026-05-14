@@ -12,7 +12,6 @@ func check_transition(_delta: float) -> TransitionData:
 
 		var boss := character as HFSMSteamBoss
 		if boss:
-			boss.is_dormant = false
 			boss.set_invulnerable(false)
 		if boss.phase == 1:	
 			return TransitionData.new(true, "Alive")

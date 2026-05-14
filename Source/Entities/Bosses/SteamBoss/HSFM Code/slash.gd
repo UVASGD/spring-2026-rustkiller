@@ -19,7 +19,6 @@ func update(_delta: float) -> void:
 	if not _hit and t >= hit_time:
 		_hit = true
 		_flip_visuals()
-		boss.do_slash()
 
 func check_transition(_delta: float) -> TransitionData:
 	if animation_ended():

@@ -20,7 +20,6 @@
 [ext_resource type="Texture2D" uid="uid://bfsugg8spf0hu" path="res://Source/Entities/Bosses/SteamBoss/Art/SteamBursts/BOSS_2_PH2_Burst_Idle_Body.png" id="7_3n1p4"]
 [ext_resource type="Script" uid="uid://dqodyx6rupre2" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/chase.gd" id="7_agvqu"]
 [ext_resource type="Texture2D" uid="uid://l21usntxm6rr" path="res://Source/Entities/Bosses/SteamBoss/Art/Awaken/Boss_Ph2_Awaken_Body_2.png" id="7_dj5ss"]
-[ext_resource type="Script" uid="uid://cme2k8xev8rm8" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/idle.gd" id="7_fflm6"]
 [ext_resource type="Texture2D" uid="uid://dguaagjxil0oe" path="res://Source/Entities/Bosses/SteamBoss/Art/Idle/BOSS_2_PH1_Idle_Armor.png" id="7_vcyxe"]
 [ext_resource type="Texture2D" uid="uid://ciocomc4p3hom" path="res://Source/Entities/Bosses/SteamBoss/Art/Movement/BOSS_2_PH1_Movement_Armor.png" id="8_6h471"]
 [ext_resource type="Script" uid="uid://ddxst2x56mddt" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/awaken.gd" id="8_fflm6"]
@@ -29,7 +28,6 @@
 [ext_resource type="Texture2D" uid="uid://d1nnn0uvqqr2n" path="res://Source/Entities/Bosses/SteamBoss/Art/SteamBursts/BOSS_2_PH2_Burst_Idle_Armor.png" id="9_odpgn"]
 [ext_resource type="Texture2D" uid="uid://dwtbbmyv5u46s" path="res://Source/Entities/Bosses/SteamBoss/Art/HandRaise/BOSS_2_PH1_Hand_Raise_Body.png" id="9_rlftm"]
 [ext_resource type="Texture2D" uid="uid://m7vmaq1xdsry" path="res://Source/Entities/Bosses/SteamBoss/Art/Idle/BOSS_2_PH2_Idle_Body.png" id="10_is3n0"]
-[ext_resource type="Script" uid="uid://cov6uwa3x5w6o" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/explosive_blast.gd" id="10_k6d11"]
 [ext_resource type="Texture2D" uid="uid://v57ifwd0gwph" path="res://Source/Entities/Bosses/SteamBoss/Art/Awaken/Boss_Ph1_Awaken_NonBody-sheet_1.png" id="10_y5pvw"]
 [ext_resource type="Texture2D" uid="uid://de3krnqf18shc" path="res://Source/Entities/Bosses/SteamBoss/Art/HandRaise/BOSS_2_PH2_Hand_Raise_Body.png" id="10_y7ji8"]
 [ext_resource type="Texture2D" uid="uid://sarf6q622a7x" path="res://Source/Entities/Bosses/SteamBoss/Art/Awaken/Boss_Ph1_Awaken_NonBody-sheet_2.png" id="11_a4e6v"]
@@ -37,7 +35,6 @@
 [ext_resource type="Script" uid="uid://ijtklukgkcb6" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/slash.gd" id="11_qs1b0"]
 [ext_resource type="Texture2D" uid="uid://dhwhm4u27xgxf" path="res://Source/Entities/Bosses/SteamBoss/Art/Awaken/Boss_Ph1_Awaken_NonBody-sheet_3.png" id="12_dj5ss"]
 [ext_resource type="Script" uid="uid://n173oyr2d0sh" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/lunge.gd" id="12_hbabe"]
-[ext_resource type="Script" uid="uid://cgkmmqeswbdax" path="res://Source/Entities/Bosses/SteamBoss/HSFM Code/warp_blast.gd" id="14_dhv1y"]
 [ext_resource type="Texture2D" uid="uid://d1xamaqjgcueg" path="res://Source/Entities/Bosses/SteamBoss/Art/Awaken/Boss_Ph2_Awaken_NonBody_1.png" id="15_hqh73"]
 [ext_resource type="PackedScene" uid="uid://dbnhgp03q0xpy" path="res://Source/Entities/Components/HealthbarComponent/Healthbar.tscn" id="15_rggcd"]
 [ext_resource type="Texture2D" uid="uid://cc8v3vjmd2llp" path="res://Source/Entities/Bosses/SteamBoss/Art/SteamBursts/BOSS_2_PH2_Burst_Start_Body.png" id="15_tcod4"]
@@ -52,8 +49,6 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rggcd"]
 radius = 55.0
 height = 194.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_agvqu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1cpe6"]
 atlas = ExtResource("3_iltgi")
@@ -2112,6 +2107,45 @@ tracks/2/keys = {
 "values": [false, true]
 }
 
+[sub_resource type="Animation" id="Animation_rlf2y"]
+resource_name = "slash2"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/SlashHitboxComponent:process_mode")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [4, 0, 4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/SlashHitboxComponent/CollisionShape2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(-61, -82), Vector2(-91, -2), Vector2(-15, 86)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/SlashHitboxComponent/CollisionShape2D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.05, 0.35),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
 [sub_resource type="Animation" id="Animation_7y0wb"]
 resource_name = "steam_bursts"
 length = 3.2
@@ -2189,6 +2223,7 @@ _data = {
 &"moving": SubResource("Animation_1cpe6"),
 &"moving2": SubResource("Animation_ydsyy"),
 &"slash": SubResource("Animation_rx823"),
+&"slash2": SubResource("Animation_rlf2y"),
 &"steam_bursts": SubResource("Animation_7y0wb")
 }
 
@@ -2202,9 +2237,6 @@ entity_name = "boss"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=1274812075]
 shape = SubResource("CapsuleShape2D_rggcd")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=619345553]
-shape = SubResource("CircleShape2D_agvqu")
 
 [node name="Visuals" type="Node2D" parent="." unique_id=2115523409]
 
@@ -2249,14 +2281,19 @@ script = ExtResource("6_udhqj")
 animator = NodePath("../AnimationPlayer")
 character = NodePath("..")
 
+[node name="Awaken" type="Node" parent="SteamBossHFSM" unique_id=1305096278]
+script = ExtResource("8_fflm6")
+move_name = "Awaken"
+animation = "Awaken"
+
+[node name="Awaken2" type="Node" parent="SteamBossHFSM" unique_id=163428356]
+script = ExtResource("8_fflm6")
+move_name = "Awaken2"
+animation = "Awaken2"
+
 [node name="Alive" type="Node" parent="SteamBossHFSM" unique_id=2140677997]
 script = ExtResource("6_j1j5t")
 move_name = "Alive"
-
-[node name="Idle" type="Node" parent="SteamBossHFSM/Alive" unique_id=634059191]
-script = ExtResource("7_fflm6")
-move_name = "Idle"
-animation = "idle"
 
 [node name="Chase" type="Node" parent="SteamBossHFSM/Alive" unique_id=749522464]
 script = ExtResource("7_agvqu")
@@ -2266,11 +2303,6 @@ animation = "moving"
 [node name="SteamBlast" type="Node" parent="SteamBossHFSM/Alive" unique_id=853641976]
 script = ExtResource("9_k6d11")
 move_name = "SteamBlast"
-animation = "idle"
-
-[node name="ExplosiveBlast" type="Node" parent="SteamBossHFSM/Alive" unique_id=1855048189]
-script = ExtResource("10_k6d11")
-move_name = "ExplosiveBlast"
 animation = "idle"
 
 [node name="Slash" type="Node" parent="SteamBossHFSM/Alive" unique_id=1634164472 node_paths=PackedStringArray("_hitbox", "_collision_shape")]
@@ -2285,34 +2317,9 @@ script = ExtResource("12_hbabe")
 move_name = "Lunge"
 animation = "idle"
 
-[node name="WarpBlast" type="Node" parent="SteamBossHFSM/Alive" unique_id=675608776]
-script = ExtResource("14_dhv1y")
-move_name = "WarpBlast"
-animation = "idle"
-
-[node name="SteamBursts" type="Node" parent="SteamBossHFSM/Alive" unique_id=409803531]
-script = ExtResource("24_3n1p4")
-move_name = "SteamBursts"
-animation = "steam_bursts"
-
-[node name="Awaken" type="Node" parent="SteamBossHFSM" unique_id=1305096278]
-script = ExtResource("8_fflm6")
-move_name = "Awaken"
-animation = "Awaken"
-
-[node name="Awaken2" type="Node" parent="SteamBossHFSM" unique_id=163428356]
-script = ExtResource("8_fflm6")
-move_name = "Awaken2"
-animation = "Awaken2"
-
 [node name="Alive2" type="Node" parent="SteamBossHFSM" unique_id=578685584]
 script = ExtResource("6_j1j5t")
 move_name = "Alive2"
-
-[node name="Idle" type="Node" parent="SteamBossHFSM/Alive2" unique_id=905780915]
-script = ExtResource("7_fflm6")
-move_name = "Idle"
-animation = "idle2"
 
 [node name="Chase" type="Node" parent="SteamBossHFSM/Alive2" unique_id=1250916484]
 script = ExtResource("7_agvqu")
@@ -2324,27 +2331,17 @@ script = ExtResource("9_k6d11")
 move_name = "SteamBlast"
 animation = "idle2"
 
-[node name="ExplosiveBlast" type="Node" parent="SteamBossHFSM/Alive2" unique_id=1461829710]
-script = ExtResource("10_k6d11")
-move_name = "ExplosiveBlast"
-animation = "idle"
-
 [node name="Slash" type="Node" parent="SteamBossHFSM/Alive2" unique_id=670606077 node_paths=PackedStringArray("_hitbox", "_collision_shape")]
 script = ExtResource("11_qs1b0")
 _hitbox = NodePath("../../../Visuals/SlashHitboxComponent")
 _collision_shape = NodePath("../../../Visuals/SlashHitboxComponent/CollisionShape2D")
 move_name = "Slash"
-animation = "slash"
+animation = "slash2"
 
 [node name="Lunge" type="Node" parent="SteamBossHFSM/Alive2" unique_id=1798542448]
 script = ExtResource("12_hbabe")
 move_name = "Lunge"
-animation = "idle"
-
-[node name="WarpBlast" type="Node" parent="SteamBossHFSM/Alive2" unique_id=959182840]
-script = ExtResource("14_dhv1y")
-move_name = "WarpBlast"
-animation = "idle"
+animation = "idle2"
 
 [node name="SteamBursts" type="Node" parent="SteamBossHFSM/Alive2" unique_id=247529975]
 script = ExtResource("24_3n1p4")

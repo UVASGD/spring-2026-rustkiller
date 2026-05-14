@@ -1,4 +1,4 @@
-extends HFSM
+﻿extends HFSM
 
 # Top layer:
 # - Dormant (waiting / intro)
@@ -12,7 +12,4 @@ func choose_internal_move() -> TransitionData:
 	if not boss:
 		return TransitionData.new(true, "Awaken")
 
-	if boss.is_dormant:
-		return TransitionData.new(true, "Awaken")
-
-	return TransitionData.new(true, "Alive")
+	return TransitionData.new(true, "Awaken")
